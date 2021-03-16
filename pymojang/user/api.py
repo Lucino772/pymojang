@@ -4,6 +4,8 @@ import datetime as dt
 from urllib.parse import urljoin
 from base64 import urlsafe_b64decode
 from .profile import UserProfile
+from .skin import Skin
+from .cape import Cape
 
 MOJANG_STATUS_URL = 'https://status.mojang.com/check'
 MOJANG_API_URL = 'https://api.mojang.com'
@@ -97,13 +99,8 @@ def get_profile(player_id: str):
         for d in data['properties']:
             textures = json.loads(urlsafe_b64decode(d['value']))['textures']
             if 'SKIN' in textures.keys():
-                profile.skins = [{
-                    'url': textures['SKIN']['url'],
-                    'variant': textures['SKIN'].get('metadata',{}).get('model','classic')
-                }]
+                profile.skins.append(Skin(textures['SKIN']['url'], textures['SKIN'].get('metadata',{}).get('model','classic')))
             if 'CAPE' in textures.keys():
-                profile.capes = [{
-                    'url': textures['CAPE']['url']
-                }]
+                profile.capes.append(Cape(textures['CAPE']['url']))
 
     return profile

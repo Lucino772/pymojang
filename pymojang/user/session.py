@@ -6,6 +6,8 @@ from . import api
 from .profile import UserProfile
 from ..auth import Yggdrasil, SecurityCheck
 from ..utils import TokenPair
+from .skin import Skin
+from .cape import Cape
 
 class UserSession:
 
@@ -87,14 +89,9 @@ class UserSession:
             self._profile.name = data['name']
 
             for skin in data['skins']:
-                self._profile.skins.append({
-                    'url': skin['url'],
-                    'variant': skin['variant'].lower()
-                })
+                self._profile.skins.append(Skin(skin['url'], skin['variant'].lower()))
             
             for cape in data['capes']:
-                self._profile.capes.append({
-                    'url': cape['url']
-                })
+                self._profile.capes.append(Cape(cape['url']))
         else:
             pass
