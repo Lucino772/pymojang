@@ -1,17 +1,15 @@
 import requests
 import os
 import datetime as dt
-from urllib.parse import urljoin
 from . import api
 from .profile import UserProfile
 from ..auth import Yggdrasil, SecurityCheck
 from ..utils import TokenPair
 from .skin import Skin
 from .cape import Cape
+from ..urls import MINECRAFT_SERVICES
 
 class UserSession:
-
-    MINECRAFT_SERVICE_URL = 'https://api.minecraftservices.com'
 
     def __init__(self, username: str, password: str, token_file=None):
         self._session = requests.Session()
@@ -69,7 +67,7 @@ class UserSession:
         self._profile.names = api.get_name_history(self._profile.id)
 
     def _get_name_change(self):
-        name_change_url = urljoin(self.MINECRAFT_SERVICE_URL, 'minecraft/profile/namechange')
+        name_change_url = MINECRAFT_SERVICES.join('minecraft/profile/namechange')
         response = self._session.get(name_change_url)
 
         if response.status_code == 200:
@@ -80,7 +78,7 @@ class UserSession:
             pass
     
     def _get_profile(self):
-        profile_url = urljoin(self.MINECRAFT_SERVICE_URL, 'minecraft/profile')
+        profile_url = MINECRAFT_SERVICES.join('minecraft/profile')
         response = self._session.get(profile_url)
 
         if response.status_code == 200:

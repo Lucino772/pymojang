@@ -8,5 +8,5 @@ setuptools.setup(
     licence='MIT',
     description='It\'s a full wrapper arround de mojang API and authentication API',
     packages=['pymojang'],
-    install_requires=['requests']
+    install_requires=['requests','validators']
 )
