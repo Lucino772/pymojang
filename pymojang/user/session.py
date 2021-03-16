@@ -40,6 +40,9 @@ class UserSession:
     def disconnect(self):
         return self._auth.invalidate()
 
+    def disconnect_all(self):
+        return self._auth.signout(self._username, self._password)
+
     def save(self, filename: str):
         self.token_pair.to_pickle(filename)
 
