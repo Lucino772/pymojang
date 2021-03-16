@@ -1,11 +1,8 @@
 import requests
-import json
-from urllib.parse import urljoin
 from ..utils import TokenPair
+from ..urls import MOJANG_AUTHSERVER
 
 class Yggdrasil:
-
-    ROOT_URL = 'https://authserver.mojang.com'
 
     def __init__(self,session: requests.Session, token_pair: TokenPair):
         self._session = session
@@ -15,7 +12,7 @@ class Yggdrasil:
             self._session.headers.update({'Authorization': f'Bearer {self._token_pair.access_token}'})
 
     def authenticate(self, username: str, password: str):
-        auth_url = urljoin(self.ROOT_URL, 'authenticate')
+        auth_url = MOJANG_AUTHSERVER.join('authenticate')
         payload = {
             'username': username,
             'password': password,
@@ -31,7 +28,7 @@ class Yggdrasil:
             pass
 
     def refresh(self):
-        refresh_url = urljoin(self.ROOT_URL, 'refresh')
+        refresh_url = MOJANG_AUTHSERVER.join('refresh')
         payload = {
             'accessToken': self._token_pair.access_token,
             'clientToken': self._token_pair.client_token
@@ -46,7 +43,7 @@ class Yggdrasil:
             pass
 
     def validate(self):
-        validate_url = urljoin(self.ROOT_URL, 'validate')
+        validate_url = MOJANG_AUTHSERVER.join('validate')
         payload = {
             'accessToken': self._token_pair.access_token,
             'clientToken': self._token_pair.client_token
@@ -56,7 +53,7 @@ class Yggdrasil:
         return response.status_code == 204
 
     def signout(self, username: str, password: str):
-        signout_url = urljoin(self.ROOT_URL, 'signout')
+        signout_url = MOJANG_AUTHSERVER.join('signout')
         payload = {
             'username': username,
             'password': password
@@ -72,7 +69,7 @@ class Yggdrasil:
             return False
 
     def invalidate(self):
-        invalidate_url = urljoin(self.ROOT_URL, 'invalidate')
+        invalidate_url = MOJANG_AUTHSERVER.join('invalidate')
         payload = {
             'accessToken': self._token_pair.access_token,
             'clientToken': self._token_pair.client_token
