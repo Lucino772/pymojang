@@ -7,6 +7,6 @@ setuptools.setup(
     author_email='lucapalmi772@gmail.com',
     licence='MIT',
     description='It\'s a full wrapper arround de mojang API and authentication API',
-    packages=['pymojang'],
+    packages=['mojang'],
     install_requires=['requests','validators']
 )
