@@ -10,6 +10,10 @@ class Cape:
         self.__extension = None
 
     @property
+    def extension(self):
+        return self.__extension
+
+    @property
     def exists(self):
         do_exists = False
 
