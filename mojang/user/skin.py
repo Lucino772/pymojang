@@ -11,6 +11,10 @@ class Skin:
         self.__extension = None
 
     @property
+    def extension(self):
+        return self.__extension
+
+    @property
     def variant(self):
         return self.__variant
 
@@ -33,9 +37,11 @@ class Skin:
         if validators.url(self.__filename) == True:
             response = requests.get(self.__filename)
             if response.ok:
-                filenames = re.findall('filename=(.+)', response.headers.get('content-disposition'))
+                filenames = re.findall('filename=(.+)', response.headers.get('content-disposition',''))
                 if len(filenames) > 0:
                     self.__extension = os.path.splitext(filenames[0].replace('"','').strip())[1]
+                else:
+                    self.__extension = '.' + response.headers.get('content-type','').split('/')[1]
                 image_bytes = response.content
         elif os.path.exists(self.__filename):
             self.__extension = os.path.splitext(self.__filename)[1]
