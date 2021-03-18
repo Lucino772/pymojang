@@ -13,8 +13,8 @@ def user(username=None, password=None):
     elif isinstance(username, str):
         uuid_data = api.uuid(username, only_uuid=False)
         names = api.names(uuid_data['uuid'])
-        name_change_data = api.user.check_name_change(sess)
-        profile_data = api.user.get_profile(sess, uuid=uuid_data['uuid'])
+        name_change_data = api.user.check_name_change()
+        profile_data = api.user.get_profile(uuid=uuid_data['uuid'])
 
         data = {'names': names, **uuid_data, **profile_data, **name_change_data}
 

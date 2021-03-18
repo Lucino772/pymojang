@@ -9,14 +9,16 @@ from ..error.handler import handle_response
 from ..utils.cape import Cape
 from ..utils.skin import Skin
 from .urls import (CHANGE_NAME, CHECK_NAME_CHANGE, GET_AUTH_PROFILE, GET_PROFILE, RESET_SKIN, UPLOAD_SKIN)
+from .validator import validate_context, default_context
 
 
-def check_name_change(session: requests.Session):
+@default_context
+@validate_context
+def check_name_change(ctx):
     res = dict.fromkeys(('created_at','name_change_allowed'), None)
 
-    if 'Authorization' in session.headers.keys():
-        response = session.get(CHECK_NAME_CHANGE)
-        data = handle_response(response, PayloadError, Unauthorized)
+    if 'Authorization' in ctx.session.headers.keys():
+        data = ctx.request('get', CHECK_NAME_CHANGE, exceptions=(PayloadError, Unauthorized))
         res.update({
             'created_at': dt.datetime.strptime(data['createdAt'], '%Y-%m-%dT%H:%M:%SZ'),
             'name_change_allowed': data['nameChangeAllowed']
@@ -24,31 +26,30 @@ def check_name_change(session: requests.Session):
     
     return res
 
-def change_name(session: requests.Session, name: str):
-    response = session.put(CHANGE_NAME)
-    handle_response(response, InvalidName, UnavailableName, Unauthorized)
+@validate_context
+def change_name(ctx, name: str):
+    ctx.request('put', CHANGE_NAME.format(name=name), exceptions=(InvalidName, UnavailableName, Unauthorized))
 
-def upload_skin(session: requests.Session, path: str, variant='classic'):
+@validate_context
+def upload_skin(ctx, path: str, variant='classic'):
     skin = Skin(path, variant=variant)
-    skin_data = skin.data
     files = [
-        ('variant', variant),
-        ('file', (f'image.{skin.extension[1:]}', skin_data, f'image/{skin.extension[1:]}'))
+        ('variant', skin.variant),
+        ('file', (f'image.{skin.file.extention}', skin.data, f'image/{skin.file.extention}'))
     ]
+    ctx.request('post', UPLOAD_SKIN, exceptions=(PayloadError, Unauthorized), files=files, headers={'content-type': None})
 
-    response = session.post(UPLOAD_SKIN, files=files, headers={'Content-Type': None})
-    handle_response(response, PayloadError, Unauthorized)
+@validate_context
+def reset_skin(ctx, uuid: str):
+    ctx.request('delete', RESET_SKIN.format(uuid=uuid), exceptions=(PayloadError, Unauthorized))
 
-def reset_skin(session: requests.Session):
-    response = session.delete(RESET_SKIN)
-    handle_response(response, PayloadError, Unauthorized)
-
-def get_profile(session: requests.Session, uuid=None):
+@default_context
+@validate_context
+def get_profile(ctx, uuid=None):
     res = dict.fromkeys(('uuid','name','skins','capes'), None)
 
-    if 'Authorization' in session.headers.keys():
-        response = session.get(GET_AUTH_PROFILE)
-        data = handle_response(response, PayloadError, Unauthorized)
+    if 'Authorization' in ctx.session.headers.keys():
+        data = ctx.request('get', GET_AUTH_PROFILE, exceptions=(PayloadError, Unauthorized))
         
         res.update({
             'uuid': data['id'],
@@ -63,8 +64,7 @@ def get_profile(session: requests.Session, uuid=None):
         for cape in data['capes']:
             res['skins'].append(Cape(cape['url']))
     else:
-        response = session.get(GET_PROFILE.format(uuid=uuid))
-        data = handle_response(response, PayloadError)
+        data = ctx.request('get', GET_PROFILE.format(uuid=uuid), exceptions=(PayloadError,))
 
         res.update({
             'uuid': data['id'],
