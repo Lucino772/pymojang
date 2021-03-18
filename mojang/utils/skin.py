@@ -1,11 +1,7 @@
 import re
 from os import path
 
-import requests
-import validators
-
 from .web import WebFile
-
 
 class Skin:
 

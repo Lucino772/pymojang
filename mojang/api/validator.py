@@ -1,7 +1,10 @@
-import requests
 from functools import wraps
-from ..globals import current_ctx
+
+import requests
+
 from ..context import Context
+from ..globals import current_ctx
+
 
 def validate_context(fct):
     @wraps(fct)

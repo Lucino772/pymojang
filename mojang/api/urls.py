@@ -1,4 +1,4 @@
-from ..utils.url import URL
+from ..utils.web import URL
 
 # Base urls
 MOJANG_AUTHSERVER = URL('https://authserver.mojang.com')

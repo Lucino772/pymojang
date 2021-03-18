@@ -1,6 +1,8 @@
 import requests
+
+from .error.handler import handle_response
 from .globals import current_ctx
-from .error.handler import handle_response 
+
 
 class Context:
     METHODS = ['request']
