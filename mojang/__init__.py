@@ -1,3 +1,2 @@
-from .auth.session import user
-from .user.profile import profile
-from .user.api import *
+from .main import user
+from .api import names, status, uuid, uuids

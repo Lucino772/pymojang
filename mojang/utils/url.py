@@ -10,8 +10,8 @@ class URL:
         for path in paths:
             base = urljoin(base, path)
         return base
-
+    
     @property
     def root(self):
         return self.__root
-       
+      
