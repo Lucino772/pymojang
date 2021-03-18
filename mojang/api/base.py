@@ -1,13 +1,16 @@
 import requests
-from .urls import STATUS_CHECK, NAME_HISTORY, GET_UUID, GET_UUIDS
+
 from ..error.exceptions import PayloadError
 from ..error.handler import handle_response
+from ..globals import current_ctx
+from .urls import GET_UUID, GET_UUIDS, NAME_HISTORY, STATUS_CHECK
+from .validator import default_context
 
 
+@default_context
 def status(service=None):
     res = {}
-    response = requests.get(STATUS_CHECK)
-    data = handle_response(response)
+    data = current_ctx.request('get', STATUS_CHECK)
     for status in data:
         res.update(status)
 
@@ -16,11 +19,10 @@ def status(service=None):
     
     return res
 
+@default_context
 def names(player_id: str):
-    response = requests.get(NAME_HISTORY.format(uuid=player_id))
-
     names = []
-    data = handle_response(response)
+    data = current_ctx.request('get', NAME_HISTORY.format(uuid=player_id))
     for item in data:
         if 'changedToAt' in item:
             item['changedToAt'] = dt.datetime.fromtimestamp(item['changedToAt'])
@@ -28,9 +30,9 @@ def names(player_id: str):
         
     return names
 
+@default_context
 def uuid(username: str, only_uuid=True):
-    response = requests.get(GET_UUID.format(name=username))
-    data = handle_response(response)
+    data = current_ctx.request('get', GET_UUID.format(name=username))
     data['uuid'] = data.pop('id')
     data['legacy'] = data.get('legacy', False)
     data['demo'] = data.get('demo', False)
@@ -39,12 +41,22 @@ def uuid(username: str, only_uuid=True):
     
     return data
     
+@default_context
 def uuids(usernames: list, only_uuid=True):
-    data = {}
+    res = []
     if len(usernames) > 0:
-        response = requests.post(GET_UUIDS, json=usernames)
-        data = handle_response(response, PayloadError)
-        if only_uuid:
-            data = list(map(lambda pdata: pdata['id'], data))
+        data = current_ctx.request('post', GET_UUIDS, exceptions=(PayloadError,),json=usernames[:10])
 
-    return data
+        res = list(map(lambda pdata: {
+            'uuid': pdata['id'],
+            'name': pdata['name'], 
+            'legacy': pdata.get('legacy',False),
+            'demo': pdata.get('demo', False)
+        }, data))
+        if only_uuid:
+            res = list(map(lambda pdata: pdata['uuid'], res))
+
+        if len(usernames[:10]) > 0:
+            res.extend(uuids(usernames[10:], only_uuid=only_uuid))
+
+    return res

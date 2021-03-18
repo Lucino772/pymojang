@@ -1,26 +1,26 @@
+import requests
 from .urls import SECURITY_CHECK, SECURITY_CHALLENGES
-from ..error.handler import handle_response
 from ..error.exceptions import *
+from .validator import validate_context
 
-
-def is_secure(session):
-    response = session.get(SECURITY_CHECK)
+@validate_context
+def is_secure(ctx):
     try:
-        handle_response(response, PayloadError, Unauthorized, IPNotSecured)
+        ctx.request('get', SECURITY_CHECK, exceptions=(PayloadError, Unauthorized, IPNotSecured))
     except IPNotSecured:
         return False
     else:
         return True
 
-def get_challenges(session):
-    response = session.get(SECURITY_CHALLENGES)
-    handle_response(response, PayloadError, Unauthorized)
+@validate_context
+def get_challenges(ctx):
+    data = ctx.request('get', SECURITY_CHALLENGES, exceptions=(PayloadError, Unauthorized))
     return data
 
-def verify_ip(session, answers: list):
-    response = session.post(SECURITY_CHECK, json=answers)
+@validate_context
+def verify_ip(ctx, answers: list):
     try:
-        handle_response(response, PayloadError, Unauthorized, IPVerificationError)
+        ctx.request('post', SECURITY_CHECK, exceptions=(PayloadError, Unauthorized, IPVerificationError), json=answers)
     except IPVerificationError:
         return False
     else:
