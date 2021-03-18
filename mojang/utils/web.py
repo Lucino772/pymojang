@@ -1,11 +1,25 @@
 import re
 from os import path
-from tempfile import TemporaryFile
-from urllib.parse import urlparse, urlsplit
+from urllib.parse import urljoin, urlparse
 
 import requests
 import validators
-import io
+
+
+class URL:
+
+    def __init__(self, root: str):
+        self.__root = root
+
+    def join(self, *paths):
+        base = self.__root
+        for path in paths:
+            base = urljoin(base, path)
+        return base
+    
+    @property
+    def root(self):
+        return self.__root
 
 
 class WebFile:
@@ -56,6 +70,10 @@ class WebFile:
         else:
             with open(self.__url,'rb') as fp:
                 self.__data = fp.read()
+
+    @property
+    def source(self):
+        return self.__url
 
     @property
     def filename(self):

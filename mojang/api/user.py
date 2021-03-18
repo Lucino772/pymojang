@@ -4,17 +4,28 @@ from base64 import urlsafe_b64decode
 
 import requests
 
+from ..context import Context
 from ..error.exceptions import *
-from ..error.handler import handle_response
 from ..utils.cape import Cape
 from ..utils.skin import Skin
 from .urls import (CHANGE_NAME, CHECK_NAME_CHANGE, GET_AUTH_PROFILE, GET_PROFILE, RESET_SKIN, UPLOAD_SKIN)
-from .validator import validate_context, default_context
+from .validator import default_context, validate_context
 
 
 @default_context
 @validate_context
-def check_name_change(ctx):
+def check_name_change(ctx: Context) -> dict:
+    """
+    Retrieve information about name change, only works with context
+
+    Required context variables
+    --------------------------
+    session: requests.Session
+
+    Returns
+    -------
+    A dict with the following values: `created_at` and `name_change_allowed`
+    """
     res = dict.fromkeys(('created_at','name_change_allowed'), None)
 
     if 'Authorization' in ctx.session.headers.keys():
@@ -27,11 +38,34 @@ def check_name_change(ctx):
     return res
 
 @validate_context
-def change_name(ctx, name: str):
+def change_name(ctx: Context, name: str):
+    """
+    Change name, only works with context
+
+    Required context variables
+    --------------------------
+    session: requests.Session
+
+    Parameters
+    ----------
+    name: str
+    """
     ctx.request('put', CHANGE_NAME.format(name=name), exceptions=(InvalidName, UnavailableName, Unauthorized))
 
 @validate_context
-def upload_skin(ctx, path: str, variant='classic'):
+def upload_skin(ctx: Context, path: str, variant='classic'):
+    """
+    Change skin, only works with context
+
+    Required context variables
+    --------------------------
+    session: requests.Session
+
+    Parameters
+    ----------
+    path: str
+        Local file or url path
+    """
     skin = Skin(path, variant=variant)
     files = [
         ('variant', skin.variant),
@@ -40,12 +74,37 @@ def upload_skin(ctx, path: str, variant='classic'):
     ctx.request('post', UPLOAD_SKIN, exceptions=(PayloadError, Unauthorized), files=files, headers={'content-type': None})
 
 @validate_context
-def reset_skin(ctx, uuid: str):
+def reset_skin(ctx: Context, uuid: str):
+    """
+    Reset skin for given `uuid`, only works with context
+
+    Required context variables
+    --------------------------
+    session: requests.Session
+
+    Parameters
+    ----------
+    uuid: str
+    """
     ctx.request('delete', RESET_SKIN.format(uuid=uuid), exceptions=(PayloadError, Unauthorized))
 
 @default_context
 @validate_context
-def get_profile(ctx, uuid=None):
+def get_profile(ctx: Context, uuid=None) -> dict:
+    """
+    Retrieve profile information about player, works with or
+    without context.
+
+    If a context is given with a valid `session`, data will
+    be loaded using the `session`.
+
+    If the context is not given, the `uuid` will be used to
+    retrieve the profile data.
+
+    Returns
+    -------
+    A dict with the following values: `uuid`, `name`, `skins` and `capes`
+    """
     res = dict.fromkeys(('uuid','name','skins','capes'), None)
 
     if 'Authorization' in ctx.session.headers.keys():

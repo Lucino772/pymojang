@@ -1,9 +1,19 @@
 import requests
+
 from . import api
-from .session import UserSession
 from .profile import UserProfile
+from .session import UserSession
+
 
 def user(username=None, password=None):
+    """
+    If both `username` and `password` are given, a 
+    `UserSession` will be created. The user will be
+    authenticated and the session will be returned.
+    
+    If only the username is given, a `UserProfile`
+    will be created and returned.
+    """
     sess = requests.Session()
     if isinstance(username, str) and isinstance(password, str):
         us = UserSession(sess)

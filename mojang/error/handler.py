@@ -3,6 +3,13 @@ from .exceptions import *
 DEFAULTS = [NotFound, MethodNotAllowed, ServerError]
 
 def handle_response(response, *exceptions, use_defaults=True):
+    """
+    Handle response message from http request. Every given `exception`
+    must have a `code` property. 
+    
+    The function will check if the status code from the response if ok.
+    If not an Exception will be raised based on the status code. 
+    """
     global DEFAULTS
     if response.ok:
         data = {}
