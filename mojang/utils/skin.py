@@ -1,26 +1,12 @@
-import re
-from os import path
+from .web import Downloadable
 
-from .web import WebFile
 
-class Skin:
+class Skin(Downloadable):
 
-    def __init__(self, filename: str, variant='classic'):
-        self.__filename = filename
+    def __init__(self, source: str, variant: str='classic'):
+        super().__init__(source)
         self.__variant = variant
-        self.__file = WebFile(self.__filename)
 
     @property
     def variant(self):
         return self.__variant
-
-    @property
-    def file(self):
-        return self.__file
-
-    @property
-    def data(self):
-        return self.__file.data()
-
-    def save(self, dest: str):
-        return self.__file.save(dest)
