@@ -25,26 +25,30 @@ class UserProfile:
         the list of skins
     capes: list
         the list of capes
-
-    Methods
-    -------
-    update(**kwargs)
-        Update given profile properties
     """
 
-    def __init__(self, name: str, uuid: str, legacy: bool, demo: bool, names: list, created_at: dt.datetime, name_change_allowed: bool, skins: list, capes: list):
-        self.name = name
-        self.uuid = uuid
-        self.is_legacy = legacy
-        self.is_demo = demo
+    __slots__ = ('name', 'uuid', 'is_legacy', 'is_demo', 'names', 'created_at', 'name_change_allowed', 'skins', 'capes')
 
-        self.names = names
+    @classmethod
+    def create(cls, **kwargs):
+        profile = UserProfile()
+        
+        for key, value in kwargs.items():
+            if key in cls.__slots__:
+                super(cls, profile).__setattr__(key, value) 
 
-        self.created_at = created_at
-        self.name_change_allowed = name_change_allowed
+        return profile
 
-        self.skins = skins
-        self.capes = capes
+    def __init__(self):
+        self.name: str = None
+        self.uuid: str = None
+        self.is_legacy: bool = False
+        self.is_demo: bool = False
 
-    def update(self, **kwargs):
-        self.__dict__.update(kwargs)
+        self.names: list = None
+
+        self.created_at: dt.datetime = None
+        self.name_change_allowed: bool = None
+
+        self.skins: list = []
+        self.capes: list = []
