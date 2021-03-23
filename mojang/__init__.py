@@ -24,8 +24,5 @@ Example - Connect with password
 
 """
 
-
-
-
-from .main import user
-from .api import names, status, uuid, uuids
+from .main import (api_status, connect, get_username, get_uuid, get_uuids,
+                   name_history, user)

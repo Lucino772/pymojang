@@ -1,34 +1,21 @@
 """
 Functions for the basic MojangAPI
 """
-
 import datetime as dt
+import json
+from base64 import urlsafe_b64decode
 
 from ..error.exceptions import PayloadError
-from ..globals import current_ctx
-from .urls import GET_UUID, GET_UUIDS, NAME_HISTORY, STATUS_CHECK
-from .validator import default_context
+from ..utils import web
+from ..utils.cape import Cape
+from ..utils.skin import Skin
+from .urls import GET_PROFILE, GET_UUID, GET_UUIDS, NAME_HISTORY, STATUS_CHECK
 
 
-@default_context
-def status(service: str = None) -> dict:
-    """
-    Retrieve the Mojang API status, work without context.
-
-    Parameters
-    ----------
-    service: str, optional
-        If given, return only status for this service (default is None)
-
-    Returns
-    -------
-    By default it will returns a `dict` where the keys are the 
-    services and the values are the status. If service is not 
-    None then only the status for the given service is returned. 
-    """
+def api_status(service: str = None) -> dict:
     res = {}
     
-    data = current_ctx.request('get', STATUS_CHECK)
+    data = web.request('get', STATUS_CHECK)
     for s in data:
         res.update(s)
 
@@ -37,23 +24,10 @@ def status(service: str = None) -> dict:
     
     return res
 
-@default_context
-def names(uuid: str) -> list:
-    """
-    Get the name history for a given uuid, work without context.
-
-    Parameters
-    ----------
-    uuid: str
-    
-    Returns
-    -------
-    A list of tuples. Each tuple contains the `name` and the `datetime`
-    it was changed.
-    """
+def name_history(uuid: str) -> list:
     names = []
 
-    data = current_ctx.request('get', NAME_HISTORY.format(uuid=uuid))
+    data = web.request('get', NAME_HISTORY.format(uuid=uuid))
     for item in data:
         if 'changedToAt' in item:
             item['changedToAt'] = dt.datetime.fromtimestamp(item['changedToAt'])
@@ -61,70 +35,52 @@ def names(uuid: str) -> list:
     
     return names
 
-@default_context
-def uuid(username: str, only_uuid: bool = True) -> dict:
-    """
-    Return the uuid of a given username
+def get_uuid(username: str, only_uuid: bool = True) -> dict:
+    data = web.request('get', GET_UUID.format(name=username))
+    
+    if data:
+        data['uuid'] = data.pop('id')
+        data['legacy'] = data.get('legacy', False)
+        data['demo'] = data.get('demo', False)
 
-    Parameters
-    ----------
-    username: str
-    only_uuid: bool, optional
-        (default is True)
-    
-    Returns
-    -------
-    By default it returns only the uuid for the given username. 
-    If `only_uuid` is set to false, it will also return the 
-    following values `legacy`, `demo` and `name` 
-    """
-    
-    data = current_ctx.request('get', GET_UUID.format(name=username))
-    
-    data['uuid'] = data.pop('id')
-    data['legacy'] = data.get('legacy', False)
-    data['demo'] = data.get('demo', False)
+        if only_uuid:
+            return data['uuid']
+    else:
+        data = None
 
-    if only_uuid:
-        return data['uuid']
-    
     return data
     
-@default_context
-def uuids(usernames: list, only_uuid: bool = True) -> list:
-    """
-    Return the uuid for multiple username
+def get_uuids(usernames: list, only_uuid: bool = True) -> list:
+    res = [None]*len(usernames)
 
-    Parameters
-    ----------
-    usernames: list
-    only_uuid: bool, optional
-        (default is True)
-    
-    Returns
-    -------
-    By default it returns only the uuid for each username. 
-    If `only_uuid` is set to false, it will also return the 
-    following values `legacy`, `demo` and `name` for each
-    username.
-    """
-    res = []
-
-    if len(usernames) > 0:
-        data = current_ctx.request('post', GET_UUIDS, exceptions=(PayloadError,),json=usernames[:10])
-
+    for i in range(0, len(usernames), 10):
+        data = web.request('post', GET_UUIDS, exceptions=(PayloadError,),json=usernames[i:i+10])
         for item in data:
+            index = usernames.index(item['name'])
             if not only_uuid:
-                res.append({
+                res[index] = {
                     'uuid': item['id'],
                     'name': item['name'], 
                     'legacy': item.get('legacy',False),
                     'demo': item.get('demo', False)
-                })
+                }
             else:
-                res.append(item['id'])
-
-        if len(usernames[:10]) > 0:
-            res.extend(uuids(usernames[10:], only_uuid=only_uuid))
+                res[index] = item['id']
 
     return res
+
+def get_profile(uuid: str) -> dict:
+    data = web.request('get', GET_PROFILE.format(uuid=uuid), exceptions=(PayloadError,))
+    if data:
+        res = {'name': None, 'uuid': None,'skins': [], 'capes': []}
+        res['uuid'] = data['id']
+        res['name'] = data['name']
+
+        for d in data['properties']:
+            textures = json.loads(urlsafe_b64decode(d['value']))['textures']
+            if 'SKIN' in textures.keys():
+                res['skins'].append(Skin(textures['SKIN']['url'], textures['SKIN'].get('metadata',{}).get('model','classic')))
+            if 'CAPE' in textures.keys():
+                res['skins'].append(Cape(textures['CAPE']['url']))
+
+        return res

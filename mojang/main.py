@@ -1,32 +1,47 @@
-import requests
-
-from . import api
+from .api import base
+from .api.auth import yggdrasil
 from .profile import UserProfile
 from .session import UserSession
 
+# Basic api
+api_status = base.api_status
+name_history = base.name_history
 
-def user(username=None, password=None):
-    """
-    If both `username` and `password` are given, a 
-    `UserSession` will be created. The user will be
-    authenticated and the session will be returned.
-    
-    If only the username is given, a `UserProfile`
-    will be created and returned.
-    """
-    sess = requests.Session()
-    if isinstance(username, str) and isinstance(password, str):
-        us = UserSession(sess)
-        us.connect(username, password)
-        
-        return us
-    elif isinstance(username, str):
-        uuid_data = api.uuid(username, only_uuid=False)
-        names = api.names(uuid_data['uuid'])
-        name_change_data = api.user.check_name_change()
-        profile_data = api.user.get_profile(uuid=uuid_data['uuid'])
+def get_uuid(username: str):
+    return base.get_uuid(username)
 
-        data = {'names': names, **uuid_data, **profile_data, **name_change_data}
+def get_uuids(usernames: list):
+    return base.get_uuids(usernames)
 
-        return UserProfile(**data)
+def get_username(uuid: str):
+    profile = base.get_profile(uuid)
+    if profile:
+        return profile['name']
+
+
+# Connect
+def connect(username: str, password: str, client_token=None):
+    auth_data = yggdrasil.authenticate_user(username, password, client_token=client_token)
+    return UserSession(auth_data['access_token'], auth_data['client_token'])
+
+
+# Complete profile
+def user(username: str = None, uuid: str = None):
+    if username is not None:
+        user_data = base.get_uuid(username, only_uuid=False)
+        if user_data:
+            user_profile = base.get_profile(user_data['uuid'])
+            names = base.name_history(user_data['uuid'])
+
+            return UserProfile.create(**{**user_data, **user_profile, 'names': names})
+    elif uuid is not None:
+        user_profile = base.get_profile(uuid)
+        if user_profile:
+            user_data = base.get_uuid(user_profile['name'], only_uuid=False)
+            names = base.name_history(user_profile['uuid'])
+
+            return UserProfile.create(**{**user_data, **user_profile, 'names': names})
+    else:
+        raise Exception('You must at least provide one argument: `username` or `uuid`')
+
 
