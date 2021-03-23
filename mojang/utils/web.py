@@ -4,6 +4,9 @@ from urllib.parse import urljoin, urlparse
 
 import requests
 import validators
+from requests.auth import AuthBase
+
+from ..error.handler import handle_response
 
 
 class URL:
@@ -22,70 +25,44 @@ class URL:
         return self.__root
 
 
-class WebFile:
+# Download
+class Downloadable:
 
-    def __init__(self, url: str, chunk_size=1024):
-        self.__url = url
-        self.__chunk_size = chunk_size
-
-        self.__filename = None
-        self.__extension = None
+    def __init__(self, source: str):
+        self.__source = source
+        self.__filename = []
         self.__data = None
 
-        self._load_info()
-        self._load_data()
-
-    def _load_info(self):
-        if validators.url(self.__url):
-            response = requests.head(self.__url, allow_redirects=True)
-
-            if response.status_code == 200:
-                # Find file name and extension
-                url_path = urlparse(self.__url).path
-                match = re.match('^([\w,\s-]+)\.([A-Za-z]{3})$', path.basename(url_path))
-                if match:
-                    self.__filename, self.__extension = match.groups()
-                elif 'content-disposition' in response.headers.keys():
-                    fnames = re.findall('filename=(.+)', response.headers['content-disposition'])
-                    if len(fnames) > 0:
-                        self.__filename, self.__extension = path.splitext(filename)
-                        self.__extension = self.__extension[1:]
-                elif 'content-type' in response.headers.keys():
-                    content_type = response.headers['content-type']
-                    if 'text' not in content_type.lower() and 'html' not in content_type.lower():
-                        self.__filename, self.__extension = response.headers['content-type'].split('/')
+        if validators.url(self.__source):
+            response = download_bytes(self.__source)
+            if response:
+                self.__filename, self.__data = response
             else:
-                response.raise_for_status()
-        else:
-            self.__filename, self.__extension = path.splitext(path.basename(self.__url))
-            self.__extension = self.__extension[1:]
-
-        if self.__filename is None and self.__extension is None:
-            raise Exception('The url/file `{}` can\'t be open'.format(response.url))
-
-    def _load_data(self):
-        if validators.url(self.__url):
-            response = requests.get(self.__url, allow_redirects=True, stream=True)
-            self.__data = response.content
-        else:
-            with open(self.__url,'rb') as fp:
+                raise Exception('Invalid source')
+        elif path.exists(self.__source):
+            basename = path.basename(self.__source)
+            self.__filename = path.splitext(basename)
+            self.__filename[1] = self.__filename[1][1:]
+            with open(self.__source, 'rb') as fp:
                 self.__data = fp.read()
+        else:
+            raise Exception('Invalid source')
 
     @property
     def source(self):
-        return self.__url
+        return self.__source
 
     @property
     def filename(self):
-        return f'{self.__filename}.{self.__extension}'
+        return '.'.join(self.__filename)
 
     @property
     def name(self):
-        return self.__filename
+        return self.__filename[0]
 
     @property
     def extension(self):
-        return self.__extension
+        return self.__filename[1]
 
     @property
     def data(self):
@@ -99,8 +76,55 @@ class WebFile:
         file_path = dest
         if path.isdir(dest):
             file_path = path.join(dest, self.filename)
-        elif not dest.endswith(self.__extension):
-            file_path = dest + f'.{self.__extension}'
+        elif not dest.endswith(self.extension):
+            file_path = dest + f'.{self.extension}'
         
         with open(file_path, 'wb') as fp:
-            fp.write(self.__data)
+            fp.write(self.data)
+
+# Auth
+class BearerAuth(AuthBase):
+
+    def __init__(self, token: str):
+        self.__token = token
+
+    def __call__(self, r):
+        r.headers['Authorization'] = 'Bearer {}'.format(self.__token)
+        return r
+
+# Download
+def filename_from_url(url: str):
+    url_path = urlparse(self.__url).path
+    match = re.match('^([\w,\s-]+)\.([A-Za-z]{3})$', path.basename(url_path))
+    if match:
+        return match.groups()
+
+def filename_from_headers(headers: dict):
+    # Check content-disposition
+    if 'content-disposition' in headers.keys():
+        cdisp = headers['content-disposition']
+        file_names = re.findall('filename=(.+)', cdisp)
+        if len(file_names) > 0:
+            return file_names[0][0], file_names[0][1][1:]
+
+    # Check content-type
+    if 'content-type' in headers.keys():
+        ctype = headers['content-type']
+        if (not 'text' in ctype) and (not 'html' in ctype):
+            return ctype.split('/')
+
+def download_bytes(url: str):
+    response = requests.get(url)
+    if response.ok:
+        filename = filename_from_headers(response.headers) or filename_from_url(url) or ['download', None]
+        return filename, response.content
+
+# Request
+def request(method: str, url: str, exceptions=[], **kwargs):
+    method_fct = getattr(requests, method)
+    response = method_fct(url, **kwargs)
+    data = handle_response(response, *exceptions)
+    return data
+
+def auth_request(method: str, url: str, token: str, exceptions=[], **kwargs):
+    return request(method, url, exceptions=exceptions, auth=BearerAuth(token), **kwargs)
