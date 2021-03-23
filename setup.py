@@ -6,7 +6,7 @@ setuptools.setup(
     author='Lucino772',
     author_email='lucapalmi772@gmail.com',
     licence='MIT',
-    description='It\'s a full wrapper arround de mojang API and authentication API',
+    description='It\'s a full wrapper arround de Mojang API and Mojang Authentication API',
     packages=['mojang'],
     install_requires=['requests','validators']
 )
