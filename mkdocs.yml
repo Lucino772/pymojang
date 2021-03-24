@@ -1,7 +1,6 @@
 site_name: PyMojang
 repo_url: https://github.com/Lucino772/pymojang
 site_author: Lucino772
-copyright: true
 
 theme: readthedocs
 
