@@ -5,16 +5,14 @@ from ..urls import SECURITY_CHALLENGES, SECURITY_CHECK
 
 def is_user_ip_secure(access_token: str) -> bool:
     try:
-        headers = web.get_auth_header(access_token)
-        web.request('get', SECURITY_CHECK, exceptions=(PayloadError, Unauthorized, IPNotSecured), headers=headers)
+        web.auth_request('get', SECURITY_CHECK, access_token, exceptions=(PayloadError, Unauthorized, IPNotSecured))
     except IPNotSecured:
         return False
     else:
         return True
 
 def get_user_challenges(access_token: str) -> list:
-    headers = web.get_auth_header(access_token)
-    data = web.request('get', SECURITY_CHALLENGES, exceptions=(PayloadError, Unauthorized), headers=headers)
+    data = web.auth_request('get', SECURITY_CHALLENGES, access_token, exceptions=(PayloadError, Unauthorized))
     challenges = []
     if data:
         for item in data:
@@ -31,8 +29,7 @@ def verify_user_ip(access_token: str, answers: list) -> bool:
             'answer': answer[1]
         })
     try:
-        headers = web.get_auth_header(access_token)
-        web.request('post', SECURITY_CHECK, exceptions=(PayloadError, Unauthorized, IPVerificationError), json=formatted_answers, headers=headers)
+        web.auth_request('post', SECURITY_CHECK, access_token, exceptions=(PayloadError, Unauthorized, IPVerificationError), json=formatted_answers)
     except IPVerificationError:
         return False
     else:
