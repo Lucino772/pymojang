@@ -1,0 +1,50 @@
+-i https://pypi.org/simple
+
+astunparse==1.6.3; python_version < '3.9'
+
+click==7.1.2; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
+
+future==0.18.2; python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'
+
+jinja2==2.11.3; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
+
+joblib==1.0.1; python_version >= '3.6'
+
+livereload==2.6.3
+
+lunr[languages]==0.5.8
+
+markdown==3.3.4; python_version >= '3.6'
+
+markupsafe==1.1.1; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
+
+mkdocs-autorefs==0.1.1; python_version >= '3.6' and python_version < '4.0'
+
+mkdocs-material-extensions==1.0.1; python_version >= '3.5'
+
+mkdocs-material==7.0.6
+
+mkdocs==1.1.2
+
+mkdocstrings==0.15.0
+
+nltk==3.5
+
+pygments==2.8.1
+
+pymdown-extensions==8.1.1; python_version >= '3.6'
+
+pytkdocs==0.11.0; python_version >= '3.6' and python_version < '4.0'
+
+pyyaml==5.4.1; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'
+
+regex==2021.3.17
+
+six==1.15.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
+
+tornado==6.1; python_version >= '3.5'
+
+tqdm==4.59.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
+
+wheel==0.36.2; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
+
