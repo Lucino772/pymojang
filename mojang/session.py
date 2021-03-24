@@ -70,3 +70,7 @@ class UserSession(UserProfile):
     def reset_skin(self):
         session.reset_user_skin(self.__access_token, self.uuid)
         self._fetch_data()
+
+
+    # Remove unused methods from UserProfile
+    del create
