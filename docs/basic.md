@@ -1,4 +1,5 @@
 # PyMojang - Basic Usage
+---
 
 ## API Status
 

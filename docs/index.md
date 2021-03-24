@@ -1,4 +1,5 @@
 # PyMojang - Documentation
+---
 
 PyMojang is a full wrapper of the [Mojang API](https://wiki.vg/Mojang_API) and [Mojang Authentication API](https://wiki.vg/Authentication).
 
