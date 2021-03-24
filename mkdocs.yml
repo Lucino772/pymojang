@@ -1,0 +1,23 @@
+site_name: PyMojang
+
+theme: readthedocs
+
+markdown_extensions:
+  - admonition
+
+nav:
+  - Quisk Start:
+    - Installation: 'index.md'
+    - Basic Usage: 'basic.md'
+  
+  - Advanced:
+    - Profile and Authentication: 'advanced.md'
+
+  - PyMojang:
+    - mojang.api.auth.yggdrasil: '/PyMojang/yggdrasil.md'
+    - mojang.api.auth.security: '/PyMojang/secuity.md'
+    - mojang.api.base: '/PyMojang/base.md'
+    - mojang.api.session: '/PyMojang/session.md'
+    - mojang.profile.UserProfile: '/PyMojang/UserProfile.md'
+    - mojang.session.UserSession: '/PyMojang/UserSession.md' 
+    - Exceptions: '/PyMojang/exceptions.md'
