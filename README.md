@@ -28,4 +28,4 @@ Checkout the [documentation](https://pymojang.readthedocs.io/en/latest/)
 
 ## Licence
 This project uses a
-**MIT** Licence ([view]((https://github.com/Lucino772/pymojang/blob/main/LICENSE)))
+**MIT** Licence [view](https://github.com/Lucino772/pymojang/blob/main/LICENSE)
