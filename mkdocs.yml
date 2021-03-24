@@ -2,10 +2,15 @@ site_name: PyMojang
 repo_url: https://github.com/Lucino772/pymojang
 site_author: Lucino772
 
-theme: readthedocs
+theme:
+  name: "material"
 
 markdown_extensions:
   - admonition
+
+plugins:
+  - search
+  - mkdocstrings
 
 extra_css:
   - css/extra.css
@@ -19,10 +24,10 @@ nav:
     - 'Profile and Authentication': 'advanced.md'
 
   - PyMojang:
-    - 'mojang.api.auth.yggdrasil': '/PyMojang/yggdrasil.md'
-    - 'mojang.api.auth.security': '/PyMojang/secuity.md'
-    - 'mojang.api.base': '/PyMojang/base.md'
-    - 'mojang.api.session': '/PyMojang/session.md'
-    - 'mojang.profile.UserProfile': '/PyMojang/UserProfile.md'
-    - 'mojang.session.UserSession': '/PyMojang/UserSession.md' 
-    - 'Exceptions': '/PyMojang/exceptions.md'
+    - 'mojang.api.auth.yggdrasil': 'PyMojang/yggdrasil.md'
+    - 'mojang.api.auth.security': 'PyMojang/secuity.md'
+    - 'mojang.api.base': 'PyMojang/base.md'
+    - 'mojang.api.session': 'PyMojang/session.md'
+    - 'mojang.profile.UserProfile': 'PyMojang/UserProfile.md'
+    - 'mojang.session.UserSession': 'PyMojang/UserSession.md' 
+    - 'Exceptions': 'PyMojang/exceptions.md'

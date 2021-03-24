@@ -5,6 +5,8 @@ verify_ssl = true
 
 [dev-packages]
 mkdocs = "*"
+mkdocs-material = "*"
+mkdocstrings = "*"
 
 [packages]
 requests = "*"
