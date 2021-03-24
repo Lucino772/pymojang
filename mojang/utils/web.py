@@ -94,7 +94,7 @@ class BearerAuth(AuthBase):
 
 # Download
 def filename_from_url(url: str):
-    url_path = urlparse(self.__url).path
+    url_path = urlparse(url).path
     match = re.match('^([\w,\s-]+)\.([A-Za-z]{3})$', path.basename(url_path))
     if match:
         return match.groups()
