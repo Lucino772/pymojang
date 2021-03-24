@@ -7,6 +7,8 @@ theme:
 
 markdown_extensions:
   - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
 
 plugins:
   - search
@@ -25,7 +27,7 @@ nav:
 
   - PyMojang:
     - 'mojang.api.auth.yggdrasil': 'PyMojang/yggdrasil.md'
-    - 'mojang.api.auth.security': 'PyMojang/secuity.md'
+    - 'mojang.api.auth.security': 'PyMojang/security.md'
     - 'mojang.api.base': 'PyMojang/base.md'
     - 'mojang.api.session': 'PyMojang/session.md'
     - 'mojang.profile.UserProfile': 'PyMojang/UserProfile.md'
