@@ -1,5 +1,5 @@
-# PyMojang - Advanced Usage
----
+PyMojang - Advanced Usage
+===
 
 ## Full profile
 
