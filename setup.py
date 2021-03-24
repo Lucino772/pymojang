@@ -5,7 +5,7 @@ with open('./README.md','r') as fp:
 
 setuptools.setup(
     name='pymojang',
-    version='1.0',
+    version='1.0.2',
     author='Lucino772',
     author_email='lucapalmi772@gmail.com',
     licence='MIT',
@@ -18,9 +18,9 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    packages=['mojang'],
+    packages=setuptools.find_packages(),
     install_requires=['requests','validators'],
-    keywords=['minecraft','mojang','python3']
+    keywords=['minecraft','mojang','python3'],
     project_urls={
         'Source': 'https://github.com/Lucino772/pymojang',
         'Documentation': 'https://pymojang.readthedocs.io/en/latest/'
