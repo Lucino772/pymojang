@@ -5,7 +5,7 @@ with open('./README.md','r') as fp:
 
 setuptools.setup(
     name='pymojang',
-    version='1.1.1',
+    version='1.1.0',
     author='Lucino772',
     author_email='lucapalmi772@gmail.com',
     licence='MIT',
