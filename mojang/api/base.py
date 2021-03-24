@@ -29,9 +29,10 @@ def name_history(uuid: str) -> list:
 
     data = web.request('get', NAME_HISTORY.format(uuid=uuid))
     for item in data:
-        if 'changedToAt' in item:
-            item['changedToAt'] = dt.datetime.fromtimestamp(item['changedToAt'])
-        names.append((item['name'], item.get('changedToAt',None)))
+        changed_at = None
+        if 'changedToAt' in item.keys():
+            changed_at = dt.datetime.fromtimestamp(item['changedToAt'] / 1000)
+        names.append((item['name'], changed_at))
     
     return names
 
