@@ -12,7 +12,12 @@ setuptools.setup(
     url='https://github.com/Lucino772/pymojang',
     description='It\'s a full wrapper arround de Mojang API and Mojang Authentication API',
     long_description=long_description,
-    long_description_content_type='text/markdown'
+    long_description_content_type='text/markdown',
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
     packages=['mojang'],
     install_requires=['requests','validators'],
     keywords=['minecraft','mojang','python3']
