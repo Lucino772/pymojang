@@ -7,6 +7,9 @@ theme: readthedocs
 markdown_extensions:
   - admonition
 
+extra_css:
+  - css/extra.css
+
 nav:
   - Quisk Start:
     - 'Installation': 'index.md'
