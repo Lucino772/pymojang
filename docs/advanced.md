@@ -3,7 +3,7 @@ PyMojang - Advanced Usage
 
 ## Full profile
 
-To get all the available data about a user, use the function [`user`](). It will return a [`UserProfile`]() object
+To get all the available data about a user, use the function [`user`][mojang.main.user]. It will return a [`UserProfile`][mojang.profile.UserProfile] object
 
 ```python
 import mojang
@@ -28,9 +28,9 @@ Once done, you have access to the following attributes:
 
 ## Authenticated User
 
-To connect with a **username** and **password**, use the function [`connect`](). It will return a [`UserSession`]() object.
+To connect with a **username** and **password**, use the function [`connect`][mojang.main.connect]. It will return a [`UserSession`][mojang.session.UserSession] object.
 
-The [`connect`]() function also take a **client_token** parameter, but it's optional. It will be, by default, automaticly generated.
+The [`connect`][mojang.main.connect] function also take a **client_token** parameter, but it's optional. It will be, by default, automaticly generated.
 
 ```python
 session = mojang.connect('YOUR_USERNAME','YOUR_PASSWORD')
@@ -43,15 +43,15 @@ Once authenticated, you will have access to all the profile's attributes and als
 
 You will also have access to the following methods:
 
-- [`change_name`]() : Change the account username
-- [`change_skin`]() : Change the account skin
-- [`reset_skin`]() : Reset the account skin to the default one
+- [`change_name`][mojang.session.UserSession.change_name] : Change the account username
+- [`change_skin`][mojang.session.UserSession.change_skin] : Change the account skin
+- [`reset_skin`][mojang.session.UserSession.reset_skin] : Reset the account skin to the default one
 
 ### Security
 
 The first time you are going to try to connect to your account you might have some problem with certain fonctionnality, and this is because your **IP** is no verified. See [Security Question Answer Flow](https://wiki.vg/Mojang_API#Security_question-answer_flow).
 
-Once your authenticated, you can check if your IP is secure with the `secure` attribute:  
+Once your authenticated, you can check if your IP is secure with the [`secure`][mojang.session.UserSession.secure] attribute:  
 
 ```python
 if not session.secure:

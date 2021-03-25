@@ -3,7 +3,7 @@ PyMojang - Basic Usage
 
 ## API Status
 
-To get the status of each Mojang services, use the function `api_status`
+To get the status of each Mojang services, use the function [`api_status`][mojang.api.base.api_status]
 
 ```python
 import mojang
@@ -38,7 +38,7 @@ green
 
 ## UUID by Username
 
-To get the UUID of a username, use the function `get_uuid`
+To get the UUID of a username, use the function [`get_uuid`][mojang.main.get_uuid]
 
 ```python
 import mojang
@@ -53,7 +53,7 @@ uuid = mojang.get_uuid('Notch')
 
 ## UUIDs by Usernames
 
-To get the UUID for multiple usernames, use the function `get_uuids`
+To get the UUID for multiple usernames, use the function [`get_uuids`][mojang.main.get_uuids]
 
 !!! note
     The Mojang API endpoint only allow 10 usernames, if more than 10 usernames are given to the function, multiple request will be made.
@@ -70,7 +70,7 @@ uuids = mojang.get_uuids(['Notch','jeb_'])
 
 ## Username by UUID
 
-To get the username for a UUID, use the function `get_username`
+To get the username for a UUID, use the function [`get_username`][mojang.main.get_username]
 
 ```python
 import mojang
@@ -84,7 +84,7 @@ Notch
 
 ## Name History
 
-To get the name history for a specific user, use the function `name_history`
+To get the name history for a specific user, use the function [`name_history`][mojang.api.base.name_history]
 
 ```python
 import mojang
