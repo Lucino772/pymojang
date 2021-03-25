@@ -21,7 +21,7 @@ class UserProfile:
         """Create a new UserProfile from a dict
         
         Args:
-            **kwargs (dict): The dict containing you want to create the profile from
+            **kwargs (dict): The dict you want to create the profile from
         
         Returns:
             A UserProfile with the attributes from the `kwargs` dict
