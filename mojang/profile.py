@@ -1,36 +1,31 @@
-import datetime as dt
-
 
 class UserProfile:
-    """
-    This class represent a Mojang user profile
+    """This class represent a Mojang user profile
 
-    Attributes
-    ----------
-    name:  str
-        the player name
-    uuid: str
-        the player uuid
-    is_legacy: bool
-        True if user has not migrated to mojang account
-    is_demo: bool
-        True if user has not paid
-    names: list
-        the player name history
-    created_at: dt.datetime
-        The player date of creation
-    name_change_allowed: bool
-        True if player can change name
-    skins: list
-        the list of skins
-    capes: list
-        the list of capes
+    Attributes:
+        name (str): The player name
+        uuid (str): The player uuid
+        is_legacy (str): True if user has not migrated to mojang account
+        is_demo (str): True if user has not paid
+        names (str): The player name history
+        created_at (datetime): The player date of creation
+        name_change_allowed (str): True if player can change name
+        skins (str): The list of skins
+        capes (str): The list of capes
     """
 
     __slots__ = ('name', 'uuid', 'is_legacy', 'is_demo', 'names', 'created_at', 'name_change_allowed', 'skins', 'capes')
 
     @classmethod
-    def create(cls, **kwargs):
+    def create(cls, **kwargs) -> 'UserProfile':
+        """Create a new UserProfile from a dict
+        
+        Args:
+            **kwargs (dict): The dict containing you want to create the profile from
+        
+        Returns:
+            A UserProfile with the attributes from the `kwargs` dict
+        """
         profile = UserProfile()
         
         for key, value in kwargs.items():
@@ -40,15 +35,15 @@ class UserProfile:
         return profile
 
     def __init__(self):
-        self.name: str = None
-        self.uuid: str = None
-        self.is_legacy: bool = False
-        self.is_demo: bool = False
+        self.name = None
+        self.uuid = None
+        self.is_legacy = False
+        self.is_demo = False
 
-        self.names: list = None
+        self.names = None
 
-        self.created_at: dt.datetime = None
-        self.name_change_allowed: bool = None
+        self.created_at = None
+        self.name_change_allowed = None
 
-        self.skins: list = []
-        self.capes: list = []
+        self.skins = []
+        self.capes = []
