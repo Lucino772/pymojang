@@ -19,17 +19,19 @@ extra_css:
 
 nav:
   - Quisk Start:
-    - 'Installation': 'index.md'
+    - 'About': 'index.md'
     - 'Basic Usage': 'basic.md'
   
   - Advanced:
     - 'Profile and Authentication': 'advanced.md'
 
-  - PyMojang:
-    - 'mojang.api.auth.yggdrasil': 'PyMojang/yggdrasil.md'
-    - 'mojang.api.auth.security': 'PyMojang/security.md'
-    - 'mojang.api.base': 'PyMojang/base.md'
-    - 'mojang.api.session': 'PyMojang/session.md'
-    - 'mojang.profile.UserProfile': 'PyMojang/UserProfile.md'
-    - 'mojang.session.UserSession': 'PyMojang/UserSession.md' 
-    - 'Exceptions': 'PyMojang/exceptions.md'
+  - Reference:
+    - mojang:
+      - 'mojang.main': 'PyMojang/main.md'
+      - 'mojang.api.base': 'PyMojang/base.md'
+      - 'mojang.api.session': 'PyMojang/session.md'
+      - 'mojang.api.auth.yggdrasil': 'PyMojang/yggdrasil.md'
+      - 'mojang.api.auth.security': 'PyMojang/security.md'
+      - 'mojang.profile.UserProfile': 'PyMojang/UserProfile.md'
+      - 'mojang.session.UserSession': 'PyMojang/UserSession.md' 
+      - 'Exceptions': 'PyMojang/exceptions.md'

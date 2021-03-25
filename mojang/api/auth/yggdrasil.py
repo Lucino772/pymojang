@@ -7,7 +7,7 @@ from ...utils import web
 from ..urls import AUTHENTICATE, INVALIDATE, REFRESH, SIGNOUT, VALIDATE
 
 
-def authenticate_user(username: str, password: str, client_token=None) -> dict:
+def authenticate_user(username: str, password: str, client_token: str = None) -> dict:
     """Authenticate user with name and password
 
     Args:
@@ -49,7 +49,7 @@ def refresh_token(access_token: str, client_token: str) -> dict:
 
     Args:
         access_token (str): The access token to refresh
-        clien_token (str): The client token used to generate the access token
+        client_token (str): The client token used to generate the access token
 
     Returns:
         A dict with the following keys: `access_token`, `client_token`, `uuid`, `name`,
@@ -80,7 +80,7 @@ def validate_token(access_token: str, client_token: str):
 
     Args:
         access_token (str): The access token to validate
-        clien_token (str): The client token used to generate the access token
+        client_token (str): The client token used to generate the access token
 
     Raises:
         TokenError: If client token is not the one used to generate the access token
@@ -116,7 +116,7 @@ def invalidate_token(access_token: str, client_token: str):
 
     Args:
         access_token (str): The access token to invalidate
-        clien_token (str): The client token used to generate the access token
+        client_token (str): The client token used to generate the access token
 
     Raises:
         TokenError: If client token is not the one used to generate the access token

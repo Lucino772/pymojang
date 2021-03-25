@@ -81,7 +81,7 @@ def get_uuid(username: str, only_uuid: bool = True) -> dict:
     return data
     
 def get_uuids(usernames: list, only_uuid: bool = True) -> list:
-    """Get uuid of username
+    """Get uuid of multiple username
 
     Note: Limited Endpoint
         The Mojang API only allow 10 usernames maximum, if more than 10 usernames are
