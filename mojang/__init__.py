@@ -26,4 +26,4 @@ Example - Connect with password
 """
 
 from .main import (api_status, connect, get_username, get_uuid, get_uuids,
-                   name_history, user)
+                   name_history, user, mcversions)

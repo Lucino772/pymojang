@@ -6,6 +6,12 @@ MOJANG_API = URL('https://api.mojang.com')
 MOJANG_STATUS = URL('https://status.mojang.com')
 MOJANG_SESSION = URL('https://sessionserver.mojang.com')
 MINECRAFT_SERVICES = URL('https://api.minecraftservices.com')
+LAUNCHER_META = URL('https://launchermeta.mojang.com')
+RESOURCES = URL('http://resources.download.minecraft.net')
+
+# Game Files
+MC_VERSIONS  = LAUNCHER_META.join('mc/game/version_manifest.json')
+RESOURCES_DOWNLOAD = RESOURCES.join('{}/{}')
 
 # Status check
 STATUS_CHECK = MOJANG_STATUS.join('check')

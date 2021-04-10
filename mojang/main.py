@@ -3,6 +3,8 @@ from .api.auth import yggdrasil
 from .profile import UserProfile
 from .session import UserSession
 
+from .api.files.versions import MinecraftVersions
+
 # Basic api
 api_status = base.api_status
 name_history = base.name_history
@@ -93,3 +95,5 @@ def user(username: str = None, uuid: str = None) -> 'UserProfile':
         raise Exception('You must at least provide one argument: `username` or `uuid`')
 
 
+# Minecraft Versions
+mcversions = MinecraftVersions()
