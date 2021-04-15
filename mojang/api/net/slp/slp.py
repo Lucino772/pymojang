@@ -60,7 +60,6 @@ def _slp_current(sock: socket.socket, hostname='localhost', port=25565):
     }
 
 def _slp_1_6(sock: socket.socket, hostname='localhost', port=25565):
-    # TODO:  Test with a 1.6 server
     # Send request
     header = struct.pack('>BBB', 0xFE, 0x01, 0xFA)
     command = struct.pack('>h22s', 11, 'MC|PingHost'.encode('utf-16be'))
@@ -70,8 +69,20 @@ def _slp_1_6(sock: socket.socket, hostname='localhost', port=25565):
     
     sock.send(packet)
 
-    d = sock.recv(1024)
-    print(d)
+    with sock.makefile('rb') as fp:
+        data = fp.read()
+        protocol_ver, version, motd, nplayers, maxplayers = data[9:].decode('utf-16-be').split('\x00')
+    
+    return {
+        'protocol_version': int(protocol_ver),
+        'version': version,
+        'motd': motd,
+        'players': {
+            'count': (int(nplayers), int(maxplayers)),
+            'list': []
+        },
+        'ping': None
+    }
 
 def _slp_prior_1_6(sock: socket.socket, **kwargs):
     sock.send(struct.pack('>BB', 0xFE, 0x01))
@@ -81,11 +92,11 @@ def _slp_prior_1_6(sock: socket.socket, **kwargs):
         protocol_ver, version, motd, nplayers, maxplayers = data[9:].decode('utf-16-be').split('\x00')
 
     return {
-        'protocol_version': protocol_ver,
+        'protocol_version': int(protocol_ver),
         'version': version,
         'motd': motd,
         'players': {
-            'count': (nplayers, maxplayers),
+            'count': (int(nplayers), int(maxplayers)),
             'list': []
         },
         'ping': None
@@ -103,7 +114,7 @@ def _slp_prior_1_4(sock: socket.socket, **kwargs):
         'version': None,
         'motd': motd,
         'players': {
-            'count': (nplayers, maxplayers),
+            'count': (int(nplayers), int(maxplayers)),
             'list': []
         },
         'ping': None
@@ -121,6 +132,7 @@ def ping(host: str, port: int):
             # Try a slp version
             with socket.socket() as sock:
                 sock.connect((host, port))
+                sock.settimeout(2)
                 _slp_result = _slp(sock, hostname=host, port=port)
                 
                 # Check if version worked
