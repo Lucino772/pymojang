@@ -1,17 +1,14 @@
 import socket
-from ..api.net import query, rcon, slp
+from ..api.net import query, slp
+from ..api.net.rcon import RconClient
 
 class Server:
 
     def __init__(self, hostname: str, port: int, rcon_port=None, rcon_password=None, query_port=None):
         self.__hostname = hostname
         self.__port = port
-        self.__rcon_password = rcon_password
-        self.__rcon_port = rcon_port
+        self.__rcon_client = RconClient(self.__hostname, rcon_port, rcon_password)
         self.__query_port = query_port
-
-        self.__rcon_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.__rcon_sock.settimeout(2)
 
     def __enter__(self):
         return self
@@ -19,19 +16,15 @@ class Server:
     def __exit__(self, *args):
         self.close()
 
+    def close(self):
+        self.__rcon_client.close()
+
     # Rcon
     def connect_rcon(self):
-        if not self.__rcon_password or not self.__rcon_port:
-            raise Exception("Missing rcon port or rcon password")
-
-        self.__rcon_sock.connect((self.__hostname, self.__rcon_port))
-        rcon.authenticate(self.__rcon_sock, self.__rcon_password)
-
-    def _close_rcon(self):
-        self.__rcon_sock.close()
+        self.__rcon_client.connect()
 
     def run_cmd(self, command: str):
-        return rcon.run_command(self.__rcon_sock, command)
+        return self.__rcon_client.run_cmd(command)
 
     # Query
     def get_stats(self, full=False):
@@ -53,6 +46,3 @@ class Server:
     def ping(self):
         return slp.ping(self.__hostname, self.__port)
 
-
-    def close(self):
-        self._close_rcon()
