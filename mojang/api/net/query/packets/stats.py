@@ -1,6 +1,6 @@
 import struct
 
-from .base import Packet
+from ...common.packet import Packet
 
 class BasicStatsRequest(Packet):
     magic: int = 0xFEFD

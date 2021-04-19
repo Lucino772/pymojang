@@ -1,7 +1,7 @@
 import struct
 import time
 
-from .base import Packet
+from ...common.packet import Packet
 
 class HandhakeRequest(Packet):
     magic: int = 0xFEFD
