@@ -1,5 +1,6 @@
 import socket
-from ..api.net import query, slp
+from ..api.net import slp
+from ..api.net.query import QueryClient
 from ..api.net.rcon import RconClient
 
 class Server:
@@ -7,8 +8,12 @@ class Server:
     def __init__(self, hostname: str, port: int, rcon_port=None, rcon_password=None, query_port=None):
         self.__hostname = hostname
         self.__port = port
-        self.__rcon_client = RconClient(self.__hostname, rcon_port, rcon_password)
-        self.__query_port = query_port
+        self.__rcon_client = None
+        self.__query_client = None
+        if rcon_port and rcon_password:
+            self.__rcon_client = RconClient(self.__hostname, rcon_port, rcon_password)
+        if query_port:
+            self.__query_client = QueryClient(self.__hostname, query_port)
 
     def __enter__(self):
         return self
@@ -17,30 +22,22 @@ class Server:
         self.close()
 
     def close(self):
-        self.__rcon_client.close()
+        if self.__rcon_client:
+            self.__rcon_client.close()
 
     # Rcon
     def connect_rcon(self):
-        self.__rcon_client.connect()
+        if self.__rcon_client:
+            self.__rcon_client.connect()
 
     def run_cmd(self, command: str):
-        return self.__rcon_client.run_cmd(command)
+        if self.__rcon_client:
+            return self.__rcon_client.run_cmd(command)
 
     # Query
     def get_stats(self, full=False):
-        if not self.__query_port:
-            raise Exception("Missing query port")
-
-        stats = None
-        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
-            sock.settimeout(2)
-            token = query.handshake(sock, (self.__hostname, self.__query_port))
-            if not full:
-                stats = query.basic_stats(sock, (self.__hostname, self.__query_port), token)
-            else:
-                stats = query.full_stats(sock, (self.__hostname, self.__query_port), token)
-
-        return stats
+        if self.__query_client:
+            return self.__query_client.stats(full)
 
     # SLP
     def ping(self):
