@@ -1,12 +1,11 @@
 import struct
 
 from .base import Packet
-from ..utils import get_id
 
 class BasicStatsRequest(Packet):
     magic: int = 0xFEFD
     type: int = 0
-    id: int = get_id
+    id: int
     token: int
 
     def _bytes(self):
@@ -43,8 +42,8 @@ class BasicStatsResponse(Packet):
 class FullStatsRequest(Packet):
     magic: int = 0xFEFD
     type: int = 0
-    id: int = get_id
     padding: int = 0xFFFFFF01
+    id: int
     token: int
 
     def _bytes(self):

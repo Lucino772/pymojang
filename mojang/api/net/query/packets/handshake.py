@@ -2,12 +2,11 @@ import struct
 import time
 
 from .base import Packet
-from ..utils import get_id
 
 class HandhakeRequest(Packet):
     magic: int = 0xFEFD
     type: int = 9
-    id: int = get_id
+    id: int
 
     def _bytes(self):
         return struct.pack('>Hbi', self.magic, self.type, self.id)
