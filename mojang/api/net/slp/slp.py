@@ -4,59 +4,47 @@ import socket
 import struct
 import time
 
-from .utils import *
-
+from .packets.types import VarInt
+from .packets.current import SLPCurrentHandshakePacket, SLPCurrentRequestPacket, SLPCurrentResponsePacket
+from .packets.ping import SLPPingPacket, SLPPongPacket
 
 def _slp_current(sock: socket.socket, hostname='localhost', port=25565):
-    ## Prepare and send handshake
-    buffer = io.BytesIO()
-    _write_varint(0x00, buffer)
-    _write_varint(0x00, buffer)
-    _write_string(hostname, buffer)
-    _write_short(port,buffer)
-    _write_varint(0x01,buffer)
-
-    with sock.makefile('wb') as fp:
-        _write_varint(len(buffer.getvalue()), fp)
-        fp.write(buffer.getvalue())
-
-    ## Receive server info
-    buffer = io.BytesIO()
-    _write_varint(0x00, buffer)
-
-    with sock.makefile('wb') as fp:
-        _write_varint(len(buffer.getvalue()), fp)
-        fp.write(buffer.getvalue())
-
-    with sock.makefile('rb') as fp:
-        packet_length = _read_varint(fp)
-        packet_id = _read_varint(fp)
-        data = json.loads(_read_string(fp))
-
-    ## Ping
-    buffer = io.BytesIO()
-    _write_varint(0x01, buffer)
-    _write_long(int(time.time() * 1000), buffer)
-
-    with sock.makefile('wb') as fp:
-        _write_varint(len(buffer.getvalue()), fp)
-        fp.write(buffer.getvalue())
-
-    with sock.makefile('rb') as fp:
-        packet_length = _read_varint(fp)
-        packet_id = _read_varint(fp)
-        itime = _read_long(fp)
+    # Send handshake
+    packet = SLPCurrentHandshakePacket(proto_version=0, server_address=hostname, server_port=port, next_state=0x01)
+    with sock.makefile('wb') as buffer:
+        VarInt().write(len(packet.data), buffer)
+        packet.write(buffer)
     
-    ping = int(time.time() * 1000) - itime
+    # Send request
+    packet = SLPCurrentRequestPacket()
+    with sock.makefile('wb') as buffer:
+        VarInt().write(len(packet.data), buffer)
+        packet.write(buffer)
+
+    # Receive response
+    with sock.makefile('rb') as buffer:
+        length = VarInt().read(buffer)
+        rpacket = SLPCurrentResponsePacket.from_bytes(buffer.read(length))
+
+    # Ping-Pong
+    packet = SLPPingPacket(payload=int(time.time() * 1000))
+    with sock.makefile('wb') as buffer:
+        VarInt().write(len(packet.data), buffer)
+        packet.write(buffer)
+
+    with sock.makefile('rb') as buffer:
+        length = VarInt().read(buffer)
+        pong_packet = SLPPongPacket.from_bytes(buffer.read(length))
+
     return {
-        'protocol_version': data['version']['protocol'],
-        'version': data['version']['name'],
-        'motd': data['description']['text'],
+        'protocol_version': int(rpacket.response['version']['protocol']),
+        'version': rpacket.response['version']['name'],
+        'motd': rpacket.response['description']['text'],
         'players': {
-            'count': (data['players']['online'], data['players']['max']),
-            'list': data['players'].get('sample', []),
+            'count': (int(rpacket.response['players']['online']), int(rpacket.response['players']['max'])),
+            'list': rpacket.response['players'].get('sample', [])
         },
-        'ping': ping
+        'ping': int(time.time() * 1000) - pong_packet.payload
     }
 
 def _slp_1_6(sock: socket.socket, hostname='localhost', port=25565):
