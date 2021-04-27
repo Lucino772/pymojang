@@ -21,3 +21,12 @@ class URLs:
     @classmethod
     def signout(cls):
         return 'https://authserver.mojang.com/signout'
+
+    ## Security
+    @classmethod
+    def verify_ip(cls):
+        return 'https://api.mojang.com/user/security/location'
+
+    @classmethod
+    def get_challenges(cls):
+        return 'https://api.mojang.com/user/security/challenges'

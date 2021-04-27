@@ -128,3 +128,8 @@ class AuthenticationInfo(NamedTuple):
     name: str
     legacy: bool = False
     demo: bool = False
+
+## Security
+class ChallengeInfo(NamedTuple):
+    id: int
+    challenge: str
