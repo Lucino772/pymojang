@@ -119,3 +119,12 @@ class Skin(_SkinCapeBase):
 
 class Cape(_SkinCapeBase):
     pass
+
+## Authentication 
+class AuthenticationInfo(NamedTuple):
+    access_token: str
+    client_token: str
+    uuid: str
+    name: str
+    legacy: bool = False
+    demo: bool = False
