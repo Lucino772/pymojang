@@ -1,7 +1,9 @@
 import requests
 
-from ._urls import URLs
+from ...exceptions import *
 from .._structures import AuthenticationInfo
+from ._urls import URLs
+
 
 def authenticate(username: str, password: str, client_token: str = None):
     payload = {
@@ -14,8 +16,8 @@ def authenticate(username: str, password: str, client_token: str = None):
         }
     }
     response = requests.post(URLs.authenticate(), json=payload)
+    data = handle_response(response, PayloadError, CredentialsError)
 
-    data = response.json()
     _dict = {
         'access_token': data['accessToken'],
         'client_token': data['clientToken'],
@@ -32,8 +34,8 @@ def refresh(access_token: str, client_token: str):
         'clientToken': client_token
     }
     response = requests.post(URLs.refresh(), json=payload)
+    data = handle_response(response, PayloadError, TokenError)
 
-    data = response.json()
     _dict = {
         'access_token': data['accessToken'],
         'client_token': data['clientToken'],
@@ -50,6 +52,7 @@ def validate(access_token: str, client_token: str):
         'clientToken': client_token
     }
     response = requests.post(URLs.validate(), json=payload)
+    handle_response(response, PayloadError, TokenError)
 
 def signout(username: str, password: str):
     payload = {
@@ -57,6 +60,7 @@ def signout(username: str, password: str):
         'password': password
     }
     response = requests.post(URLs.signout(), json=payload)
+    handle_response(response, PayloadError, CredentialsError)
 
 def invalidate(access_token: str, client_token: str):
     payload = {
@@ -64,3 +68,4 @@ def invalidate(access_token: str, client_token: str):
         'clientToken': client_token
     }
     response = requests.post(URLs.invalidate(), json=payload)
+    data = handle_response(response, PayloadError, TokenError)

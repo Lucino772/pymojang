@@ -18,6 +18,10 @@ class URLs:
     def name_history(cls, uuid: str):
         return f'https://api.mojang.com/user/profiles/{uuid}/names'
 
+    @classmethod
+    def profile(cls, uuid: str):
+        return f'https://sessionserver.mojang.com/session/minecraft/profile/{uuid}'
+
     # Session URLs
     @classmethod
     def name_change(cls):

@@ -1,9 +1,12 @@
-import validators
-import re
-import requests
-from os import path
 import datetime as dt
-from typing import NamedTuple, Tuple, Union
+import re
+from dataclasses import dataclass, field
+from os import path
+from typing import List, NamedTuple, Tuple, Union
+
+import requests
+import validators
+
 
 # Status check
 class ServiceStatus(NamedTuple):
@@ -133,3 +136,14 @@ class AuthenticationInfo(NamedTuple):
 class ChallengeInfo(NamedTuple):
     id: int
     challenge: str
+
+## Profile
+@dataclass
+class UserProfile:
+    name: str = field()
+    uuid: str = field()
+    is_legacy: bool = field()
+    is_demo: bool = field()
+    names: NameInfoList = field()
+    skin: Skin = field()
+    cape: Cape = field()

@@ -1,13 +1,15 @@
 import datetime as dt
 from dataclasses import dataclass, field
 
-from ..account import session
-from ..account.auth import security, yggdrasil
-from .profile import UserProfile
+from . import session, user
+from ._structures import UserProfile
+from .auth import security, yggdrasil
+
 
 def connect(username: str, password: str, client_token: str = None):
     auth = yggdrasil.authenticate(username, password, client_token)
     return UserSession(auth.access_token, auth.client_token)
+
 
 @dataclass(init=False)
 class UserSession(UserProfile):
@@ -38,7 +40,7 @@ class UserSession(UserProfile):
 
     def _fetch_data(self):
         # Load profile
-        profile = super().create(self.uuid)
+        profile = user(self.uuid)
         self.names = profile.names
         self.skin = profile.skin
         self.cape = profile.cape
@@ -54,6 +56,9 @@ class UserSession(UserProfile):
         self.__access_token = None
         self.__client_token = None
 
+    @property
+    def token_pair(self):
+        return self.__access_token, self.__client_token
 
     # Security
     @property
@@ -66,7 +71,6 @@ class UserSession(UserProfile):
 
     def verify(self, answers: list):
         return security.verify_ip(self.__access_token, answers)
-
 
     # Name
     def change_name(self, name: str):

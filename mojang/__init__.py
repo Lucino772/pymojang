@@ -24,5 +24,4 @@ Example - Connect with password
     'http://textures.minecraft.net/texture/292009a4925b58f02c77dadc3ecef07ea4c7472f64e0fdc32ce5522489362680'
     >>> ...
 """
-from .account import get_uuid, get_uuids, names, status
-from .classes import user, connect
+from .account import get_uuid, get_uuids, names, status, user, connect
