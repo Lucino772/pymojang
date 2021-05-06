@@ -26,7 +26,7 @@ def authenticate(username: str, password: str, client_token: str = None):
     }
     return AuthenticationInfo(**_dict)
 
-def refresh(access_token: str, client_token: str) -> dict:
+def refresh(access_token: str, client_token: str):
     payload = {
         'accessToken': access_token,
         'clientToken': client_token
