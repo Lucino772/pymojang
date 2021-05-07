@@ -1,15 +1,21 @@
 import base64
 import json
 from dataclasses import fields
+from typing import List
 
 import requests
 
 from ..exceptions import handle_response
-from ._structures import *
-from ._urls import URLs
+from .structures.base import *
+from .utils.urls import URLs
 
 
-def status():
+def status() -> StatusCheck:
+    """Get the status of Mojang's services
+    
+    Returns:
+        StatusCheck
+    """
     response = requests.get(URLs.status_check())
     data = handle_response(response)
 
@@ -20,7 +26,15 @@ def status():
     
     return StatusCheck(_status)
 
-def get_uuid(username: str):
+def get_uuid(username: str) -> UUIDInfo:
+    """Get uuid of username
+    
+    Args:
+        username (str): The username which you want the uuid of
+    
+    Returns:
+        UUIDInfo
+    """
     response = requests.get(URLs.uuid(username))
     data = handle_response(response)
 
@@ -28,7 +42,19 @@ def get_uuid(username: str):
 
     return UUIDInfo(**data)
 
-def get_uuids(usernames: list):
+def get_uuids(usernames: list) -> List[UUIDInfo]:
+    """Get uuid of multiple username
+    
+    Note: Limited Endpoint
+        The Mojang API only allow 10 usernames maximum, if more than 10 usernames are
+        given to the function, multiple request will be made.
+    
+    Args:
+        usernames (list): The list of username which you want the uuid of
+    
+    Returns:
+        A list of UUIDInfo
+    """
     usernames = list(map(lambda u: u.lower(), usernames))
     _uuids = [None]*len(usernames)
 
@@ -43,7 +69,15 @@ def get_uuids(usernames: list):
 
     return _uuids
 
-def names(uuid: str):
+def names(uuid: str) -> NameInfoList:
+    """Get the user's name history
+    
+    Args:
+        uuid (str): The user's uuid
+    
+    Returns:
+        NameInfoList
+    """
     response = requests.get(URLs.name_history(uuid))
     data = handle_response(response)
 
@@ -56,7 +90,15 @@ def names(uuid: str):
 
     return NameInfoList(_names)
 
-def user(uuid: str):
+def user(uuid: str) -> UserProfile:
+    """Get profile information by uuid
+    
+    Args:
+        uuid (str): The uuid of the profile
+    
+    Returns:
+        UserProfile
+    """
     response = requests.get(URLs.profile(uuid))
     data = handle_response(response)
     _dict = dict.fromkeys([f.name for f in fields(UserProfile) if f.init], None)

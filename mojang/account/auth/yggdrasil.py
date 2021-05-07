@@ -1,11 +1,27 @@
+from typing import Optional
+
 import requests
 
 from ...exceptions import *
-from .._structures import AuthenticationInfo
-from ._urls import URLs
+from ..structures.auth import AuthenticationInfo
+from ..utils.auth import URLs
 
 
-def authenticate(username: str, password: str, client_token: str = None):
+def authenticate(username: str, password: str, client_token: Optional[str] = None) -> AuthenticationInfo:
+    """Authenticate a user with name and password
+
+    Args:
+        username (str): The username of email if account is not legacy
+        password (str): The user password
+        client_token (str, optional): The client token to use (default to None)
+
+    Returns:
+        AuthenticationInfo
+
+    Raises:
+        CredentialsError: If username and password are invalid
+        PayloadError: If credentials are not formated correctly
+    """
     payload = {
         'username': username,
         'password': password,
@@ -28,7 +44,20 @@ def authenticate(username: str, password: str, client_token: str = None):
     }
     return AuthenticationInfo(**_dict)
 
-def refresh(access_token: str, client_token: str):
+def refresh(access_token: str, client_token: str) -> AuthenticationInfo:
+    """Refresh an invalid access token
+    
+    Args:
+        access_token (str): The access token to refresh
+        client_token (str): The client token used to generate the access token
+    
+    Returns:
+        AuthenticationInfo
+
+    Raises:
+        TokenError: If client token is not the one used to generate the access token
+        PayloadError: If the tokens are not formated correctly
+    """
     payload = {
         'accessToken': access_token,
         'clientToken': client_token
@@ -47,6 +76,16 @@ def refresh(access_token: str, client_token: str):
     return AuthenticationInfo(**_dict)
 
 def validate(access_token: str, client_token: str):
+    """Validate an access token
+    
+    Args:
+        access_token (str): The access token to validate
+        client_token (str): The client token used to generate the access token
+    
+    Raises:
+        TokenError: If client token is not the one used to generate the access token
+        PayloadError: If the tokens are not formated correctly
+    """
     payload = {
         'accessToken': access_token,
         'clientToken': client_token
@@ -55,6 +94,16 @@ def validate(access_token: str, client_token: str):
     handle_response(response, PayloadError, TokenError)
 
 def signout(username: str, password: str):
+    """Signout user with name and password
+    
+    Args:
+        username (str): The username or email if account is not legacy
+        password (str): The user password
+    
+    Raises:
+        CredentialsError: If username and password are invalid
+        PayloadError: If credentials are not formated correctly
+    """
     payload = {
         'username': username,
         'password': password
@@ -63,6 +112,16 @@ def signout(username: str, password: str):
     handle_response(response, PayloadError, CredentialsError)
 
 def invalidate(access_token: str, client_token: str):
+    """Invalidate an access token
+    
+    Args:
+        access_token (str): The access token to invalidate
+        client_token (str): The client token used to generate the access token
+    
+    Raises:
+        TokenError: If client token is not the one used to generate the access token
+        PayloadError: If the tokens are not formated correctly
+    """
     payload = {
         'accessToken': access_token,
         'clientToken': client_token

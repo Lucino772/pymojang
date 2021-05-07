@@ -1,12 +1,23 @@
 import datetime as dt
 from dataclasses import dataclass, field
+from typing import Optional
 
-from . import session, user
-from ._structures import UserProfile
-from .auth import security, yggdrasil
+from .. import session, user
+from ..auth import security, yggdrasil
+from ..structures.base import UserProfile
 
 
-def connect(username: str, password: str, client_token: str = None):
+def connect(username: str, password: str, client_token: Optional[str] = None) -> 'UserSession':
+    """Connect a user with name and password
+    
+    Args:
+        username (str): The username or email if account is not legacy
+        password (str): The user password
+        client_token (str, optional): The client token to use in the authentication (default to None)
+    
+    Returns:
+        UserSession
+    """
     auth = yggdrasil.authenticate(username, password, client_token)
     return UserSession(auth.access_token, auth.client_token)
 

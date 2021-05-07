@@ -2,59 +2,21 @@ import datetime as dt
 import re
 from dataclasses import dataclass, field
 from os import path
-from typing import List, NamedTuple, Tuple, Union
+from urllib.parse import urlparse
 
 import requests
 import validators
 
 
-# Status check
-class ServiceStatus(NamedTuple):
-    name: str
-    status: str
+@dataclass(frozen=True)
+class NameChange:
+    allowed: bool = field()
+    created_at: dt.datetime = field()
 
-class StatusCheck(Tuple[ServiceStatus]):
-    
-    def get(self, name: str) -> Union[None, ServiceStatus]:
-        service = list(filter(lambda s: s.name == name, self))
-        if len(service) > 0:
-            return service[0]
-
-# UUID and Name
-class UUIDInfo(NamedTuple):
-    name: str
-    uuid: str
-    legacy: bool = False
-    demo: bool = False
-
-class NameInfo(NamedTuple):
-    name: str
-    changed_to_at: dt.datetime
-
-class NameInfoList(Tuple[NameInfo]):
-    
-    @property
-    def current(self) -> NameInfo:
-        if len(self) == 1:
-            return self[0]
-
-        _list = filter(lambda n: n.change_to_at != None, self)
-        return max(_list, key=lambda n: n.change_to_at)
-    
-    @property
-    def first(self) -> Union[None, NameInfo]:
-        first = list(filter(lambda n: n.changed_to_at == None, self))
-        if len(first) > 0:
-            return first[0]
-
-## Session
-class NameChange(NamedTuple):
-    allowed: bool
-    created_at: dt.datetime
-
-class _SkinCapeBase(NamedTuple):
-    source: str
-    variant: str = None
+@dataclass(frozen=True)
+class _SkinCapeBase:
+    source: str = field()
+    variant: str = field(default=None)
 
     @classmethod
     def _filename_from_url(cls, url: str):
@@ -122,28 +84,3 @@ class Skin(_SkinCapeBase):
 
 class Cape(_SkinCapeBase):
     pass
-
-## Authentication 
-class AuthenticationInfo(NamedTuple):
-    access_token: str
-    client_token: str
-    uuid: str
-    name: str
-    legacy: bool = False
-    demo: bool = False
-
-## Security
-class ChallengeInfo(NamedTuple):
-    id: int
-    challenge: str
-
-## Profile
-@dataclass
-class UserProfile:
-    name: str = field()
-    uuid: str = field()
-    is_legacy: bool = field()
-    is_demo: bool = field()
-    names: NameInfoList = field()
-    skin: Skin = field()
-    cape: Cape = field()
