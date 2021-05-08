@@ -19,6 +19,18 @@ def check_ip(access_token: str) -> bool:
     Raises:
         Unauthorized: If access token is invalid
         PayloadError: If access token is not formated correctly
+
+    Example:
+
+        ```python
+        from mojang.account.auth import security
+
+        checked = security.check_ip('ACCESS_TOKEN')
+        print(checked)
+        ```
+        ```
+        True
+        ```
     """
     response = requests.get(URLs.verify_ip(), auth=BearerAuth(access_token))
     try:
@@ -37,20 +49,26 @@ def get_challenges(access_token: str) -> List[ChallengeInfo]:
     Returns:
         A list of ChallengeInfo
     
-    Example:
-        
-        Example of challenges
-        ```python
-        [
-            (123, "What is your favorite pet's name?"),
-            (456, "What is your favorite movie?"),
-            (789, "What is your favorite author's last name?")
-        ]
-        ```
     
     Raises:
         Unauthorized: If access token is invalid
         PayloadError: If access token is not formated correctly
+
+    Example:
+        
+        ```python
+        from mojang.account.auth import security
+
+        challenges = security.get_challenges('ACCESS_TOKEN')
+        print(challenges)
+        ```
+        ```bash
+        [
+            ChallengeInfo(id=123, challenge="What is your favorite pet's name?"), 
+            ChallengeInfo(id=456, challenge="What is your favorite movie?"), 
+            ChallengeInfo(id=589, challenge="What is your favorite author's last name?")
+        ]
+        ```
     """
     response = requests.get(URLs.get_challenges(), auth=BearerAuth(access_token))
     data = handle_response(response, PayloadError, Unauthorized)
@@ -67,24 +85,27 @@ def verify_ip(access_token: str, answers: list) -> bool:
     Args:
         access_token (str): The session's access token
         answers (list): The answers to the question
-    
-    Example:
         
-        ```python
-        answers = [
-            (123, "foo"),
-            (456, "bar"),
-            (789, "baz")
-        ]
-        security.verify_user_ip(ACCESS_TOKEN, answers)
-        ```
-    
     Returns:
         True if IP is secure else False
     
     Raises:
         Unauthorized: If access token is invalid
         PayloadError: If access token is not formated correctly
+    
+    Example:
+        
+        ```python
+        from mojang.account.auth import security
+
+        answers = [
+            (123, "foo"),
+            (456, "bar"),
+            (789, "baz")
+        ]
+
+        security.verify_user_ip('ACCESS_TOKEN', answers)
+        ```
     """
     answers = list(map(lambda a: {'id': a[0], 'answer': a[1]}, answers))
     response = requests.post(URLs.verify_ip(), auth=BearerAuth(access_token), json=answers)

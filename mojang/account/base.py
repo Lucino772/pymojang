@@ -15,6 +15,18 @@ def status() -> StatusCheck:
     
     Returns:
         StatusCheck
+    
+    Example:
+
+        ```python
+        import mojang
+
+        service_status = mojang.status().get('minecraft.net')
+        print(service_status)
+        ```
+        ```bash
+        ServiceStatus(name='minecraft.net', status='green')
+        ```
     """
     response = requests.get(URLs.status_check())
     data = handle_response(response)
@@ -34,6 +46,17 @@ def get_uuid(username: str) -> UUIDInfo:
     
     Returns:
         UUIDInfo
+
+    Example:
+
+        ```python
+        import mojang
+        uuid_info = mojang.get_uuid('Notch')
+        print(uuid_info)
+        ```
+        ```
+        UUIDInfo(name='Notch', uuid='069a79f444e94726a5befca90e38aaf5', legacy=False, demo=False)
+        ```
     """
     response = requests.get(URLs.uuid(username))
     data = handle_response(response)
@@ -54,6 +77,20 @@ def get_uuids(usernames: list) -> List[UUIDInfo]:
     
     Returns:
         A list of UUIDInfo
+
+    Example:
+
+        ```python
+        import mojang
+        uuids_info = mojang.get_uuids(['Notch', '_jeb'])
+        print(uuids_info)
+        ```
+        ```
+        [
+            UUIDInfo(name='Notch', uuid='069a79f444e94726a5befca90e38aaf5', legacy=False, demo=False), 
+            UUIDInfo(name='_jeb', uuid='45f50155c09f4fdcb5cee30af2ebd1f0', legacy=False, demo=False)
+        ]
+        ```
     """
     usernames = list(map(lambda u: u.lower(), usernames))
     _uuids = [None]*len(usernames)
@@ -77,6 +114,21 @@ def names(uuid: str) -> NameInfoList:
     
     Returns:
         NameInfoList
+
+    Example:
+
+        ```python
+        import mojang
+
+        name_history = mojang.names('65a8dd127668422e99c2383a07656f7a')
+        print(name_history)
+        ```
+        ```
+        (
+            NameInfo(name='piewdipie', changed_to_at=None), 
+            NameInfo(name='KOtMotros', changed_to_at=datetime.datetime(2020, 3, 4, 17, 45, 26))
+        )
+        ```
     """
     response = requests.get(URLs.name_history(uuid))
     data = handle_response(response)
@@ -98,6 +150,26 @@ def user(uuid: str) -> UserProfile:
     
     Returns:
         UserProfile
+
+    Example:
+
+        ```python
+        import mojang
+
+        profile = mojang.user('069a79f444e94726a5befca90e38aaf5')
+        print(profile)
+        ```
+        ```
+        UserProfile(
+            name='Notch', 
+            uuid='069a79f444e94726a5befca90e38aaf5', 
+            is_legacy=False, 
+            is_demo=False, 
+            names=(NameInfo(name='Notch', changed_to_at=None),),
+            skin=Skin(source='...', variant='classic'), 
+            cape=None
+        )
+        ```
     """
     response = requests.get(URLs.profile(uuid))
     data = handle_response(response)

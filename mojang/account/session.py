@@ -19,6 +19,18 @@ def get_user_name_change(access_token: str) -> NameChange:
     
     Raises:
         Unauthorized: If the access token is invalid
+
+    Example:
+
+        ```python
+        from mojang.account import session
+
+        name_change = session.get_user_name_change('ACCESS_TOKEN')
+        print(name_change)
+        ```
+        ```bash
+        NameChange(allowed=True, created_at=datetime.datetime(2006, 4, 29, 10, 10, 10))
+        ```
     """
     response = requests.get(URLs.name_change(), auth=BearerAuth(access_token))
     data = handle_response(response, PayloadError, Unauthorized)
@@ -39,6 +51,14 @@ def change_user_name(access_token: str, name: str):
         Unauthorized: If the access token is invalid
         InvalidName: If the new user name is invalid
         UnavailableName: If the new user name is unavailable
+    
+    Example:
+
+        ```python
+        from mojang.account import session
+
+        session.change_user_name('ACCESS_TOKEN', 'my_super_cool_name')
+        ```
     """
     response = requests.put(URLs.change_name(name), auth=BearerAuth(access_token))
     handle_response(response, InvalidName, UnavailableName, Unauthorized)
@@ -53,6 +73,14 @@ def change_user_skin(access_token: str, path: str, variant='classic'):
     
     Raises:
         Unauthorized: If the access token is invalid
+
+    Example:
+
+        ```python
+        from mojang.account import session
+
+        session.change_user_skin('ACCESS_TOKEN', 'http://...')
+        ```
     """
     skin = Skin(source=path, variant=variant)
     files = [
@@ -71,6 +99,14 @@ def reset_user_skin(access_token: str, uuid: str):
     
     Raises:
         Unauthorized: If the access token is invalid
+
+    Example:
+
+        ```python
+        from mojang.account import session
+
+        session.reset_user_skin('ACCESS_TOKEN', 'USER_UUID')
+        ```
     """
     response = requests.delete(URLs.reset_skin(uuid), auth=BearerAuth(access_token))
     handle_response(response, PayloadError, Unauthorized)

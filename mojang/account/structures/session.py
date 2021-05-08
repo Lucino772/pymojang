@@ -10,6 +10,11 @@ import validators
 
 @dataclass(frozen=True)
 class NameChange:
+    """
+    Attributes:
+        allowed (bool): Wether the user can change name
+        created_at (dt.datetime): When was the user created
+    """
     allowed: bool = field()
     created_at: dt.datetime = field()
 
@@ -80,7 +85,14 @@ class _SkinCapeBase:
             fp.write(self.data)
 
 class Skin(_SkinCapeBase):
-    pass
+    """
+    Attributes:
+        source (str): The source where the skin is located
+        variant (str): The variant of skin (default to 'classic')
+    """
 
 class Cape(_SkinCapeBase):
-    pass
+    """
+    Attributes:
+        source (str): The source where the cape is located
+    """
