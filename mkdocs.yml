@@ -2,9 +2,27 @@ site_name: PyMojang
 repo_url: https://github.com/Lucino772/pymojang
 repo_name: Lucino772/PyMojang
 site_author: Lucino772
+edit_uri: ""
 
 theme: 
   name: material
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
 
 markdown_extensions:
   - admonition
