@@ -1,9 +1,10 @@
 site_name: PyMojang
 repo_url: https://github.com/Lucino772/pymojang
+repo_name: Lucino772/PyMojang
 site_author: Lucino772
 
-theme:
-  name: "material"
+theme: 
+  name: material
 
 markdown_extensions:
   - admonition
@@ -12,26 +13,30 @@ markdown_extensions:
 
 plugins:
   - search
-  - mkdocstrings
+  - mkdocstrings:
+      default_handler: python
+      watch:
+        - mojang
 
 extra_css:
   - css/extra.css
 
-nav:
-  - Quisk Start:
-    - 'About': 'index.md'
-    - 'Basic Usage': 'basic.md'
-  
-  - Advanced:
-    - 'Profile and Authentication': 'advanced.md'
+extra:
+  version:
+    provider: mike
+    default: stable
 
-  - Reference:
-    - mojang:
-      - 'mojang.main': 'PyMojang/main.md'
-      - 'mojang.api.base': 'PyMojang/base.md'
-      - 'mojang.api.session': 'PyMojang/session.md'
-      - 'mojang.api.auth.yggdrasil': 'PyMojang/yggdrasil.md'
-      - 'mojang.api.auth.security': 'PyMojang/security.md'
-      - 'mojang.profile.UserProfile': 'PyMojang/UserProfile.md'
-      - 'mojang.session.UserSession': 'PyMojang/UserSession.md' 
-      - 'Exceptions': 'PyMojang/exceptions.md'
+nav:
+  - What is PyMojang: 'index.md'
+  - Check Status: 'check_status.md'
+  - Account:
+    - Retrieve user information: 'account/retrieve_user_info.md'
+    - Authenticated User:
+      - Connect: 'account/auth_connect.md'
+      - Auth API: 'account/auth_api.md'
+      - Security API: 'account/auth_security.md'
+      - Session API: 'account/auth_session.md'
+  - Minecraft:
+    - RCON: 'minecraft/rcon.md'
+    - Query: 'minecraft/query.md'
+    - Server List Ping: 'minecraft/slp.md'

@@ -1,3 +1,18 @@
-li.toctree-l3:first-child {
-    display: none;
+code, .rst-content tt, .rst-content code {
+    white-space: pre;
+}
+
+.md-typeset__table {
+    min-width: 100%;
+}
+ 
+.md-typeset table:not([class]) {
+    display: table;
+}
+
+/* Indentation. */
+div.doc-contents:not(.first) {
+    padding-left: 25px;
+    border-left: 4px solid rgba(230, 230, 230);
+    margin-bottom: 80px;
 }
