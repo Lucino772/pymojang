@@ -18,11 +18,32 @@ def status() -> StatusCheck:
     
     Example:
 
+        Get status for all services
         ```python
         import mojang
 
-        service_status = mojang.status().get('minecraft.net')
-        print(service_status)
+        status = mojang.status()
+        print(status)
+        ```
+        ```bash
+        (
+            ServiceStatus(name='minecraft.net', status='green'), 
+            ServiceStatus(name='session.minecraft.net', status='green'), 
+            ServiceStatus(name='account.mojang.com', status='green'), 
+            ServiceStatus(name='authserver.mojang.com', status='green'), 
+            ServiceStatus(name='sessionserver.mojang.com', status='red'),
+            ServiceStatus(name='api.mojang.com', status='green'), 
+            ServiceStatus(name='textures.minecraft.net', status='green'), 
+            ServiceStatus(name='mojang.com', status='green')
+        )
+        ```
+
+        Get status for one specific service
+        ```python
+        import mojang
+
+        status = mojang.status().get('minecraft.net')
+        print(status)
         ```
         ```bash
         ServiceStatus(name='minecraft.net', status='green')
@@ -61,11 +82,14 @@ def get_uuid(username: str) -> UUIDInfo:
     response = requests.get(URLs.uuid(username))
     data = handle_response(response)
 
+    if not data:
+        return None
+
     data['uuid'] = data.pop('id')
 
     return UUIDInfo(**data)
 
-def get_uuids(usernames: list) -> List[UUIDInfo]:
+def get_uuids(usernames: list) -> List['UUIDInfo']:
     """Get uuid of multiple username
     
     Note: Limited Endpoint
@@ -143,7 +167,7 @@ def names(uuid: str) -> NameInfoList:
     return NameInfoList(_names)
 
 def user(uuid: str) -> UserProfile:
-    """Get profile information by uuid
+    """Returns the full profile of a user 
     
     Args:
         uuid (str): The uuid of the profile
@@ -173,6 +197,10 @@ def user(uuid: str) -> UserProfile:
     """
     response = requests.get(URLs.profile(uuid))
     data = handle_response(response)
+    
+    if not data:
+        return None
+
     _dict = dict.fromkeys([f.name for f in fields(UserProfile) if f.init], None)
 
     # Load profile info

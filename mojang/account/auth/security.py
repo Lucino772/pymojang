@@ -40,7 +40,7 @@ def check_ip(access_token: str) -> bool:
     else:
         return True
 
-def get_challenges(access_token: str) -> List[ChallengeInfo]:
+def get_challenges(access_token: str) -> List['ChallengeInfo']:
     """Return a list of challenges to verify IP
     
     Args:

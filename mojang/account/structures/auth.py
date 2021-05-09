@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 
+
 ## Authentication 
 @dataclass(frozen=True)
 class AuthenticationInfo:

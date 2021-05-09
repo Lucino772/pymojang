@@ -1,5 +1,6 @@
 from requests.auth import AuthBase
 
+
 class BearerAuth(AuthBase):
 
     def __init__(self, token: str):

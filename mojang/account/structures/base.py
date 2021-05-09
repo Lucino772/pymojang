@@ -1,6 +1,6 @@
 import datetime as dt
 from dataclasses import dataclass, field
-from typing import Tuple, Union
+from typing import Iterator, Union
 
 from .session import Cape, Skin
 
@@ -16,7 +16,7 @@ class ServiceStatus:
     name: str = field()
     status: str = field()
 
-class StatusCheck(Tuple[ServiceStatus]):
+class StatusCheck(tuple):
     
     def get(self, name: str) -> Union[None, 'ServiceStatus']:
         """Get service by name
@@ -30,6 +30,12 @@ class StatusCheck(Tuple[ServiceStatus]):
         service = list(filter(lambda s: s.name == name, self))
         if len(service) > 0:
             return service[0]
+
+    def __getitem__(self, x) -> ServiceStatus:
+        return super().__getitem__(x)
+
+    def __iter__(self) -> Iterator['ServiceStatus']:
+        return super().__iter__()
 
 # UUID and Name
 @dataclass(frozen=True)
@@ -56,10 +62,10 @@ class NameInfo:
     name: str = field()
     changed_to_at: dt.datetime = field()
 
-class NameInfoList(Tuple[NameInfo]):
+class NameInfoList(tuple):
 
     @property
-    def current(self) -> 'NameInfo':
+    def current(self) -> NameInfo:
         """Returns the most recent name"""
         if len(self) == 1:
             return self[0]
@@ -68,10 +74,17 @@ class NameInfoList(Tuple[NameInfo]):
         return max(_list, key=lambda n: n.change_to_at)
     
     @property
-    def first(self) -> 'NameInfo':
+    def first(self) -> NameInfo:
         """Returns the first name"""
         first = list(filter(lambda n: n.changed_to_at == None, self))
         return first[0]
+
+    def __getitem__(self, x) -> NameInfo:
+        return super().__getitem__(x)
+
+    def __iter__(self) -> Iterator['NameInfo']:
+        return super().__iter__()
+
 
 ## Profile
 @dataclass

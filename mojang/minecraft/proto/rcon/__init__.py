@@ -2,7 +2,7 @@ import random
 import socket
 import struct
 from contextlib import contextmanager
-from typing import IO, Tuple
+from typing import IO, Tuple, Callable, Any
 
 
 def get_request_id():
@@ -31,7 +31,27 @@ def _write_packet(sock: socket.socket, packet_type: int, payload: str):
 
 
 @contextmanager
-def session(addr: Tuple[str, int], password: str, timeout: float = 3):
+def session(addr: Tuple[str, int], password: str, timeout: float = 3) -> Callable[[str], Any]:
+    """Open a RCON connection
+
+    Args:
+        addr (tuple): The address and the port to connect to
+        password (str): The RCON password set in the server properties
+        timeout (int, optional): Time to wait before closing pending connection (default to 3) 
+
+    Returns:
+        A function to send command
+        
+    Example:
+
+        ```python
+        from mojang.minecraft import rcon
+
+        with rcon.session(('localhost', 25575), 'my_super_password') as send:
+            result = send('help') # This execute the /help command
+        ```
+
+    """
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.settimeout(timeout)
     sock.connect(addr)

@@ -77,7 +77,39 @@ def _get_stats(sock: socket.socket, addr: Tuple[str, int], session_id: int, toke
 
     return ServerStats(**info, player_list=players)
 
-def get_stats(addr: Tuple[str, int], session_id: int = None, timeout: float = 3):
+def get_stats(addr: Tuple[str, int], session_id: int = None, timeout: float = 3) -> ServerStats:
+    """Returns full stats about server using the Query protocol
+
+    Args:
+        addr (tuple): tuple with the address and the port to connect to
+        session_id (int, optional): A session id used for the requests (default to None)
+        timeout (int, optional): Time to wait before closing pending connection (default to 3)
+    
+    Returns:
+        ServerStats
+
+    Example:
+
+        ```python
+        from mojang.minecraft import query
+
+        stats = query.get_stats(('localhost', 25585))
+        print(stats)
+        ```
+        ```bash
+        ServerStats(
+            motd='A Minecraft Server', 
+            game_type='SMP', 
+            game_id='MINECRAFT', 
+            version='1.16.5', 
+            map='world', 
+            host=('localhost', 25585), 
+            players=(0, 20), 
+            player_list=[]
+        )
+        ```
+
+    """
     session_id = get_session_id() if not session_id else session_id
 
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as conn:
