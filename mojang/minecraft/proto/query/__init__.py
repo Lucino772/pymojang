@@ -2,12 +2,13 @@ import io
 import socket
 import struct
 import time
-from typing import IO, Tuple, Union
+from typing import IO, Tuple
 
 from ._structures import ServerStats
+from .packets import Packets
 
 
-def read_null_terminated_string(buffer: IO, encoding='utf-8'):
+def read_null_terminated_string(buffer: IO, encoding: str = 'utf-8') -> str:
     res = b''
     char = buffer.read(1)
     while char != b'\0':
@@ -16,43 +17,9 @@ def read_null_terminated_string(buffer: IO, encoding='utf-8'):
 
     return res.decode(encoding)
 
-def get_session_id():
-    return int(time.time()) & 0x0F0F0F0F
 
-
-def _handshake(sock: socket.socket, addr: Tuple[str, int], session_id: int):
-    # Send handshake request
-    packet = struct.pack('>Hbi', 0xFEFD, 9, session_id)
-    sock.sendto(packet, addr)
-
-    # Receive token
-    data = sock.recvfrom(18)[0]
-    r_type, r_session_id = struct.unpack('>bi', data[:5])
-    token_str = data[5:-1]
-
-    if r_type != 9 or r_session_id != session_id:
-        raise Exception('An error occured while handshaking')
-
-    return int(token_str)
-    
-def _get_stats(sock: socket.socket, addr: Tuple[str, int], session_id: int, token: int):
-    # Send request
-    packet = struct.pack('>HbiiI', 0xFEFD, 0, session_id, token, 0xFFFFFF01)
-    sock.sendto(packet, addr)
-
-    # Receive response
-    total_data = b''
-    packet_id = 0
-    while packet_id != 0x80:
-        data = sock.recvfrom(4096)[0]
-        r_type, r_session_id, _, packet_id, _ = struct.unpack('>bi9sBb', data[:16])
-
-        if r_type != 0 or r_session_id != session_id:
-            raise Exception('An error occured while getting stats')
-
-        total_data += data[16:]
-
-    with io.BytesIO(total_data) as buffer:
+def _parse_stats(data: bytes) -> ServerStats:
+    with io.BytesIO(data) as buffer:
         # Read server info
         info = {}
         for _ in range(10):
@@ -66,8 +33,9 @@ def _get_stats(sock: socket.socket, addr: Tuple[str, int], session_id: int, toke
         info['players'] = (int(info.pop('numplayers')), int(info.pop('maxplayers')))
         info['host'] = (info.pop('hostip'), int(info.pop('hostport')))
         
-        buffer.seek(11, 1) # Skip next 11 bytes
-        
+        # Skip next 11 bytes
+        buffer.seek(11, 1)
+
         # Read players
         players = []
         player_name = read_null_terminated_string(buffer)
@@ -77,12 +45,41 @@ def _get_stats(sock: socket.socket, addr: Tuple[str, int], session_id: int, toke
 
     return ServerStats(**info, player_list=players)
 
-def get_stats(addr: Tuple[str, int], session_id: int = None, timeout: float = 3) -> ServerStats:
+
+def _handshake(sock: socket.socket, addr: Tuple[str, int], session_id: int) -> int:
+    pcks = Packets(sock)
+    pcks.send(9, session_id)
+
+    r_type, r_session_id, data = pcks.recv()
+    if r_type != 9 or r_session_id != session_id:
+        raise Exception('An error occured while handshaking')
+
+    return int(data.rstrip(b'\0'))
+
+
+def _get_stats(sock: socket.socket, addr: Tuple[str, int], session_id: int, token: int) -> ServerStats:
+    pcks = Packets(sock)
+    pcks.send(0, session_id, struct.pack('>iI', token, 0xFFFFFF01))
+
+    total_data = b''
+    packet_id = 0
+    while packet_id != 0x80:
+        r_type, r_session_id, data = pcks.recv()
+        packet_id = struct.unpack('>9xBx', data[:11])[0]
+
+        if r_type != 0 or r_session_id != session_id:
+            raise Exception('An error occured while getting stats')
+
+        total_data += data[11:]
+
+    return _parse_stats(total_data)
+
+
+def get_stats(addr: Tuple[str, int], timeout: float = 3) -> ServerStats:
     """Returns full stats about server using the Query protocol
 
     Args:
         addr (tuple): tuple with the address and the port to connect to
-        session_id (int, optional): A session id used for the requests (default to None)
         timeout (int, optional): Time to wait before closing pending connection (default to 3)
     
     Returns:
@@ -110,12 +107,16 @@ def get_stats(addr: Tuple[str, int], session_id: int = None, timeout: float = 3)
         ```
 
     """
-    session_id = get_session_id() if not session_id else session_id
+    session_id = int(time.time()) & 0x0F0F0F0F
 
-    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as conn:
-        conn.settimeout(timeout)
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+            sock.settimeout(timeout)
+            sock.connect(addr)
 
-        token = _handshake(conn, addr, session_id)
-        stats = _get_stats(conn, addr, session_id, token)
-
-    return stats
+            token = _handshake(sock, addr, session_id)
+            stats = _get_stats(sock, addr, session_id, token)
+    except socket.timeout:
+        stats = None
+    finally:
+        return stats

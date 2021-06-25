@@ -1,14 +1,13 @@
-from dataclasses import dataclass, field
-from typing import List, Tuple
+from typing import List, NamedTuple, Tuple
 
-@dataclass(frozen=True)
-class ServerStats:
-    motd: str = field()
-    game_type: str = field()
-    game_id: str = field()
-    version: str = field()
-    map: str = field()
-    host: Tuple[str, int] = field()
-    plugins: List[str] = field(repr=False)
-    players: Tuple[int, int] = field()
-    player_list: List[str] = field()
+
+class ServerStats(NamedTuple):
+    motd: str
+    game_type: str
+    game_id: str
+    version: str
+    map: str
+    host: Tuple[str, int]
+    plugins: List[str]
+    players: Tuple[int, int]
+    player_list: List[str]

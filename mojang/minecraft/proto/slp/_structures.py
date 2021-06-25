@@ -1,15 +1,14 @@
-from dataclasses import dataclass, field
-from typing import Tuple, List
+from typing import List, NamedTuple, Tuple
 
-@dataclass(frozen=True)
-class Players:
-    count: Tuple[int, int] = field()
-    list: List[str] = field()
 
-@dataclass(frozen=True)
-class SLPResponse:
-    protocol_version: int = field()
-    version: str = field()
-    motd: str = field()
-    players: Players = field()
-    ping: int = field()
+class Players(NamedTuple):
+    count: Tuple[int, int]
+    list: List[str]
+
+
+class SLPResponse(NamedTuple):
+    protocol_version: int
+    version: str
+    motd: str
+    players: Players
+    ping: float

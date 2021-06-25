@@ -1,17 +1,24 @@
 import socket
+from functools import partial
 from typing import Tuple
 
 from ._structures import SLPResponse
-from .current import slp
-from .old import slp_1_6, slp_prior_1_4, slp_prior_1_6
+from .post_netty import ping as mping
+from .pre_netty import ping_fe, ping_fe01
 
+V1_7 = 1
+V1_6 = 2
+V1_4 = 4
+V1_3 = 8
+V_ALL = V1_7 | V1_6 | V1_4 | V1_3
 
-def ping(addr: Tuple[str, int], timeout: int = 3) -> SLPResponse:
+def ping(addr: Tuple[str, int], timeout: int = 3, flags: int = V_ALL) -> SLPResponse:
     """Ping the server for information
 
     Args:
         addr (tuple): The address and the port to connect to
         timeout (int, optional): Time to wait before closing pending connection (default to 3) 
+        flags (int, optional): Which version of the ping version to use
 
     Returns:
         SLPResponse
@@ -35,18 +42,26 @@ def ping(addr: Tuple[str, int], timeout: int = 3) -> SLPResponse:
         ```
 
     """
-    response = None
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.connect(addr)
-        sock.settimeout(timeout)
+    _methods = []
+    if V1_7 & flags:
+        _methods.append(partial(mping, hostname=addr[0], port=addr[1]))
+    if V1_6 & flags:
+        _methods.append(partial(ping_fe01, hostname=addr[0], port=addr[1]))
+    if V1_4 & flags:
+        _methods.append(ping_fe01)
+    if V1_3 & flags:
+        _methods.append(ping_fe)
 
-        _methods = [slp, slp_1_6, slp_prior_1_6, slp_prior_1_6]
-        while len(_methods) > 0 and response is None:
-            method = _methods.pop(0)
+    response = None
+    while len(_methods) > 0 and response is None:
+        method = _methods.pop(0)
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.settimeout(timeout)
             try:
-                response = method(sock, addr[0], addr[1])
+                sock.connect(addr)
+                response = method(sock)
             except socket.error:
                 pass
-        
+    
     return response
-                
+        
