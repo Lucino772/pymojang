@@ -1,6 +1,5 @@
 import base64
 import json
-from dataclasses import fields
 from typing import List
 
 import requests
