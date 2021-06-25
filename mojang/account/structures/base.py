@@ -1,20 +1,19 @@
 import datetime as dt
-from dataclasses import dataclass, field
-from typing import Iterator, Union
+from typing import Iterator, NamedTuple, Union
 
 from .session import Cape, Skin
 
 
 # Status check
-@dataclass(frozen=True)
-class ServiceStatus:
+class ServiceStatus(NamedTuple):
     """
     Attributes:
         name (str): The service name
         status (str): The service status
     """
-    name: str = field()
-    status: str = field()
+    name: str
+    status: str
+
 
 class StatusCheck(tuple):
     
@@ -37,9 +36,9 @@ class StatusCheck(tuple):
     def __iter__(self) -> Iterator['ServiceStatus']:
         return super().__iter__()
 
+
 # UUID and Name
-@dataclass(frozen=True)
-class UUIDInfo:
+class UUIDInfo(NamedTuple):
     """
     Attributes:
         name (str): The user name
@@ -47,20 +46,21 @@ class UUIDInfo:
         legacy (bool): Wether the account has migrated
         demo (bool): Wether the account is demo
     """
-    name: str = field()
-    uuid: str = field()
-    legacy: bool = field(default=False)
-    demo: bool = field(default=False)
+    name: str
+    uuid: str
+    legacy: bool = False
+    demo: bool = False
 
-@dataclass(frozen=True)
-class NameInfo:
+
+class NameInfo(NamedTuple):
     """
     Attributes:
         name (str): The player name
         changed_to_at (dt.datetime): When it's was changed to
     """
-    name: str = field()
-    changed_to_at: dt.datetime = field()
+    name: str
+    changed_to_at: dt.datetime
+
 
 class NameInfoList(tuple):
 
@@ -87,8 +87,7 @@ class NameInfoList(tuple):
 
 
 ## Profile
-@dataclass
-class UserProfile:
+class UserProfile(NamedTuple):
     """
     Attributes:
         name (str): The user name
@@ -99,10 +98,10 @@ class UserProfile:
         skin (Skin): The user skin
         cape (Cape): The user cape
     """
-    name: str = field()
-    uuid: str = field()
-    is_legacy: bool = field()
-    is_demo: bool = field()
-    names: NameInfoList = field()
-    skin: Skin = field()
-    cape: Cape = field()
+    name: str
+    uuid: str
+    is_legacy: bool
+    is_demo: bool
+    names: NameInfoList
+    skin: Skin
+    cape: Cape

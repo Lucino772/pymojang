@@ -2,7 +2,7 @@ import io
 import socket
 import struct
 import time
-from typing import IO, Tuple
+from typing import IO, Optional, Tuple
 
 from ._structures import ServerStats
 from .packets import Packets
@@ -75,7 +75,7 @@ def _get_stats(sock: socket.socket, addr: Tuple[str, int], session_id: int, toke
     return _parse_stats(total_data)
 
 
-def get_stats(addr: Tuple[str, int], timeout: float = 3) -> ServerStats:
+def get_stats(addr: Tuple[str, int], timeout: Optional[float] = 3) -> ServerStats:
     """Returns full stats about server using the Query protocol
 
     Args:

@@ -1,11 +1,12 @@
 import socket
 import struct
 import time
+from typing import Optional
 
 from .._structures import Players, SLPResponse
 
 
-def ping_fe01(sock: socket.socket, hostname: str = None, port: int = -1):
+def ping_fe01(sock: socket.socket, hostname: Optional[str] = None, port: Optional[int] = -1):
     if hostname is not None and len(hostname) > 0 and port > 0:
         encoded_hostname = hostname.encode('utf-16be')
         packet = struct.pack(

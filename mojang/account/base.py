@@ -201,7 +201,7 @@ def user(uuid: str) -> UserProfile:
     if not data:
         return None
 
-    _dict = dict.fromkeys([f.name for f in fields(UserProfile) if f.init], None)
+    _dict = dict.fromkeys(UserProfile._fields, None)
 
     # Load profile info
     _dict['name'] = data['name']

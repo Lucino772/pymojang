@@ -1,10 +1,11 @@
 import datetime as dt
-from dataclasses import dataclass, field
 from typing import Optional, Tuple
+
+from ..structures.session import Cape, Skin
 
 from .. import session, user
 from ..auth import security, yggdrasil
-from ..structures.base import UserProfile
+from ..structures.base import NameInfoList
 
 
 def connect(username: str, password: str, client_token: Optional[str] = None) -> 'UserSession':
@@ -44,8 +45,8 @@ def connect(username: str, password: str, client_token: Optional[str] = None) ->
     return UserSession(auth.access_token, auth.client_token)
 
 
-@dataclass(init=False)
-class UserSession(UserProfile):
+
+class UserSession:
     """
     Attributes:
         name (str): The user name
@@ -58,8 +59,15 @@ class UserSession(UserProfile):
         name_change_allowed (bool): Wether the user can change name
         created_at (dt.datetime): When was the user created
     """
-    created_at: dt.datetime = field()
-    name_change_allowed: bool = field()
+    name: str
+    uuid: str
+    is_legacy: bool
+    is_demo: bool
+    names: NameInfoList
+    skin: Skin
+    cape: Cape
+    created_at: dt.datetime
+    name_change_allowed: bool
 
     def __init__(self, access_token: str, client_token: str):
         """Create a user session with access token and client token.

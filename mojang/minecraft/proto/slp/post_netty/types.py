@@ -1,5 +1,5 @@
 import struct
-from typing import IO
+from typing import IO, Optional
 
 
 class VarInt:
@@ -39,13 +39,13 @@ class VarInt:
 class String:
 
     @classmethod
-    def write(cls, buffer: IO, value: str, encoding: str = 'utf-8'):
+    def write(cls, buffer: IO, value: str, encoding: Optional[str] = 'utf-8'):
         value = value.encode(encoding)
         VarInt.write(buffer, len(value))
         buffer.write(value)
 
 
     @classmethod
-    def read(cls, buffer: IO, encoding: str = 'utf-8') -> str:
+    def read(cls, buffer: IO, encoding: Optional[str] = 'utf-8') -> str:
         length = VarInt.read(buffer)
         return buffer.read(length).decode(encoding)

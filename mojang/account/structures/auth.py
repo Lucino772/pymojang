@@ -1,9 +1,8 @@
-from dataclasses import dataclass, field
+from typing import NamedTuple
 
 
 ## Authentication 
-@dataclass(frozen=True)
-class AuthenticationInfo:
+class AuthenticationInfo(NamedTuple):
     """
     Attributes:
         access_token (str): The session's access token
@@ -13,20 +12,19 @@ class AuthenticationInfo:
         legacy (bool): Wether the account has migrated
         demo (bool): Wether the account is demo 
     """
-    access_token: str = field()
-    client_token: str = field()
-    uuid: str = field()
-    name: str = field()
-    legacy: bool = field(default=False)
-    demo: bool = field(default=False)
+    access_token: str
+    client_token: str
+    uuid: str
+    name: str
+    legacy: bool
+    demo: bool
 
 ## Security
-@dataclass(frozen=True)
-class ChallengeInfo:
+class ChallengeInfo(NamedTuple):
     """
     Attributes:
         id (int): The id of the challenge
         challenge (str): The challenge to complete
     """
-    id: int = field()
-    challenge: str = field()
+    id: int
+    challenge: str

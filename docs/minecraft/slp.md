@@ -11,3 +11,4 @@
     selection:
         members:
             - ping
+            - PingVersion

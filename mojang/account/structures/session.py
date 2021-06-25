@@ -1,32 +1,30 @@
 import datetime as dt
 import re
-from dataclasses import dataclass, field
 from os import path
+from typing import NamedTuple
 from urllib.parse import urlparse
 
 import requests
 import validators
 
 
-@dataclass(frozen=True)
-class NameChange:
+class NameChange(NamedTuple):
     """
     Attributes:
         allowed (bool): Wether the user can change name
         created_at (dt.datetime): When was the user created
     """
-    allowed: bool = field()
-    created_at: dt.datetime = field()
+    allowed: bool
+    created_at: dt.datetime
 
-@dataclass(frozen=True)
-class _SkinCapeBase:
-    source: str = field()
-    variant: str = field(default=None)
+class _SkinCapeBase(NamedTuple):
+    source: str
+    variant: str = None
 
     @classmethod
     def _filename_from_url(cls, url: str):
         url_path = urlparse(url).path
-        match = re.match('^([\w,\s-]+)\.([A-Za-z]{3})$', path.basename(url_path))
+        match = re.match(r'^([\w,\s-]+)\.([A-Za-z]{3})$', path.basename(url_path))
         if match:
             return match.groups()
 

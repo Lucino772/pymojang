@@ -1,12 +1,12 @@
 import socket
 from contextlib import contextmanager
-from typing import Callable, Tuple
+from typing import Callable, Optional, Tuple
 
 from .packets import Packets
 
 
 @contextmanager
-def session(addr: Tuple[str, int], password: str, timeout: float = 3) -> Callable[[str], str]:
+def session(addr: Tuple[str, int], password: str, timeout: Optional[float] = 3) -> Callable[[str], str]:
     """Open a RCON connection
 
     Args:

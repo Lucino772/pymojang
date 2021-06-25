@@ -2,13 +2,14 @@ import json
 import socket
 import struct
 import time
+from typing import Optional
 
 from .._structures import Players, SLPResponse
 from .packets import Packets
 from .types import String, VarInt
 
 
-def ping(sock: socket.socket, hostname: str = 'locahost', port: int = 25565) -> SLPResponse:
+def ping(sock: socket.socket, hostname: Optional[str] = 'locahost', port: Optional[int] = 25565) -> SLPResponse:
     pcks = Packets(sock)
 
     # Send handshake packet    
