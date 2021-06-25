@@ -5,7 +5,7 @@ with open('./README.md', 'r') as fp:
 
 setuptools.setup(
     name='pymojang',
-    version='1.2.0',
+    version='1.2.1',
     author='Lucino772',
     author_email='lucapalmi772@gmail.com',
     licence='MIT',
@@ -15,15 +15,17 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     classifiers=[
-        "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9"
     ],
     packages=setuptools.find_packages(),
     install_requires=['requests', 'validators'],
     keywords=['minecraft', 'mojang', 'python3'],
     project_urls={
-        'Source': 'https://github.com/Lucino772/pymojang',
         'Documentation': 'https://pymojang.readthedocs.io/en/latest/'
     }
 )
