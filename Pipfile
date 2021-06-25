@@ -9,6 +9,8 @@ mkdocs-material = "*"
 mkdocstrings = "*"
 pygments = "*"
 mike = "*"
+pytest = "*"
+flake8 = "*"
 
 [packages]
 requests = "*"
