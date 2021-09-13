@@ -1,5 +1,6 @@
 import datetime as dt
 
+import jwt
 import requests
 
 from ..exceptions import *
@@ -110,3 +111,37 @@ def reset_user_skin(access_token: str, uuid: str):
     """
     response = requests.delete(URLs.reset_skin(uuid), auth=BearerAuth(access_token))
     handle_response(response, PayloadError, Unauthorized)
+
+def owns_minecraft(access_token: str, verify_sig: bool = False, public_key: str = None) -> bool:
+    """Returns True if the authenticated user owns minecraft
+    
+    Args:
+        access_token (str): The session's access token
+        verify_sig (bool, optional): If True, will check the jwt sig with the public key
+        public_key (str, optional): The key to use to verify jwt sig 
+
+    Returns:
+        True if user owns the game, else False
+
+    Raises:
+        Unauthorized: If the access token is invalid
+
+    Example:
+
+        ```python
+        from mojang.account import session
+
+        if session.owns_minecraft('ACCESS_TOKEN'):
+            print('This user owns minecraft')
+        ```
+    """
+    response = requests.get(URLs.check_minecraft_onwership(), auth=BearerAuth(access_token))
+    data = handle_response(response, Unauthorized)
+    
+    if verify_sig:
+        for i in data.get('items', []):
+            jwt.decode(i['signature'], public_key, algorithms=['RS256'])
+
+        jwt.decode(data['signature'], public_key, algorithms=['RS256'])
+
+    return not len(data['items']) == 0

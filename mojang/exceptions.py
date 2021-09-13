@@ -1,3 +1,5 @@
+import json
+
 
 def handle_response(response, *exceptions, use_defaults=True):
     """Handle response message from http request. Every given `exception`
@@ -10,21 +12,25 @@ def handle_response(response, *exceptions, use_defaults=True):
         data = {}
         try:
             data = response.json()
-        except ValueError:
+        except json.decoder.JSONDecodeError:
             pass
         finally:
             return data
     else:
         if use_defaults:
             exceptions += (NotFound, MethodNotAllowed, ServerError)
-        data = response.json()
+        try:
+            data = response.json()
+        except json.decoder.JSONDecodeError:
+            data = {'errorMessage': response.text}
+        
         for exception in exceptions:
             if isinstance(exception.code, int):
                 if response.status_code == exception.code:
-                    raise exception(data['errorMessage'])
+                    raise exception(*data.values())
             elif isinstance(exception.code, list):
                 if response.status_code in exception.code:
-                    raise exception(data['errorMessage'])
+                    raise exception(*data.values())
         else:
             raise Exception(*data.values())
 
@@ -64,6 +70,22 @@ class TokenError(Exception):
 class Unauthorized(Exception):
     """The token sent to the server is invalid"""
     code = 401
+
+
+# Microsoft Authentication Errors
+class MicrosoftInvalidGrant(Exception):
+    """The auth code or refresh token sent to the server is invalid"""
+    code = 400
+
+
+class XboxLiveAuthenticationError(Exception):
+    """Authentication with Xbox Live failed"""
+    code = 400
+
+
+class XboxLiveInvalidUserHash(Exception):
+    """The user hash sent to the server is invalid"""
+    code = 400
 
 
 # Name Change Errors

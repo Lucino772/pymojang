@@ -47,3 +47,7 @@ class URLs:
     def reset_skin(cls, uuid: str):
         """Returns the url to reset the user's skin"""
         return f'https://api.mojang.com/user/profile/{uuid}/skin'
+
+    @classmethod
+    def check_minecraft_onwership(cls):
+        return 'https://api.minecraftservices.com/entitlements/mcstore'
