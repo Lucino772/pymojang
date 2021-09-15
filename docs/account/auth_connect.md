@@ -2,6 +2,9 @@ Getting a user profile is great, but you can also connect to your account and re
 
 Both [`connect`][mojang.account.ext.session.connect] and [`UserSession`][mojang.account.ext.session.UserSession] use more low-level functions, you can view them in the following sections: [`Auth API`](./auth_api.md), [`Security API`](./auth_security.md) and [`Session API`](./auth_session.md).
 
+!!! note "Microsoft Users"
+    The following function works for Mojang account, for Microsoft accounts view
+    [this](./microsoft/connect.md)
 
 ::: mojang.account.ext.session
     handler: python

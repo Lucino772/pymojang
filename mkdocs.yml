@@ -49,9 +49,12 @@ nav:
   - Check Status: 'check_status.md'
   - Account:
     - Retrieve user information: 'account/retrieve_user_info.md'
-    - Authenticated User:
-      - Connect: 'account/auth_connect.md'
+    - Authenticate:
+      - Mojang Account: 'account/auth_connect.md'
+      - Microsoft Account: 'account/microsoft/connect.md'
+    - API:
       - Auth API: 'account/auth_api.md'
+      - Microsoft Auth API: 'account/microsoft/auth_api.md'
       - Security API: 'account/auth_security.md'
       - Session API: 'account/auth_session.md'
   - Minecraft:

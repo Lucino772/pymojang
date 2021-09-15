@@ -1,3 +1,4 @@
+from typing import Tuple
 import requests
 from mojang.exceptions import *
 
@@ -9,11 +10,12 @@ HEADERS_ACCEPT_JSON = {
 }
 
 
-def authenticate_xbl(auth_token: str) -> tuple:
-    """Authenticate with Xbox Live
+def authenticate_xbl(auth_token: str) -> Tuple[str, str]:
+    """Authenticate with Xbox Live using the Microsoft access token
+    received after the OAuth authentication
     
     Args:
-        auth_token (str): The access token received from the authentication with Microsoft
+        auth_token (str): The access token
     
     Returns:
         A tuple containing the Xbox Live token and user hash
@@ -36,8 +38,8 @@ def authenticate_xbl(auth_token: str) -> tuple:
     data = handle_response(response, XboxLiveAuthenticationError)
     return data['Token'], data['DisplayClaims']['xui'][0]['uhs']
 
-def authenticate_xsts(xbl_token: str) -> tuple:
-    """Retrieve the XSTS Token
+def authenticate_xsts(xbl_token: str) -> Tuple[str, str]:
+    """Retrieve the XSTS Token using the Xbox Live token
     
     Args:
         xbl_token (str): The Xbox Live token
@@ -62,8 +64,9 @@ def authenticate_xsts(xbl_token: str) -> tuple:
     data = handle_response(response, XboxLiveAuthenticationError)
     return data['Token'], data['DisplayClaims']['xui'][0]['uhs']
 
-def authenticate_minecraft(userhash: str, xsts_token: str):
-    """Login to minecraft using Xbox Live
+def authenticate_minecraft(userhash: str, xsts_token: str) -> str:
+    """Retrieve the Minecraft access token loging in using Xbox Live
+    
     Args:
         user_hash (str): The user hash from Xbox Live
         xbl_token (str): The XSTS Token from Xbox Live
@@ -74,6 +77,18 @@ def authenticate_minecraft(userhash: str, xsts_token: str):
     Raises:
         XboxLiveInvalidUserHash: If the user hash is invalid
         Unauthorized: If the XSTS token is invalid
+
+    Example:
+
+        ```python
+        from mojang.account.auth import microsoft
+
+        ACCESS_TOKEN = '....' # Access token from Microsoft
+
+        xbl_token, _ = microsoft.authenticate_xbl(ACCESS_TOKEN)
+        xsts_token, userhash = microsoft.authenticate_xsts(xbl_token)
+        mc_access_token = microsoft.authenticate_minecraft(userhash, xsts_token)
+        ```
     """
 
     data = {"identityToken": f"XBL3.0 x={userhash};{xsts_token}"}
