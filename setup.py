@@ -23,7 +23,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.9"
     ],
     packages=setuptools.find_packages(),
-    install_requires=['requests', 'validators', 'pyjwt[crypto]'],
+    install_requires=['requests', 'validators', 'pyjwt[crypto]', 'msal'],
     keywords=['minecraft', 'mojang', 'python3'],
     project_urls={
         'Documentation': 'https://pymojang.readthedocs.io/en/latest/'

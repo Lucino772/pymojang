@@ -51,3 +51,7 @@ class URLs:
     @classmethod
     def check_minecraft_onwership(cls):
         return 'https://api.minecraftservices.com/entitlements/mcstore'
+
+    @classmethod
+    def get_profile(cls):
+        return 'https://api.minecraftservices.com/minecraft/profile'

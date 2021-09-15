@@ -16,6 +16,7 @@ flake8 = "*"
 requests = "*"
 validators = "*"
 pyjwt = {extras = ["crypto"], version = "*"}
+msal = "*"
 
 [requires]
 python_version = "3.8"

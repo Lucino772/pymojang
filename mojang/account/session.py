@@ -4,9 +4,11 @@ import jwt
 import requests
 
 from ..exceptions import *
-from .structures.session import NameChange, Skin
+from .structures.session import NameChange, Skin, Cape
+from .structures.base import UserProfile
 from .utils.auth import BearerAuth
 from .utils.urls import URLs
+from .base import names
 
 
 def get_user_name_change(access_token: str) -> NameChange:
@@ -145,3 +147,24 @@ def owns_minecraft(access_token: str, verify_sig: bool = False, public_key: str 
         jwt.decode(data['signature'], public_key, algorithms=['RS256'])
 
     return not len(data['items']) == 0
+
+def get_profile(access_token: str):
+    response = requests.get(URLs.get_profile(), auth=BearerAuth(access_token))
+    data = handle_response(response, Unauthorized)
+
+    _dict = dict.fromkeys(UserProfile._fields, None)
+
+    _dict['name'] = data['name']
+    _dict['uuid'] = data['id']
+    _dict['names'] = names(data['id'])
+
+    if len(data['skins']) > 0:
+        _dict['skin'] = Skin(data['skins'][0]['url'], data['skins'][0]['variant'])
+    
+    if len(data['capes']) > 0:
+        _dict['cape'] = Cape(data['capes'][0]['url'])
+
+    _dict['is_legacy'] = False
+    _dict['is_demo'] = False
+    
+    return UserProfile(**_dict)
