@@ -1,6 +1,8 @@
+from mojang.exceptions import MicrosoftInvalidGrant, MicrosoftUserNotOwner
 import msal
 from ..auth import microsoft
 from .session import UserSession
+from .. import session
 
 
 _DEFAULT_SCOPES = ['XboxLive.signin']
@@ -66,9 +68,15 @@ class MicrosoftApp:
             An instance of UserSession
         """
         response = self.__client.acquire_token_by_authorization_code(auth_code, scopes=_DEFAULT_SCOPES, redirect_uri=(redirect_uri or self.__redirect_uri))
+        if response.get('error', False):
+            raise MicrosoftInvalidGrant(*response.values())
+
         xbl_token, userhash = microsoft.authenticate_xbl(response['access_token'])
         xsts_token, userhash = microsoft.authenticate_xsts(xbl_token)
         access_token = microsoft.authenticate_minecraft(userhash, xsts_token)
+
+        if not session.owns_minecraft(access_token):
+            raise MicrosoftUserNotOwner()
 
         return UserSession(access_token, response['refresh_token'], True, self._refresh_session, None)
     

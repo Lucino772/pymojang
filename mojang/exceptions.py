@@ -72,6 +72,14 @@ class Unauthorized(Exception):
     code = 401
 
 
+class MigratedAccount(Exception):
+    """Account has been migrated to an Microsoft account,
+    you need to use the Microsoft OAuth Flow"""
+    code = 410
+
+    def __init__(self, *args):
+        super().__init__("Account has been migrated to an Microsoft account, you need to use the Microsoft OAuth Flow")
+
 # Microsoft Authentication Errors
 class MicrosoftInvalidGrant(Exception):
     """The auth code or refresh token sent to the server is invalid"""
@@ -88,6 +96,12 @@ class XboxLiveInvalidUserHash(Exception):
     code = 400
 
 
+class MicrosoftUserNotOwner(Exception):
+    """The Microsoft user does not own Minecraft"""
+
+    def __init__(self, *args):
+        super().__init__("The Microsoft user does not own Minecraft")
+
 # Name Change Errors
 class InvalidName(Exception):
     """The name is invalid, longer than 16 characters or contains
@@ -96,16 +110,15 @@ class InvalidName(Exception):
     """
     code = 400
 
-    def __init__(self):
-        super().__init__("Name is invalid, longer than 16 characters or \
-             contains characters other than (a-zA-Z0-9_)")
+    def __init__(self, *args):
+        super().__init__("Name is invalid, longer than 16 characters or contains characters other than (a-zA-Z0-9_)")
 
 
 class UnavailableName(Exception):
     """Name is unavailable. Only raised when changing the name of a user"""
     code = 403
 
-    def __init__(self):
+    def __init__(self, *args):
         super().__init__("Name is unavailable")
 
 

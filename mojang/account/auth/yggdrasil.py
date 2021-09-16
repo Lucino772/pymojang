@@ -44,7 +44,7 @@ def authenticate(username: str, password: str, client_token: Optional[str] = Non
         }
     }
     response = requests.post(URLs.authenticate(), json=payload)
-    data = handle_response(response, PayloadError, CredentialsError)
+    data = handle_response(response, PayloadError, CredentialsError, MigratedAccount)
 
     _dict = {
         'access_token': data['accessToken'],
@@ -175,4 +175,4 @@ def invalidate(access_token: str, client_token: str):
         'clientToken': client_token
     }
     response = requests.post(URLs.invalidate(), json=payload)
-    data = handle_response(response, PayloadError, TokenError)
+    handle_response(response, PayloadError, TokenError)
