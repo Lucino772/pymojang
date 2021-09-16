@@ -28,6 +28,8 @@ markdown_extensions:
   - admonition
   - pymdownx.highlight
   - pymdownx.superfences
+  - pymdownx.snippets:
+      check_paths: true
 
 plugins:
   - search

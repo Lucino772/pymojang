@@ -68,8 +68,8 @@ def authenticate_minecraft(userhash: str, xsts_token: str) -> str:
     """Retrieve the Minecraft access token loging in using Xbox Live
     
     Args:
-        user_hash (str): The user hash from Xbox Live
-        xbl_token (str): The XSTS Token from Xbox Live
+        userhash (str): The user hash from Xbox Live
+        xsts_token (str): The XSTS Token from Xbox Live
     
     Returns:
         The minecraft access token
