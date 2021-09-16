@@ -31,7 +31,7 @@ class TestMojangAPI(unittest.TestCase):
 
     def test_existent_profile(self):
         self.assertEqual(mojang.user('069a79f444e94726a5befca90e38aaf5'), UserProfile('Notch', '069a79f444e94726a5befca90e38aaf5', False, False, NameInfoList([NameInfo('Notch', None)]), Skin('http://textures.minecraft.net/texture/292009a4925b58f02c77dadc3ecef07ea4c7472f64e0fdc32ce5522489362680', 'classic'), None))
-        self.assertEqual(mojang.user('853c80ef3c3749fdaa49938b674adae6'), UserProfile('jeb_', '853c80ef3c3749fdaa49938b674adae6', False, False, NameInfoList([NameInfo('jeb_', None)]), Skin('http://textures.minecraft.net/texture/7fd9ba42a7c81eeea22f1524271ae85a8e045ce0af5a6ae16c6406ae917e68b5', 'classic'), Cape('http://textures.minecraft.net/texture/5786fe99be377dfb6858859f926c4dbc995751e91cee373468c5fbf4865e7151', None)))
+        self.assertEqual(mojang.user('853c80ef3c3749fdaa49938b674adae6'), UserProfile('jeb_', '853c80ef3c3749fdaa49938b674adae6', False, False, NameInfoList([NameInfo('jeb_', None)]), Skin('http://textures.minecraft.net/texture/7fd9ba42a7c81eeea22f1524271ae85a8e045ce0af5a6ae16c6406ae917e68b5', 'classic'), Cape('http://textures.minecraft.net/texture/9e507afc56359978a3eb3e32367042b853cddd0995d17d0da995662913fb00f7', None)))
 
     def test_unexistent_profile(self):
         self.assertEqual(mojang.user('069a79f444e94726a5befca90e38aaf6'), None)

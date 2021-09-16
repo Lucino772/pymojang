@@ -1,9 +1,10 @@
-![Read the Docs](https://img.shields.io/readthedocs/pymojang?style=flat-square)
+[![Read the Docs](https://img.shields.io/readthedocs/pymojang?style=flat-square)](https://pymojang.readthedocs.io/en/latest/)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/pymojang?style=flat-square)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pymojang?style=flat-square)
 
 # Pymojang
-Pymojang is a full wrapper arround de [Mojang API](https://wiki.vg/Mojang_API) and [Mojang Authentication API](https://wiki.vg/Authentication).
+PyMojang is a full wrapper of the [Mojang API](https://wiki.vg/Mojang_API) and [Mojang Authentication API](https://wiki.vg/Authentication).
+It also support the [Microsoft Authentication Scheme](https://wiki.vg/Microsoft_Authentication_Scheme).
 
 ## Installation
 
