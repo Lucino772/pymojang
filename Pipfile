@@ -11,6 +11,7 @@ pygments = "*"
 mike = "*"
 pytest = "*"
 flake8 = "*"
+pymdown-extensions = "*"
 
 [packages]
 requests = "*"
