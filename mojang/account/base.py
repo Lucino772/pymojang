@@ -48,13 +48,16 @@ def status() -> StatusCheck:
         ServiceStatus(name='minecraft.net', status='green')
         ```
     """
-    response = requests.get(URLs.status_check())
-    data = handle_response(response)
-
-    _status = []
-    for service in data:
-        item = list(service.items())[0]
-        _status.append(ServiceStatus(name=item[0], status=item[1]))
+    _status = [
+        ServiceStatus(name='minecraft.net', status='unknown'), 
+        ServiceStatus(name='session.minecraft.net', status='unknown'), 
+        ServiceStatus(name='account.mojang.com', status='unknown'), 
+        ServiceStatus(name='authserver.mojang.com', status='unknown'), 
+        ServiceStatus(name='sessionserver.mojang.com', status='unknown'),
+        ServiceStatus(name='api.mojang.com', status='unknown'), 
+        ServiceStatus(name='textures.minecraft.net', status='unknown'), 
+        ServiceStatus(name='mojang.com', status='unknown')
+    ]
     
     return StatusCheck(_status)
 
