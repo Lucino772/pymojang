@@ -6,10 +6,8 @@ from .types import VarInt
 
 
 class Packets:
-
     def __init__(self, sock: socket.socket):
         self.__sock = sock
-
 
     @contextmanager
     def send(self):
@@ -18,13 +16,12 @@ class Packets:
             yield packet
         finally:
             data = packet.getvalue()
-            with self.__sock.makefile('wb') as buffer:
+            with self.__sock.makefile("wb") as buffer:
                 VarInt.write(buffer, len(data))
                 buffer.write(data)
 
-
     def recv(self):
-        with self.__sock.makefile('rb') as buffer:
+        with self.__sock.makefile("rb") as buffer:
             length = VarInt.read(buffer)
             packet = buffer.read(length)
 

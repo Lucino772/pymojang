@@ -63,7 +63,7 @@ class MicrosoftApp:
         self.__redirect_uri = redirect_uri
 
     def authorization_url(self, redirect_uri: str = None) -> str:
-        """Returns the authorization url for Microsfot OAuth"""
+        """Returns the authorization url for Microsoft OAuth"""
         return self.__client.get_authorization_request_url(
             scopes=_DEFAULT_SCOPES,
             redirect_uri=(redirect_uri or self.__redirect_uri),

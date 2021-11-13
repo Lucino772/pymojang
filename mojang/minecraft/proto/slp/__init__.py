@@ -7,6 +7,7 @@ from ._structures import SLPResponse
 from .post_netty import ping as mping
 from .pre_netty import ping_fe, ping_fe01
 
+
 class PingVersion(enum.IntFlag):
     """
     Attributes:
@@ -16,6 +17,7 @@ class PingVersion(enum.IntFlag):
         V1_3 (int): Use the ping protocol for version 1.3 and lower
         V_ALL (int): Use all the ping protocol
     """
+
     V1_7 = 1
     V1_6 = 2
     V1_4 = 4
@@ -23,12 +25,16 @@ class PingVersion(enum.IntFlag):
     V_ALL = 15
 
 
-def ping(addr: Tuple[str, int], timeout: Optional[int] = 3, flags: Optional[int] = PingVersion.V_ALL) -> SLPResponse:
+def ping(
+    addr: Tuple[str, int],
+    timeout: Optional[int] = 3,
+    flags: Optional[int] = PingVersion.V_ALL,
+) -> SLPResponse:
     """Ping the server for information
 
     Args:
         addr (tuple): The address and the port to connect to
-        timeout (int, optional): Time to wait before closing pending connection (default to 3) 
+        timeout (int, optional): Time to wait before closing pending connection (default to 3)
         flags (int, optional): Which version of the ping version to use
 
     Returns:
@@ -45,8 +51,8 @@ def ping(addr: Tuple[str, int], timeout: Optional[int] = 3, flags: Optional[int]
         ```bash
         SLPResponse(
             protocol_version=754,
-            version='1.16.5', 
-            motd='A Minecraft Server', 
+            version='1.16.5',
+            motd='A Minecraft Server',
             players=Players(count=(0, 20), list=[]),
             ping=1
         )
@@ -73,6 +79,5 @@ def ping(addr: Tuple[str, int], timeout: Optional[int] = 3, flags: Optional[int]
                 response = method(sock)
             except socket.error:
                 pass
-    
+
     return response
-        

@@ -112,12 +112,27 @@ class AuthenticatedUser(metaclass=ABCMeta):
 
 
 class MojangAuthenticatedUser(AuthenticatedUser):
+    """
+    Attributes:
+        name (str): The user name
+        uuid (str): The user uuid
+        is_legacy (bool): Wether the account has migrated
+        is_demo (bool): Wether the account is demo
+        names (NameInfoList): The user name history
+        skin (Skin): The user skin
+        cape (Cape): The user cape
+        name_change_allowed (bool): Can the user change name
+        created_at (dt.datetime): When was the user created
+    """
+
     def refresh(self):
+        """Refresh current session"""
         self._access_token, self._refresh_token = yggdrasil.refresh(
             self._access_token, self._refresh_token
         )
 
     def close(self):
+        """Close current session"""
         yggdrasil.invalidate(self._access_token, self._refresh_token)
         self._access_token, self._refresh_token = None
 
@@ -137,6 +152,19 @@ class MojangAuthenticatedUser(AuthenticatedUser):
 
 
 class MicrosoftAuthenticatedUser(AuthenticatedUser):
+    """
+    Attributes:
+        name (str): The user name
+        uuid (str): The user uuid
+        is_legacy (bool): Wether the account has migrated
+        is_demo (bool): Wether the account is demo
+        names (NameInfoList): The user name history
+        skin (Skin): The user skin
+        cape (Cape): The user cape
+        name_change_allowed (bool): Can the user change name
+        created_at (dt.datetime): When was the user created
+    """
+
     def __init__(
         self,
         access_token: str,
@@ -147,6 +175,7 @@ class MicrosoftAuthenticatedUser(AuthenticatedUser):
         self.__oauth_client = oauth_client
 
     def refresh(self):
+        """Refresh current session"""
         response = self.__oauth_client.acquire_token_by_refresh_token(
             self._refresh_token, ["XboxLive.signin"]
         )
@@ -162,4 +191,5 @@ class MicrosoftAuthenticatedUser(AuthenticatedUser):
         )
 
     def close(self):
+        """Close current session"""
         self._access_token, self._refresh_token = None, None
