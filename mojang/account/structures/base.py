@@ -1,5 +1,5 @@
 import datetime as dt
-from typing import Iterator, NamedTuple, Union
+from typing import NamedTuple, Tuple, Union
 
 from .session import Cape, Skin
 
@@ -11,30 +11,24 @@ class ServiceStatus(NamedTuple):
         name (str): The service name
         status (str): The service status
     """
+
     name: str
     status: str
 
 
-class StatusCheck(tuple):
-    
-    def get(self, name: str) -> Union[None, 'ServiceStatus']:
+class StatusCheck(Tuple[ServiceStatus, ...]):
+    def get(self, name: str) -> Union[None, ServiceStatus]:
         """Get service by name
 
         Args:
             name (str): The service name
-        
+
         Returns:
             ServiceStatus
         """
         service = list(filter(lambda s: s.name == name, self))
         if len(service) > 0:
             return service[0]
-
-    def __getitem__(self, x) -> ServiceStatus:
-        return super().__getitem__(x)
-
-    def __iter__(self) -> Iterator['ServiceStatus']:
-        return super().__iter__()
 
 
 # UUID and Name
@@ -46,6 +40,7 @@ class UUIDInfo(NamedTuple):
         legacy (bool): Wether the account has migrated
         demo (bool): Wether the account is demo
     """
+
     name: str
     uuid: str
     legacy: bool = False
@@ -58,12 +53,12 @@ class NameInfo(NamedTuple):
         name (str): The player name
         changed_to_at (dt.datetime): When it's was changed to
     """
+
     name: str
     changed_to_at: dt.datetime
 
 
-class NameInfoList(tuple):
-
+class NameInfoList(Tuple[NameInfo, ...]):
     @property
     def current(self) -> NameInfo:
         """Returns the most recent name"""
@@ -72,18 +67,12 @@ class NameInfoList(tuple):
 
         _list = filter(lambda n: n.change_to_at != None, self)
         return max(_list, key=lambda n: n.change_to_at)
-    
+
     @property
     def first(self) -> NameInfo:
         """Returns the first name"""
         first = list(filter(lambda n: n.changed_to_at == None, self))
         return first[0]
-
-    def __getitem__(self, x) -> NameInfo:
-        return super().__getitem__(x)
-
-    def __iter__(self) -> Iterator['NameInfo']:
-        return super().__iter__()
 
 
 ## Profile
@@ -98,6 +87,7 @@ class UserProfile(NamedTuple):
         skin (Skin): The user skin
         cape (Cape): The user cape
     """
+
     name: str
     uuid: str
     is_legacy: bool

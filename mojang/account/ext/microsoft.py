@@ -1,15 +1,20 @@
-from mojang.exceptions import MicrosoftInvalidGrant, MicrosoftUserNotOwner
 import msal
-from ..auth import microsoft
-from .session import UserSession
+from mojang.exceptions import MicrosoftInvalidGrant, MicrosoftUserNotOwner
+
 from .. import session
+from ..auth import microsoft
+from ._profile import MicrosoftAuthenticatedUser
+
+_DEFAULT_SCOPES = ["XboxLive.signin"]
 
 
-_DEFAULT_SCOPES = ['XboxLive.signin']
-
-def microsoft_app(client_id: str, client_secret: str, redirect_uri: str = 'http://example.com') -> 'MicrosoftApp':
+def microsoft_app(
+    client_id: str,
+    client_secret: str,
+    redirect_uri: str = "http://example.com",
+) -> "MicrosoftApp":
     """It create an instance of [`MicrosoftApp`][mojang.account.ext.microsoft.MicrosoftApp] with the client id and client secret.
-    This app can then be used to get a [`UserSession`][mojang.account.ext.session.UserSession] like 
+    This app can then be used to get a [`UserSession`][mojang.account.ext.session.UserSession] like
     [`connect`][mojang.account.ext.session.connect] for Microsoft users.
 
     Args:
@@ -38,52 +43,61 @@ def microsoft_app(client_id: str, client_secret: str, redirect_uri: str = 'http:
         # they will be redirect to the uri you choose with a `code` parameter
         # http://example.com?code=...
         # You can use this code to authenticate the user
-        code = ... 
+        code = ...
         user = app.authenticate(code)
         ```
     """
-    client = msal.ClientApplication(client_id, client_credential=client_secret, authority='https://login.microsoftonline.com/consumers')
+    client = msal.ClientApplication(
+        client_id,
+        client_credential=client_secret,
+        authority="https://login.microsoftonline.com/consumers",
+    )
     return MicrosoftApp(client, redirect_uri)
 
 
 class MicrosoftApp:
     """This class allows you to authenticate Microsoft users to Minecraft"""
-    
+
     def __init__(self, client: msal.ClientApplication, redirect_uri: str):
         self.__client = client
         self.__redirect_uri = redirect_uri
 
     def authorization_url(self, redirect_uri: str = None) -> str:
         """Returns the authorization url for Microsfot OAuth"""
-        return self.__client.get_authorization_request_url(scopes=_DEFAULT_SCOPES, redirect_uri=(redirect_uri or self.__redirect_uri))
+        return self.__client.get_authorization_request_url(
+            scopes=_DEFAULT_SCOPES,
+            redirect_uri=(redirect_uri or self.__redirect_uri),
+        )
 
-    def authenticate(self, auth_code: str, redirect_uri: str = None) -> 'UserSession':
+    def authenticate(
+        self, auth_code: str, redirect_uri: str = None
+    ) -> "MicrosoftAuthenticatedUser":
         """Authenticate a user with the auth code
-        
+
         Args:
             auth_code (str): The auth code from the redirect
             redirect_uri (str, optional): The redirect uri for your app
 
         Returns:
-            An instance of UserSession
+            An instance of MicrosoftAuthenticatedUser
         """
-        response = self.__client.acquire_token_by_authorization_code(auth_code, scopes=_DEFAULT_SCOPES, redirect_uri=(redirect_uri or self.__redirect_uri))
-        if response.get('error', False):
+        response = self.__client.acquire_token_by_authorization_code(
+            auth_code,
+            scopes=_DEFAULT_SCOPES,
+            redirect_uri=(redirect_uri or self.__redirect_uri),
+        )
+        if response.get("error", False):
             raise MicrosoftInvalidGrant(*response.values())
 
-        xbl_token, userhash = microsoft.authenticate_xbl(response['access_token'])
+        xbl_token, userhash = microsoft.authenticate_xbl(
+            response["access_token"]
+        )
         xsts_token, userhash = microsoft.authenticate_xsts(xbl_token)
         access_token = microsoft.authenticate_minecraft(userhash, xsts_token)
 
         if not session.owns_minecraft(access_token):
             raise MicrosoftUserNotOwner()
 
-        return UserSession(access_token, response['refresh_token'], True, self._refresh_session, None)
-    
-    def _refresh_session(self, access_token: str, refresh_token: str):
-        response = self.__client.acquire_token_by_refresh_token(refresh_token, _DEFAULT_SCOPES)
-        xbl_token, userhash = microsoft.authenticate_xbl(response['access_token'])
-        xsts_token, userhash = microsoft.authenticate_xsts(xbl_token)
-        mc_token = microsoft.authenticate_minecraft(userhash, xsts_token)
-        
-        return mc_token, response['refresh_token']
+        return MicrosoftAuthenticatedUser(
+            access_token, response["refresh_token"], self.__client
+        )
