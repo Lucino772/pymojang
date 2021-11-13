@@ -39,5 +39,7 @@ def connect(
         )
         ```
     """
-    auth = yggdrasil.authenticate(username, password, client_token)
-    return MojangAuthenticatedUser(auth.access_token, auth.client_token)
+    access_token, client_token = yggdrasil.authenticate(
+        username, password, client_token
+    )
+    return MojangAuthenticatedUser(access_token, client_token)

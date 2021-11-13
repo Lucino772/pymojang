@@ -113,10 +113,8 @@ class AuthenticatedUser(metaclass=ABCMeta):
 
 class MojangAuthenticatedUser(AuthenticatedUser):
     def refresh(self):
-        auth = yggdrasil.refresh(self._access_token, self._refresh_token)
-        self._access_token, self._refresh_token = (
-            auth.access_token,
-            auth.client_token,
+        self._access_token, self._refresh_token = yggdrasil.refresh(
+            self._access_token, self._refresh_token
         )
 
     def close(self):
