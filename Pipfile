@@ -18,6 +18,7 @@ requests = "*"
 validators = "*"
 pyjwt = {extras = ["crypto"], version = "*"}
 msal = "*"
+versioneer = "*"
 
 [requires]
 python_version = "3.8"
