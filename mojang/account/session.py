@@ -180,11 +180,18 @@ def get_profile(access_token: str):
 
     if len(data["skins"]) > 0:
         _dict["skin"] = Skin(
-            data["skins"][0]["url"], data["skins"][0]["variant"]
+            data["skins"][0]["url"],
+            data["skins"][0]["variant"],
+            id=data["skins"][0]["id"],
+            state=data["skins"][0]["state"],
         )
 
     if len(data["capes"]) > 0:
-        _dict["cape"] = Cape(data["capes"][0]["url"])
+        _dict["cape"] = Cape(
+            data["capes"][0]["url"],
+            id=data["capes"][0]["id"],
+            state=data["capes"][0]["state"],
+        )
 
     _dict["is_legacy"] = False
     _dict["is_demo"] = False

@@ -111,13 +111,30 @@ class Skin(_Resource):
         variant (str): The variant of skin (default to 'classic')
     """
 
-    def __init__(self, source: str, variant: str, load: bool = True) -> None:
+    def __init__(
+        self,
+        source: str,
+        variant: str,
+        id: str = None,
+        state: str = None,
+        load: bool = True,
+    ) -> None:
         super().__init__(source, load=load)
         self.__variant = variant
+        self.__id = id
+        self.__state = state
 
     @property
     def variant(self):
         return self.__variant
+
+    @property
+    def id(self):
+        return self.__id
+
+    @property
+    def state(self):
+        return self.__state
 
     def __hash__(self) -> int:
         return hash((self.source, self.variant, self.data))
@@ -129,15 +146,32 @@ class Skin(_Resource):
         return False
 
     def __repr__(self) -> str:
-        return f"Skin(source='{self.source}', variant='{self.variant}')"
+        return f"Skin(source='{self.source}', variant='{self.variant}', id='{self.id}', state='{self.state}')"
 
     __str__ = __repr__
+
 
 class Cape(_Resource):
     """
     Attributes:
         source (str): The source where the cape is located
     """
+
+    def __init__(
+        self, source: str, id: str = None, state: str = None, load: bool = True
+    ) -> None:
+        super().__init__(source, load=load)
+        self.__id = id
+        self.__state = state
+
+    @property
+    def id(self):
+        return self.__id
+
+    @property
+    def state(self):
+        return self.__state
+
     def __hash__(self) -> int:
         return hash((self.source, self.data))
 
@@ -148,6 +182,6 @@ class Cape(_Resource):
         return False
 
     def __repr__(self) -> str:
-        return f"Cape(source='{self.source}'')"
+        return f"Cape(source='{self.source}', id='{self.id}', state='{self.state}')"
 
     __str__ = __repr__
