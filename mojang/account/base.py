@@ -5,7 +5,15 @@ from typing import List
 import requests
 
 from ..exceptions import handle_response
-from .structures.base import *
+from .structures.base import (
+    NameInfo,
+    NameInfoList,
+    ServiceStatus,
+    StatusCheck,
+    UUIDInfo,
+)
+from .structures.profile import UnauthenticatedProfile
+from .structures.session import Cape, Skin
 from .utils.urls import URLs
 
 
@@ -174,14 +182,14 @@ def names(uuid: str) -> NameInfoList:
     return NameInfoList(_names)
 
 
-def user(uuid: str) -> UserProfile:
+def user(uuid: str) -> UnauthenticatedProfile:
     """Returns the full profile of a user
 
     Args:
         uuid (str): The uuid of the profile
 
     Returns:
-        UserProfile
+        UnauthenticatedProfile
 
     Example:
 
@@ -192,7 +200,7 @@ def user(uuid: str) -> UserProfile:
         print(profile)
         ```
         ```
-        UserProfile(
+        UnauthenticatedProfile(
             name='Notch',
             uuid='069a79f444e94726a5befca90e38aaf5',
             is_legacy=False,
@@ -209,31 +217,30 @@ def user(uuid: str) -> UserProfile:
     if not data:
         return None
 
-    _dict = dict.fromkeys(UserProfile._fields, None)
-
-    # Load profile info
-    _dict["name"] = data["name"]
-    _dict["uuid"] = uuid
-    _dict["is_legacy"] = data.get("legacy", False)
-    _dict["is_demo"] = data.get("demo", False)
-
     # Load skin and cape
     textures_data = json.loads(
         base64.b64decode(data["properties"][0]["value"])
     )
 
+    skin = None
     skin_data = textures_data["textures"].get("SKIN", None)
     if skin_data:
-        _dict["skin"] = Skin(
+        skin = Skin(
             skin_data["url"],
             skin_data.get("metadata", {"model": "classic"})["model"],
         )
 
+    cape = None
     cape_data = textures_data["textures"].get("CAPE", None)
     if cape_data:
-        _dict["cape"] = Cape(cape_data["url"])
+        cape = Cape(cape_data["url"])
 
-    # Get name history
-    _dict["names"] = names(uuid)
-
-    return UserProfile(**_dict)
+    return UnauthenticatedProfile(
+        name=data["name"],
+        uuid=uuid,
+        is_legacy=data.get("legacy", False),
+        is_demo=data.get("demo", False),
+        names=names(uuid),
+        skin=skin,
+        cape=cape,
+    )

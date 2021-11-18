@@ -4,11 +4,11 @@ import jwt
 import requests
 
 from ..exceptions import *
-from .structures.session import NameChange, Skin, Cape
-from .structures.base import UserProfile
+from .base import names
+from .structures.profile import AuthenticatedUserProfile
+from .structures.session import Cape, NameChange, Skin
 from .utils.auth import BearerAuth
 from .utils.urls import URLs
-from .base import names
 
 
 def get_user_name_change(access_token: str) -> NameChange:
@@ -172,28 +172,29 @@ def get_profile(access_token: str):
     response = requests.get(URLs.get_profile(), auth=BearerAuth(access_token))
     data = handle_response(response, Unauthorized)
 
-    _dict = dict.fromkeys(UserProfile._fields, None)
+    skins = []
+    for item in data["skins"]:
+        skins.append(Skin(
+            item["url"],
+            item["variant"],
+            id=item["id"],
+            state=item["state"],
+        ))
 
-    _dict["name"] = data["name"]
-    _dict["uuid"] = data["id"]
-    _dict["names"] = names(data["id"])
+    capes = []
+    for item in data["capes"]:
+        capes.append(Cape(
+            item["url"],
+            id=item["id"],
+            state=item["state"],
+        ))
 
-    if len(data["skins"]) > 0:
-        _dict["skin"] = Skin(
-            data["skins"][0]["url"],
-            data["skins"][0]["variant"],
-            id=data["skins"][0]["id"],
-            state=data["skins"][0]["state"],
-        )
-
-    if len(data["capes"]) > 0:
-        _dict["cape"] = Cape(
-            data["capes"][0]["url"],
-            id=data["capes"][0]["id"],
-            state=data["capes"][0]["state"],
-        )
-
-    _dict["is_legacy"] = False
-    _dict["is_demo"] = False
-
-    return UserProfile(**_dict)
+    return AuthenticatedUserProfile(
+        name=data["name"],
+        uuid=data["id"],
+        is_legacy=False,
+        is_demo=False,
+        names=names(data["id"]),
+        skins=skins,
+        capes=capes,
+    )

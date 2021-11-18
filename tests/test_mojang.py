@@ -3,10 +3,10 @@ import unittest
 import mojang
 from mojang.account.structures.base import (
     NameInfoList,
-    UserProfile,
     UUIDInfo,
     NameInfo,
 )
+from mojang.account.structures.profile import UnauthenticatedProfile
 from mojang.account.structures.session import Cape, Skin
 
 
@@ -66,7 +66,7 @@ class TestMojangAPI(unittest.TestCase):
     def test_existent_profile(self):
         self.assertEqual(
             mojang.user("069a79f444e94726a5befca90e38aaf5"),
-            UserProfile(
+            UnauthenticatedProfile(
                 "Notch",
                 "069a79f444e94726a5befca90e38aaf5",
                 False,
@@ -81,7 +81,7 @@ class TestMojangAPI(unittest.TestCase):
         )
         self.assertEqual(
             mojang.user("853c80ef3c3749fdaa49938b674adae6"),
-            UserProfile(
+            UnauthenticatedProfile(
                 "jeb_",
                 "853c80ef3c3749fdaa49938b674adae6",
                 False,

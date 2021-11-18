@@ -73,25 +73,3 @@ class NameInfoList(Tuple[NameInfo, ...]):
         """Returns the first name"""
         first = list(filter(lambda n: n.changed_to_at == None, self))
         return first[0]
-
-
-## Profile
-class UserProfile(NamedTuple):
-    """
-    Attributes:
-        name (str): The user name
-        uuid (str): The user uuid
-        is_legacy (bool): Wether the account has migrated
-        is_demo (bool): Wether the account is demo
-        names (NameInfoList): The user name history
-        skin (Skin): The user skin
-        cape (Cape): The user cape
-    """
-
-    name: str
-    uuid: str
-    is_legacy: bool
-    is_demo: bool
-    names: NameInfoList
-    skin: Skin
-    cape: Cape

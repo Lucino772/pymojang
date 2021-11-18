@@ -14,8 +14,8 @@ class AuthenticatedUser(metaclass=ABCMeta):
         self.__is_legacy = False
         self.__is_demo = False
         self.__names = None
-        self.__skin = None
-        self.__cape = None
+        self.__skins = None
+        self.__capes = None
 
         self.__name_change_allowed = False
         self.__created_at = False
@@ -54,12 +54,28 @@ class AuthenticatedUser(metaclass=ABCMeta):
         return self.__names
 
     @property
+    def skins(self):
+        return self.__skins
+
+    @property
     def skin(self):
-        return self.__skin
+        res = list(filter(lambda skin: skin.state == "ACTIVE", self.__skins))
+        if len(res) > 0:
+            return res[0]
+
+        return None
+
+    @property
+    def capes(self):
+        return self.__capes
 
     @property
     def cape(self):
-        return self.__cape
+        res = list(filter(lambda cape: cape.state == "ACTIVE", self.__capes))
+        if len(res) > 0:
+            return res[0]
+
+        return None
 
     @property
     def name_change_allowed(self):
@@ -75,8 +91,8 @@ class AuthenticatedUser(metaclass=ABCMeta):
         self.__name = profile.name
         self.__uuid = profile.uuid
         self.__names = profile.names
-        self.__skin = profile.skin
-        self.__cape = profile.cape
+        self.__skins = profile.skins
+        self.__capes = profile.capes
         self.__is_legacy = profile.is_legacy
         self.__is_demo = profile.is_demo
         del profile
@@ -119,8 +135,10 @@ class MojangAuthenticatedUser(AuthenticatedUser):
         is_legacy (bool): Wether the account has migrated
         is_demo (bool): Wether the account is demo
         names (NameInfoList): The user name history
-        skin (Skin): The user skin
-        cape (Cape): The user cape
+        skin (Skin): The active user skin
+        skins (List[Skin]): All the skins of the user
+        cape (Cape): The active user cape
+        capes (List[Cape]): All the capes of the user
         name_change_allowed (bool): Can the user change name
         created_at (dt.datetime): When was the user created
     """
@@ -159,8 +177,10 @@ class MicrosoftAuthenticatedUser(AuthenticatedUser):
         is_legacy (bool): Wether the account has migrated
         is_demo (bool): Wether the account is demo
         names (NameInfoList): The user name history
-        skin (Skin): The user skin
-        cape (Cape): The user cape
+        skin (Skin): The active user skin
+        skins (List[Skin]): All the skins of the user
+        cape (Cape): The active user cape
+        capes (List[Cape]): All the capes of the user
         name_change_allowed (bool): Can the user change name
         created_at (dt.datetime): When was the user created
     """
