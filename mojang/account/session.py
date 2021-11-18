@@ -94,7 +94,7 @@ def change_user_skin(access_token: str, path: str, variant="classic"):
     skin = Skin(source=path, variant=variant)
     files = [
         ("variant", skin.variant),
-        ("file", ("image.png", skin.data, f"image/png")),
+        ("file", ("image.png", skin.data, "image/png")),
     ]
     response = requests.post(
         URLs.change_skin(),
@@ -174,20 +174,24 @@ def get_profile(access_token: str):
 
     skins = []
     for item in data["skins"]:
-        skins.append(Skin(
-            item["url"],
-            item["variant"],
-            id=item["id"],
-            state=item["state"],
-        ))
+        skins.append(
+            Skin(
+                item["url"],
+                item["variant"],
+                id=item["id"],
+                state=item["state"],
+            )
+        )
 
     capes = []
     for item in data["capes"]:
-        capes.append(Cape(
-            item["url"],
-            id=item["id"],
-            state=item["state"],
-        ))
+        capes.append(
+            Cape(
+                item["url"],
+                id=item["id"],
+                state=item["state"],
+            )
+        )
 
     return AuthenticatedUserProfile(
         name=data["name"],

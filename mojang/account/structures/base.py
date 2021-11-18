@@ -1,9 +1,6 @@
 import datetime as dt
 from typing import NamedTuple, Tuple, Union
 
-from .session import Cape, Skin
-
-
 # Status check
 class ServiceStatus(NamedTuple):
     """
