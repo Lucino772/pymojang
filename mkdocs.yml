@@ -4,7 +4,7 @@ repo_name: Lucino772/PyMojang
 site_author: Lucino772
 edit_uri: ""
 
-theme: 
+theme:
   name: material
   features:
     - navigation.instant

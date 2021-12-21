@@ -12,6 +12,7 @@ mike = "*"
 pytest = "*"
 flake8 = "*"
 pymdown-extensions = "*"
+pre-commit = "*"
 
 [packages]
 requests = "*"
