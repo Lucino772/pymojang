@@ -1,6 +1,10 @@
-[![Read the Docs](https://img.shields.io/readthedocs/pymojang?style=flat-square)](https://pymojang.readthedocs.io/en/latest/)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/pymojang?style=flat-square)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pymojang?style=flat-square)
+[![PyPI](https://img.shields.io/pypi/v/pymojang)](https://pypi.org/project/pymojang/)
+[![Read the Docs](https://img.shields.io/readthedocs/pymojang)](https://pymojang.readthedocs.io/en/latest/)
+[![CI](https://github.com/Lucino772/pymojang/actions/workflows/ci.yml/badge.svg)](https://github.com/Lucino772/pymojang/actions/workflows/ci.yml)
+[![pre-commit](https://github.com/Lucino772/pymojang/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/Lucino772/pymojang/actions/workflows/pre-commit.yml)
+[![codecov](https://codecov.io/gh/Lucino772/pymojang/branch/main/graph/badge.svg?token=5Q6PRUXL4T)](https://codecov.io/gh/Lucino772/pymojang)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/pymojang)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pymojang)
 
 # Pymojang
 PyMojang is a full wrapper of the [Mojang API](https://wiki.vg/Mojang_API) and [Mojang Authentication API](https://wiki.vg/Authentication).
