@@ -2,7 +2,7 @@
 Pymojang module
 ---------------
 
-Pymojang is a full wrapper around the [Mojang API](https://wiki.vg/Mojang_API) 
+Pymojang is a full wrapper around the [Mojang API](https://wiki.vg/Mojang_API)
 and [Mojang Authentication API](https://wiki.vg/Authentication)
 
 Checkout the [`documentation`](https://pymojang.readthedocs.io/en/latest/)

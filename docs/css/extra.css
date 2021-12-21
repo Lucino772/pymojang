@@ -5,7 +5,7 @@ code, .rst-content tt, .rst-content code {
 .md-typeset__table {
     min-width: 100%;
 }
- 
+
 .md-typeset table:not([class]) {
     display: table;
 }
