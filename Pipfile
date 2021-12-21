@@ -13,6 +13,7 @@ pytest = "*"
 flake8 = "*"
 pymdown-extensions = "*"
 pre-commit = "*"
+pytest-cov = "*"
 
 [packages]
 requests = "*"
