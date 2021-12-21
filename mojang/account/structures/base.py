@@ -1,6 +1,7 @@
 import datetime as dt
 from typing import NamedTuple, Tuple, Union
 
+
 # Status check
 class ServiceStatus(NamedTuple):
     """
@@ -62,11 +63,11 @@ class NameInfoList(Tuple[NameInfo, ...]):
         if len(self) == 1:
             return self[0]
 
-        _list = filter(lambda n: n.change_to_at != None, self)
+        _list = filter(lambda n: n.change_to_at is not None, self)
         return max(_list, key=lambda n: n.change_to_at)
 
     @property
     def first(self) -> NameInfo:
         """Returns the first name"""
-        first = list(filter(lambda n: n.changed_to_at == None, self))
+        first = list(filter(lambda n: n.changed_to_at is None, self))
         return first[0]

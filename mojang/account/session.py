@@ -3,7 +3,13 @@ import datetime as dt
 import jwt
 import requests
 
-from ..exceptions import *
+from ..exceptions import (
+    handle_response,
+    PayloadError,
+    Unauthorized,
+    InvalidName,
+    UnavailableName,
+)
 from .base import names
 from .structures.profile import AuthenticatedUserProfile
 from .structures.session import Cape, NameChange, Skin

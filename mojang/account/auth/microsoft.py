@@ -1,6 +1,11 @@
 from typing import Tuple
 import requests
-from mojang.exceptions import *
+from mojang.exceptions import (
+    handle_response,
+    XboxLiveAuthenticationError,
+    XboxLiveInvalidUserHash,
+    Unauthorized,
+)
 
 from ..utils.auth import URLs
 

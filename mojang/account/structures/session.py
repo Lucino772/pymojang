@@ -61,7 +61,7 @@ class _Resource:
         # Check content-type
         if "content-type" in headers.keys():
             ctype = headers["content-type"]
-            if (not "text" in ctype) and (not "html" in ctype):
+            if ("text" not in ctype) and ("html" not in ctype):
                 return ctype.split("/")
 
     @classmethod
@@ -93,8 +93,8 @@ class _Resource:
     def save(self, dest: str, add_extension: bool = True):
         if (
             len(path.splitext(dest)[1]) == 0
-            and self.__extension != None
-            and add_extension == True
+            and self.__extension is not None
+            and add_extension is True
         ):
             dest += self.__extension
 

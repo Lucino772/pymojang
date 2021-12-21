@@ -2,7 +2,13 @@ from typing import List
 
 import requests
 
-from ...exceptions import *
+from ...exceptions import (
+    handle_response,
+    PayloadError,
+    Unauthorized,
+    IPNotSecured,
+    IPVerificationError,
+)
 from ..structures.auth import ChallengeInfo
 from ..utils.auth import BearerAuth, URLs
 
