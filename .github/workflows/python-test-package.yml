@@ -3,11 +3,7 @@
 
 name: Test Python Package
 
-on:
-  push:
-    branches: [ main, development ]
-  pull_request:
-    branches: [ main, development ]
+on: [pull_request, push, workflow_dispatch]
 
 jobs:
   build:

@@ -11,7 +11,9 @@ repos:
     rev: 21.9b0
     hooks:
     -   id: black
+        language_version: python3
 -   repo: https://gitlab.com/pycqa/flake8
     rev: 4.0.1
     hooks:
-    - id: flake8
+    -   id: flake8
+        language_version: python3
