@@ -4,17 +4,16 @@ import jwt
 import requests
 
 from ..exceptions import (
-    handle_response,
+    InvalidName,
     PayloadError,
     Unauthorized,
-    InvalidName,
     UnavailableName,
+    handle_response,
 )
 from .base import names
 from .structures.profile import AuthenticatedUserProfile
 from .structures.session import Cape, NameChange, Skin
-from .utils.auth import BearerAuth
-from .utils.urls import URLs
+from .utils import helpers, urls
 
 
 def get_user_name_change(access_token: str) -> NameChange:
@@ -41,7 +40,8 @@ def get_user_name_change(access_token: str) -> NameChange:
         NameChange(allowed=True, created_at=datetime.datetime(2006, 4, 29, 10, 10, 10))
         ```
     """
-    response = requests.get(URLs.name_change(), auth=BearerAuth(access_token))
+    headers = helpers.get_headers(bearer=access_token)
+    response = requests.get(urls.api_session_name_change, headers=headers)
     data = handle_response(response, PayloadError, Unauthorized)
 
     data["created_at"] = dt.datetime.strptime(
@@ -72,8 +72,9 @@ def change_user_name(access_token: str, name: str):
         session.change_user_name('ACCESS_TOKEN', 'my_super_cool_name')
         ```
     """
+    headers = helpers.get_headers(bearer=access_token)
     response = requests.put(
-        URLs.change_name(name), auth=BearerAuth(access_token)
+        urls.api_session_change_name(name), headers=headers
     )
     handle_response(response, InvalidName, UnavailableName, Unauthorized)
 
@@ -102,11 +103,10 @@ def change_user_skin(access_token: str, path: str, variant="classic"):
         ("variant", skin.variant),
         ("file", ("image.png", skin.data, "image/png")),
     ]
+    headers = helpers.get_headers(bearer=access_token)
+    headers["content-type"] = None
     response = requests.post(
-        URLs.change_skin(),
-        auth=BearerAuth(access_token),
-        files=files,
-        headers={"content-type": None},
+        urls.api_session_change_skin, headers=headers, files=files
     )
     handle_response(response, PayloadError, Unauthorized)
 
@@ -129,8 +129,9 @@ def reset_user_skin(access_token: str, uuid: str):
         session.reset_user_skin('ACCESS_TOKEN', 'USER_UUID')
         ```
     """
+    headers = helpers.get_headers(bearer=access_token)
     response = requests.delete(
-        URLs.reset_skin(uuid), auth=BearerAuth(access_token)
+        urls.api_session_reset_skin(uuid), headers=headers
     )
     handle_response(response, PayloadError, Unauthorized)
 
@@ -160,9 +161,8 @@ def owns_minecraft(
             print('This user owns minecraft')
         ```
     """
-    response = requests.get(
-        URLs.check_minecraft_onwership(), auth=BearerAuth(access_token)
-    )
+    headers = helpers.get_headers(bearer=access_token)
+    response = requests.get(urls.api_session_ownership, headers=headers)
     data = handle_response(response, Unauthorized)
 
     if verify_sig:
@@ -175,7 +175,8 @@ def owns_minecraft(
 
 
 def get_profile(access_token: str):
-    response = requests.get(URLs.get_profile(), auth=BearerAuth(access_token))
+    headers = helpers.get_headers(bearer=access_token)
+    response = requests.get(urls.api_session_profile, headers=headers)
     data = handle_response(response, Unauthorized)
 
     skins = []

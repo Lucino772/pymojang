@@ -3,13 +3,13 @@ from typing import Optional, Tuple
 import requests
 
 from ...exceptions import (
-    handle_response,
-    PayloadError,
     CredentialsError,
     MigratedAccount,
+    PayloadError,
     TokenError,
+    handle_response,
 )
-from ..utils.auth import URLs
+from ..utils import urls
 
 
 def authenticate(
@@ -47,7 +47,7 @@ def authenticate(
         "clientToken": client_token,
         "agent": {"name": "Minecraft", "version": 1},
     }
-    response = requests.post(URLs.authenticate(), json=payload)
+    response = requests.post(urls.api_yggdrasil_authenticate, json=payload)
     data = handle_response(
         response, PayloadError, CredentialsError, MigratedAccount
     )
@@ -82,7 +82,7 @@ def refresh(access_token: str, client_token: str) -> Tuple[str, str]:
         ```
     """
     payload = {"accessToken": access_token, "clientToken": client_token}
-    response = requests.post(URLs.refresh(), json=payload)
+    response = requests.post(urls.api_yggdrasil_refresh, json=payload)
     data = handle_response(response, PayloadError, TokenError)
 
     return data["accessToken"], data["clientToken"]
@@ -108,7 +108,7 @@ def validate(access_token: str, client_token: str):
         ```
     """
     payload = {"accessToken": access_token, "clientToken": client_token}
-    response = requests.post(URLs.validate(), json=payload)
+    response = requests.post(urls.api_yggdrasil_validate, json=payload)
     handle_response(response, PayloadError, TokenError)
 
 
@@ -132,7 +132,7 @@ def signout(username: str, password: str):
         ```
     """
     payload = {"username": username, "password": password}
-    response = requests.post(URLs.signout(), json=payload)
+    response = requests.post(urls.api_yggdrasil_signout, json=payload)
     handle_response(response, PayloadError, CredentialsError)
 
 
@@ -156,5 +156,5 @@ def invalidate(access_token: str, client_token: str):
         ```
     """
     payload = {"accessToken": access_token, "clientToken": client_token}
-    response = requests.post(URLs.invalidate(), json=payload)
+    response = requests.post(urls.api_yggdrasil_invalidate, json=payload)
     handle_response(response, PayloadError, TokenError)

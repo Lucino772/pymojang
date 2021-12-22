@@ -15,6 +15,7 @@ pymdown-extensions = "*"
 pre-commit = "*"
 pytest-cov = "*"
 importlib-metadata = "*"
+black = "*"
 
 [packages]
 requests = "*"

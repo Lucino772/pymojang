@@ -3,14 +3,14 @@ from typing import List
 import requests
 
 from ...exceptions import (
-    handle_response,
-    PayloadError,
-    Unauthorized,
     IPNotSecured,
     IPVerificationError,
+    PayloadError,
+    Unauthorized,
+    handle_response,
 )
 from ..structures.auth import ChallengeInfo
-from ..utils.auth import BearerAuth, URLs
+from ..utils import helpers, urls
 
 
 def check_ip(access_token: str) -> bool:
@@ -38,7 +38,8 @@ def check_ip(access_token: str) -> bool:
         True
         ```
     """
-    response = requests.get(URLs.verify_ip(), auth=BearerAuth(access_token))
+    headers = helpers.get_headers(bearer=access_token)
+    response = requests.get(urls.api_security_verify_ip, headers=headers)
     try:
         handle_response(response, PayloadError, Unauthorized, IPNotSecured)
     except IPNotSecured:
@@ -77,9 +78,8 @@ def get_challenges(access_token: str) -> List["ChallengeInfo"]:
         ]
         ```
     """
-    response = requests.get(
-        URLs.get_challenges(), auth=BearerAuth(access_token)
-    )
+    headers = helpers.get_headers(bearer=access_token)
+    response = requests.get(urls.api_security_challenges, headers=headers)
     data = handle_response(response, PayloadError, Unauthorized)
 
     _challenges = []
@@ -121,9 +121,10 @@ def verify_ip(access_token: str, answers: list) -> bool:
         security.verify_user_ip('ACCESS_TOKEN', answers)
         ```
     """
+    headers = helpers.get_headers(bearer=access_token)
     answers = list(map(lambda a: {"id": a[0], "answer": a[1]}, answers))
     response = requests.post(
-        URLs.verify_ip(), auth=BearerAuth(access_token), json=answers
+        urls.api_security_verify_ip, headers=headers, json=answers
     )
     try:
         handle_response(

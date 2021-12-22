@@ -1,6 +1,6 @@
 import base64
-import json
 import datetime as dt
+import json
 from typing import List
 
 import requests
@@ -15,7 +15,7 @@ from .structures.base import (
 )
 from .structures.profile import UnauthenticatedProfile
 from .structures.session import Cape, Skin
-from .utils.urls import URLs
+from .utils import urls
 
 
 def status() -> StatusCheck:
@@ -91,7 +91,7 @@ def get_uuid(username: str) -> UUIDInfo:
         UUIDInfo(name='Notch', uuid='069a79f444e94726a5befca90e38aaf5', legacy=False, demo=False)
         ```
     """
-    response = requests.get(URLs.uuid(username))
+    response = requests.get(urls.api_get_uuid(username))
     data = handle_response(response)
 
     if not data:
@@ -133,7 +133,9 @@ def get_uuids(usernames: list) -> List["UUIDInfo"]:
     _uuids = [None] * len(usernames)
 
     for i in range(0, len(usernames), 10):
-        response = requests.post(URLs.uuids(), json=usernames[i : i + 10])
+        response = requests.post(
+            urls.api_get_uuids, json=usernames[i : i + 10]
+        )
         data = handle_response(response)
 
         for item in data:
@@ -168,7 +170,7 @@ def names(uuid: str) -> NameInfoList:
         )
         ```
     """
-    response = requests.get(URLs.name_history(uuid))
+    response = requests.get(urls.api_name_history(uuid))
     data = handle_response(response)
 
     _names = []
@@ -212,7 +214,7 @@ def user(uuid: str) -> UnauthenticatedProfile:
         )
         ```
     """
-    response = requests.get(URLs.profile(uuid))
+    response = requests.get(urls.api_user_profile(uuid))
     data = handle_response(response)
 
     if not data:

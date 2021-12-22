@@ -1,58 +1,48 @@
-class URLs:
+# URLs for basic api
+api_check_status = "https://status.mojang.com/check"
+api_get_uuid = (
+    lambda username: f"https://api.mojang.com/users/profiles/minecraft/{username}"
+)
+api_get_uuids = "https://api.mojang.com/profiles/minecraft"
+api_name_history = (
+    lambda uuid: f"https://api.mojang.com/user/profiles/{uuid}/names"
+)
+api_user_profile = (
+    lambda uuid: f"https://sessionserver.mojang.com/session/minecraft/profile/{uuid}"
+)
 
-    # Base URLs
-    @classmethod
-    def status_check(cls):
-        """Returns the url to check Mojang APIs status"""
-        return "https://status.mojang.com/check"
+# URLs for Authenticated users
+api_session_name_change = (
+    "https://api.minecraftservices.com/minecraft/profile/namechange"
+)
+api_session_change_name = (
+    lambda name: f"https://api.minecraftservices.com/minecraft/profile/name/{name}"
+)
+api_session_change_skin = (
+    "https://api.minecraftservices.com/minecraft/profile/skins"
+)
+api_session_reset_skin = (
+    lambda uuid: f"https://api.mojang.com/user/profile/{uuid}/skin"
+)
+api_session_ownership = (
+    "https://api.minecraftservices.com/entitlements/mcstore"
+)
+api_session_profile = "https://api.minecraftservices.com/minecraft/profile"
 
-    @classmethod
-    def uuid(cls, username: str):
-        """Returns the url to get uuid of username"""
-        return f"https://api.mojang.com/users/profiles/minecraft/{username}"
+# URLs for authentication with yggdrasil
+api_yggdrasil_authenticate = "https://authserver.mojang.com/authenticate"
+api_yggdrasil_refresh = "https://authserver.mojang.com/refresh"
+api_yggdrasil_validate = "https://authserver.mojang.com/validate"
+api_yggdrasil_invalidate = "https://authserver.mojang.com/invalidate"
+api_yggdrasil_signout = "https://authserver.mojang.com/signout"
 
-    @classmethod
-    def uuids(cls):
-        """Returns the url to get uuids of multiple username"""
-        return "https://api.mojang.com/profiles/minecraft"
+# URLs for security of Mojang accounts
+api_security_verify_ip = "https://api.mojang.com/user/security/location"
+api_security_challenges = "https://api.mojang.com/user/security/challenges"
 
-    @classmethod
-    def name_history(cls, uuid: str):
-        """Returns the url to get the name history of a user"""
-        return f"https://api.mojang.com/user/profiles/{uuid}/names"
-
-    @classmethod
-    def profile(cls, uuid: str):
-        """Returns the url to get the profile of a user"""
-        return f"https://sessionserver.mojang.com/session/minecraft/profile/{uuid}"
-
-    # Session URLs
-    @classmethod
-    def name_change(cls):
-        """Returns the url to get t name change information"""
-        return "https://api.minecraftservices.com/minecraft/profile/namechange"
-
-    @classmethod
-    def change_name(cls, name: str):
-        """Returns the url to change user's name"""
-        return (
-            f"https://api.minecraftservices.com/minecraft/profile/name/{name}"
-        )
-
-    @classmethod
-    def change_skin(cls):
-        """Returns the url to change the user's skin"""
-        return "https://api.minecraftservices.com/minecraft/profile/skins"
-
-    @classmethod
-    def reset_skin(cls, uuid: str):
-        """Returns the url to reset the user's skin"""
-        return f"https://api.mojang.com/user/profile/{uuid}/skin"
-
-    @classmethod
-    def check_minecraft_onwership(cls):
-        return "https://api.minecraftservices.com/entitlements/mcstore"
-
-    @classmethod
-    def get_profile(cls):
-        return "https://api.minecraftservices.com/minecraft/profile"
+# URLs for authentication with Microsoft
+api_ms_xbl_authenticate = "https://user.auth.xboxlive.com/user/authenticate"
+api_ms_xbl_authorize = "https://xsts.auth.xboxlive.com/xsts/authorize"
+api_ms_xbl_login = (
+    "https://api.minecraftservices.com/authentication/login_with_xbox"
+)

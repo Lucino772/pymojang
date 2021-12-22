@@ -1,18 +1,14 @@
 from typing import Tuple
+
 import requests
 from mojang.exceptions import (
-    handle_response,
+    Unauthorized,
     XboxLiveAuthenticationError,
     XboxLiveInvalidUserHash,
-    Unauthorized,
+    handle_response,
 )
 
-from ..utils.auth import URLs
-
-HEADERS_ACCEPT_JSON = {
-    "content-type": "application/json",
-    "accept": "application/json",
-}
+from ..utils import helpers, urls
 
 
 def authenticate_xbl(auth_token: str) -> Tuple[str, str]:
@@ -28,7 +24,7 @@ def authenticate_xbl(auth_token: str) -> Tuple[str, str]:
     Raises:
         XboxLiveAuthenticationError: If the auth token is invalid
     """
-
+    headers = helpers.get_headers(json_content=True)
     data = {
         "Properties": {
             "AuthMethod": "RPS",
@@ -40,8 +36,8 @@ def authenticate_xbl(auth_token: str) -> Tuple[str, str]:
     }
 
     response = requests.post(
-        URLs.microsoft_xbl_authenticate(),
-        headers=HEADERS_ACCEPT_JSON,
+        urls.api_ms_xbl_authenticate,
+        headers=headers,
         json=data,
     )
     data = handle_response(response, XboxLiveAuthenticationError)
@@ -60,7 +56,7 @@ def authenticate_xsts(xbl_token: str) -> Tuple[str, str]:
     Raises:
         XboxLiveAuthenticationError: If the xbl token is invalid
     """
-
+    headers = helpers.get_headers(json_content=True)
     data = {
         "Properties": {"SandboxId": "RETAIL", "UserTokens": [xbl_token]},
         "RelyingParty": "rp://api.minecraftservices.com/",
@@ -68,7 +64,7 @@ def authenticate_xsts(xbl_token: str) -> Tuple[str, str]:
     }
 
     response = requests.post(
-        URLs.microsoft_xbl_authorize(), headers=HEADERS_ACCEPT_JSON, json=data
+        urls.api_ms_xbl_authorize, headers=headers, json=data
     )
     data = handle_response(response, XboxLiveAuthenticationError)
     return data["Token"], data["DisplayClaims"]["xui"][0]["uhs"]
@@ -100,11 +96,9 @@ def authenticate_minecraft(userhash: str, xsts_token: str) -> str:
         mc_access_token = microsoft.authenticate_minecraft(userhash, xsts_token)
         ```
     """
-
+    headers = helpers.get_headers(json_content=True)
     data = {"identityToken": f"XBL3.0 x={userhash};{xsts_token}"}
 
-    response = requests.post(
-        URLs.login_with_microsoft(), headers=HEADERS_ACCEPT_JSON, json=data
-    )
+    response = requests.post(urls.api_ms_xbl_login, headers=headers, json=data)
     data = handle_response(response, XboxLiveInvalidUserHash, Unauthorized)
     return data["access_token"]
