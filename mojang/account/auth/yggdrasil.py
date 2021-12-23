@@ -2,14 +2,8 @@ from typing import Optional, Tuple
 
 import requests
 
-from ...exceptions import (
-    CredentialsError,
-    MigratedAccount,
-    PayloadError,
-    TokenError,
-    handle_response,
-)
-from ..utils import urls
+from ...exceptions import CredentialsError, MigratedAccount, TokenError
+from ..utils import urls, helpers
 
 
 def authenticate(
@@ -48,8 +42,11 @@ def authenticate(
         "agent": {"name": "Minecraft", "version": 1},
     }
     response = requests.post(urls.api_yggdrasil_authenticate, json=payload)
-    data = handle_response(
-        response, PayloadError, CredentialsError, MigratedAccount
+    _, data = helpers.err_check(
+        response,
+        (400, ValueError),
+        ([403, 429], CredentialsError),
+        (410, MigratedAccount),
     )
 
     return data["accessToken"], data["clientToken"]
@@ -83,7 +80,11 @@ def refresh(access_token: str, client_token: str) -> Tuple[str, str]:
     """
     payload = {"accessToken": access_token, "clientToken": client_token}
     response = requests.post(urls.api_yggdrasil_refresh, json=payload)
-    data = handle_response(response, PayloadError, TokenError)
+    _, data = helpers.err_check(
+        response,
+        (400, ValueError),
+        (403, TokenError),
+    )
 
     return data["accessToken"], data["clientToken"]
 
@@ -109,7 +110,8 @@ def validate(access_token: str, client_token: str):
     """
     payload = {"accessToken": access_token, "clientToken": client_token}
     response = requests.post(urls.api_yggdrasil_validate, json=payload)
-    handle_response(response, PayloadError, TokenError)
+    code, _ = helpers.err_check(response, (400, ValueError))
+    return code == 204
 
 
 def signout(username: str, password: str):
@@ -133,7 +135,12 @@ def signout(username: str, password: str):
     """
     payload = {"username": username, "password": password}
     response = requests.post(urls.api_yggdrasil_signout, json=payload)
-    handle_response(response, PayloadError, CredentialsError)
+    code, _ = helpers.err_check(
+        response,
+        (400, ValueError),
+        ([403, 429], CredentialsError),
+    )
+    return code == 204
 
 
 def invalidate(access_token: str, client_token: str):
@@ -157,4 +164,9 @@ def invalidate(access_token: str, client_token: str):
     """
     payload = {"accessToken": access_token, "clientToken": client_token}
     response = requests.post(urls.api_yggdrasil_invalidate, json=payload)
-    handle_response(response, PayloadError, TokenError)
+    code, _ = helpers.err_check(
+        response,
+        (400, ValueError),
+        (403, TokenError),
+    )
+    return code == 204

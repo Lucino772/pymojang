@@ -5,7 +5,6 @@ from mojang.exceptions import (
     Unauthorized,
     XboxLiveAuthenticationError,
     XboxLiveInvalidUserHash,
-    handle_response,
 )
 
 from ..utils import helpers, urls
@@ -40,7 +39,7 @@ def authenticate_xbl(auth_token: str) -> Tuple[str, str]:
         headers=headers,
         json=data,
     )
-    data = handle_response(response, XboxLiveAuthenticationError)
+    _, data = helpers.err_check(response, (400, XboxLiveAuthenticationError))
     return data["Token"], data["DisplayClaims"]["xui"][0]["uhs"]
 
 
@@ -66,7 +65,7 @@ def authenticate_xsts(xbl_token: str) -> Tuple[str, str]:
     response = requests.post(
         urls.api_ms_xbl_authorize, headers=headers, json=data
     )
-    data = handle_response(response, XboxLiveAuthenticationError)
+    _, data = helpers.err_check(response, (400, XboxLiveAuthenticationError))
     return data["Token"], data["DisplayClaims"]["xui"][0]["uhs"]
 
 
@@ -100,5 +99,7 @@ def authenticate_minecraft(userhash: str, xsts_token: str) -> str:
     data = {"identityToken": f"XBL3.0 x={userhash};{xsts_token}"}
 
     response = requests.post(urls.api_ms_xbl_login, headers=headers, json=data)
-    data = handle_response(response, XboxLiveInvalidUserHash, Unauthorized)
+    _, data = helpers.err_check(
+        response, (400, XboxLiveInvalidUserHash), (401, Unauthorized)
+    )
     return data["access_token"]

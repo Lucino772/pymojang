@@ -2,13 +2,7 @@ from typing import List
 
 import requests
 
-from ...exceptions import (
-    IPNotSecured,
-    IPVerificationError,
-    PayloadError,
-    Unauthorized,
-    handle_response,
-)
+from ...exceptions import Unauthorized
 from ..structures.auth import ChallengeInfo
 from ..utils import helpers, urls
 
@@ -40,12 +34,10 @@ def check_ip(access_token: str) -> bool:
     """
     headers = helpers.get_headers(bearer=access_token)
     response = requests.get(urls.api_security_verify_ip, headers=headers)
-    try:
-        handle_response(response, PayloadError, Unauthorized, IPNotSecured)
-    except IPNotSecured:
-        return False
-    else:
-        return True
+    code, _ = helpers.err_check(
+        response, (400, ValueError), (401, Unauthorized)
+    )
+    return code != 403
 
 
 def get_challenges(access_token: str) -> List["ChallengeInfo"]:
@@ -80,7 +72,9 @@ def get_challenges(access_token: str) -> List["ChallengeInfo"]:
     """
     headers = helpers.get_headers(bearer=access_token)
     response = requests.get(urls.api_security_challenges, headers=headers)
-    data = handle_response(response, PayloadError, Unauthorized)
+    _, data = helpers.err_check(
+        response, (400, ValueError), (401, Unauthorized)
+    )
 
     _challenges = []
     for item in data:
@@ -126,11 +120,7 @@ def verify_ip(access_token: str, answers: list) -> bool:
     response = requests.post(
         urls.api_security_verify_ip, headers=headers, json=answers
     )
-    try:
-        handle_response(
-            response, PayloadError, Unauthorized, IPVerificationError
-        )
-    except IPVerificationError:
-        return False
-    else:
-        return True
+    code, _ = helpers.err_check(
+        response, (400, ValueError), (401, Unauthorized)
+    )
+    return code != 403

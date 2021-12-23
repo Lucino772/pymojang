@@ -5,7 +5,7 @@ from typing import List
 
 import requests
 
-from ..exceptions import handle_response
+from ..exceptions import InvalidName
 from .structures.base import (
     NameInfo,
     NameInfoList,
@@ -15,7 +15,7 @@ from .structures.base import (
 )
 from .structures.profile import UnauthenticatedProfile
 from .structures.session import Cape, Skin
-from .utils import urls
+from .utils import urls, helpers
 
 
 def status() -> StatusCheck:
@@ -91,15 +91,21 @@ def get_uuid(username: str) -> UUIDInfo:
         UUIDInfo(name='Notch', uuid='069a79f444e94726a5befca90e38aaf5', legacy=False, demo=False)
         ```
     """
-    response = requests.get(urls.api_get_uuid(username))
-    data = handle_response(response)
+    if len(username) == 0 or len(username) > 16:
+        raise InvalidName()
 
-    if not data:
+    response = requests.get(urls.api_get_uuid(username))
+    code, data = helpers.err_check(response)
+
+    if code == 204:
         return None
 
-    data["uuid"] = data.pop("id")
-
-    return UUIDInfo(**data)
+    return UUIDInfo(
+        name=data["name"],
+        uuid=data["id"],
+        legacy=data.get("legacy", False),
+        demo=data.get("demo", False),
+    )
 
 
 def get_uuids(usernames: list) -> List["UUIDInfo"]:
@@ -132,11 +138,16 @@ def get_uuids(usernames: list) -> List["UUIDInfo"]:
     usernames = list(map(lambda u: u.lower(), usernames))
     _uuids = [None] * len(usernames)
 
-    for i in range(0, len(usernames), 10):
+    # Check for invalid names
+    valid_usernames = list(filter(lambda u: 0 < len(u) <= 16, usernames))
+    if len(valid_usernames) < len(usernames):
+        raise InvalidName()
+
+    for i in range(0, len(valid_usernames), 10):
         response = requests.post(
-            urls.api_get_uuids, json=usernames[i : i + 10]
+            urls.api_get_uuids, json=valid_usernames[i : i + 10]
         )
-        data = handle_response(response)
+        _, data = helpers.err_check(response)
 
         for item in data:
             index = usernames.index(item["name"].lower())
@@ -171,7 +182,10 @@ def names(uuid: str) -> NameInfoList:
         ```
     """
     response = requests.get(urls.api_name_history(uuid))
-    data = handle_response(response)
+    code, data = helpers.err_check(response, (400, ValueError))
+
+    if code == 204:
+        return None
 
     _names = []
     for item in data:
@@ -215,9 +229,9 @@ def user(uuid: str) -> UnauthenticatedProfile:
         ```
     """
     response = requests.get(urls.api_user_profile(uuid))
-    data = handle_response(response)
+    code, data = helpers.err_check(response, (400, ValueError))
 
-    if not data:
+    if code == 204:
         return None
 
     # Load skin and cape

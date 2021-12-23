@@ -3,13 +3,7 @@ import datetime as dt
 import jwt
 import requests
 
-from ..exceptions import (
-    InvalidName,
-    PayloadError,
-    Unauthorized,
-    UnavailableName,
-    handle_response,
-)
+from ..exceptions import InvalidName, Unauthorized, UnavailableName
 from .base import names
 from .structures.profile import AuthenticatedUserProfile
 from .structures.session import Cape, NameChange, Skin
@@ -42,7 +36,9 @@ def get_user_name_change(access_token: str) -> NameChange:
     """
     headers = helpers.get_headers(bearer=access_token)
     response = requests.get(urls.api_session_name_change, headers=headers)
-    data = handle_response(response, PayloadError, Unauthorized)
+    _, data = helpers.err_check(
+        response, (400, ValueError), (401, Unauthorized)
+    )
 
     data["created_at"] = dt.datetime.strptime(
         data.pop("createdAt"), "%Y-%m-%dT%H:%M:%SZ"
@@ -76,7 +72,13 @@ def change_user_name(access_token: str, name: str):
     response = requests.put(
         urls.api_session_change_name(name), headers=headers
     )
-    handle_response(response, InvalidName, UnavailableName, Unauthorized)
+    code, _ = helpers.err_check(
+        response,
+        (400, InvalidName),
+        (403, UnavailableName),
+        (401, Unauthorized),
+    )
+    return code == 200
 
 
 def change_user_skin(access_token: str, path: str, variant="classic"):
@@ -108,7 +110,10 @@ def change_user_skin(access_token: str, path: str, variant="classic"):
     response = requests.post(
         urls.api_session_change_skin, headers=headers, files=files
     )
-    handle_response(response, PayloadError, Unauthorized)
+    code, _ = helpers.err_check(
+        response, (400, ValueError), (401, Unauthorized)
+    )
+    return code == 204
 
 
 def reset_user_skin(access_token: str, uuid: str):
@@ -133,7 +138,10 @@ def reset_user_skin(access_token: str, uuid: str):
     response = requests.delete(
         urls.api_session_reset_skin(uuid), headers=headers
     )
-    handle_response(response, PayloadError, Unauthorized)
+    code, _ = helpers.err_check(
+        response, (400, ValueError), (401, Unauthorized)
+    )
+    return code == 204
 
 
 def owns_minecraft(
@@ -163,7 +171,7 @@ def owns_minecraft(
     """
     headers = helpers.get_headers(bearer=access_token)
     response = requests.get(urls.api_session_ownership, headers=headers)
-    data = handle_response(response, Unauthorized)
+    _, data = helpers.err_check(response, (401, Unauthorized))
 
     if verify_sig:
         for i in data.get("items", []):
@@ -177,7 +185,7 @@ def owns_minecraft(
 def get_profile(access_token: str):
     headers = helpers.get_headers(bearer=access_token)
     response = requests.get(urls.api_session_profile, headers=headers)
-    data = handle_response(response, Unauthorized)
+    _, data = helpers.err_check(response, (401, Unauthorized))
 
     skins = []
     for item in data["skins"]:
