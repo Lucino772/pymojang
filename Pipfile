@@ -4,18 +4,13 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-mkdocs = "*"
-mkdocs-material = "*"
-mkdocstrings = "*"
-pygments = "*"
-mike = "*"
 pytest = "*"
 flake8 = "*"
-pymdown-extensions = "*"
 pre-commit = "*"
 pytest-cov = "*"
 importlib-metadata = "*"
-black = "*"
+sphinx = "*"
+furo = "*"
 
 [packages]
 requests = "*"
