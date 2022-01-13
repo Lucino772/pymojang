@@ -16,13 +16,14 @@
 
 
 # -- Project information -----------------------------------------------------
+import mojang
 
 project = "PyMojang"
 copyright = "2022, Lucino772"
 author = "Lucino772"
 
 # The full version, including alpha/beta/rc tags
-release = "1.4.0"
+release = mojang.__version__
 
 
 # -- General configuration ---------------------------------------------------
