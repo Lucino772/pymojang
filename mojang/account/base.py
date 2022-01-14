@@ -1,7 +1,8 @@
 import base64
+from ctypes import Union
 import datetime as dt
 import json
-from typing import List
+from typing import List, Optional
 
 import requests
 
@@ -51,7 +52,7 @@ def status() -> StatusCheck:
     return StatusCheck(_status)
 
 
-def get_uuid(username: str) -> UUIDInfo:
+def get_uuid(username: str) -> Optional[UUIDInfo]:
     """Get uuid of username
 
     :param str username: The username you want the uuid of
@@ -84,7 +85,7 @@ def get_uuid(username: str) -> UUIDInfo:
     )
 
 
-def get_uuids(usernames: list) -> List["UUIDInfo"]:
+def get_uuids(usernames: list) -> List[Optional[UUIDInfo]]:
     """Get uuid of multiple username
 
     .. admonition:: Limited Endpoint
@@ -105,7 +106,7 @@ def get_uuids(usernames: list) -> List["UUIDInfo"]:
     ]
     """
     usernames = list(map(lambda u: u.lower(), usernames))
-    _uuids = [None] * len(usernames)
+    _uuids: List[Optional[UUIDInfo]] = [None] * len(usernames)
 
     # Check for invalid names
     valid_usernames = list(filter(lambda u: 0 < len(u) <= 16, usernames))
@@ -126,7 +127,7 @@ def get_uuids(usernames: list) -> List["UUIDInfo"]:
     return _uuids
 
 
-def names(uuid: str) -> NameInfoList:
+def names(uuid: str) -> Optional[NameInfoList]:
     """Get the user's name history
 
     :param str uuid: The user's uuid
@@ -158,7 +159,7 @@ def names(uuid: str) -> NameInfoList:
     return NameInfoList(_names)
 
 
-def user(uuid: str) -> UnauthenticatedProfile:
+def user(uuid: str) -> Optional[UnauthenticatedProfile]:
     """Returns the full profile of a user
 
     :param str uuid: The uuid of the profile

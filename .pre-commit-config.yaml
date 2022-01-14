@@ -22,3 +22,5 @@ repos:
     rev: v0.931
     hooks:
     -   id: mypy
+        exclude: ^examples/
+        additional_dependencies: [types-requests==2.27.7]

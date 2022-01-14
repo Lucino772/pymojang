@@ -11,8 +11,8 @@ from .types import String, VarInt
 
 def ping(
     sock: socket.socket,
-    hostname: Optional[str] = "locahost",
-    port: Optional[int] = 25565,
+    hostname: str = "locahost",
+    port: int = 25565,
 ) -> SLPResponse:
     pcks = Packets(sock)
 
@@ -43,10 +43,13 @@ def ping(
         _ = VarInt.read(buffer)
         ping_start = struct.unpack(">q", buffer.read(8))[0]
 
-    players = None
+    players = Players((-1, -1), [])
     if "players" in response:
         players = Players(
-            (response["players"]["online"], response["players"]["max"]),
+            (
+                int(response["players"]["online"]),
+                int(response["players"]["max"]),
+            ),
             response["players"].get("sample", []),
         )
 

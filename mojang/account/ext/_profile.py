@@ -40,7 +40,7 @@ class AuthenticatedUser(metaclass=ABCMeta):
         self.__capes = None
 
         self.__name_change_allowed = False
-        self.__created_at = False
+        self.__created_at = None
 
         self._access_token = access_token
         self._refresh_token = refresh_token
@@ -56,11 +56,11 @@ class AuthenticatedUser(metaclass=ABCMeta):
         raise NotImplementedError
 
     @property
-    def name(self) -> str:
+    def name(self) -> Optional[str]:
         return self.__name
 
     @property
-    def uuid(self) -> str:
+    def uuid(self) -> Optional[str]:
         return self.__uuid
 
     @property
@@ -72,27 +72,33 @@ class AuthenticatedUser(metaclass=ABCMeta):
         return self.__is_demo
 
     @property
-    def names(self) -> NameInfoList:
+    def names(self) -> Optional[NameInfoList]:
         return self.__names
 
     @property
-    def skins(self) -> List[Skin]:
+    def skins(self) -> Optional[List[Skin]]:
         return self.__skins
 
     @property
-    def skin(self) -> Skin:
-        res = list(filter(lambda skin: skin.state == "ACTIVE", self.__skins))
+    def skin(self) -> Optional[Skin]:
+        if self.__skins is None:
+            return None
+
+        res = list(filter(lambda s: s.state == "ACTIVE", self.__skins))
         if len(res) > 0:
             return res[0]
 
         return None
 
     @property
-    def capes(self) -> List[Cape]:
+    def capes(self) -> Optional[List[Cape]]:
         return self.__capes
 
     @property
-    def cape(self) -> Cape:
+    def cape(self) -> Optional[Cape]:
+        if self.__capes is None:
+            return None
+
         res = list(filter(lambda cape: cape.state == "ACTIVE", self.__capes))
         if len(res) > 0:
             return res[0]
@@ -104,7 +110,7 @@ class AuthenticatedUser(metaclass=ABCMeta):
         return self.__name_change_allowed
 
     @property
-    def created_at(self) -> datetime.datetime:
+    def created_at(self) -> Optional[datetime.datetime]:
         return self.__created_at
 
     def _fetch_profile(self):

@@ -1,5 +1,5 @@
 import datetime as dt
-from typing import NamedTuple, Tuple, Union
+from typing import Callable, NamedTuple, Optional, Tuple, Union
 
 
 # Status check
@@ -22,6 +22,8 @@ class StatusCheck(Tuple[ServiceStatus, ...]):
         service = list(filter(lambda s: s.name == name, self))
         if len(service) > 0:
             return service[0]
+
+        return None
 
 
 # UUID and Name
@@ -46,7 +48,7 @@ class NameInfo(NamedTuple):
     """
 
     name: str
-    changed_to_at: dt.datetime
+    changed_to_at: Optional[dt.datetime]
 
 
 class NameInfoList(Tuple[NameInfo, ...]):
@@ -56,8 +58,15 @@ class NameInfoList(Tuple[NameInfo, ...]):
         if len(self) == 1:
             return self[0]
 
-        _list = filter(lambda n: n.change_to_at is not None, self)
-        return max(_list, key=lambda n: n.change_to_at)
+        _max = self[0]
+        for n in self[1:]:
+            if (n.changed_to_at is not None) and (
+                _max.changed_to_at is None
+                or n.changed_to_at > _max.changed_to_at
+            ):
+                _max = n
+
+        return _max
 
     @property
     def first(self) -> NameInfo:
