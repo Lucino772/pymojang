@@ -89,6 +89,7 @@ def get_uuids(usernames: list) -> List["UUIDInfo"]:
 
     .. admonition:: Limited Endpoint
         :class: note
+
         The Mojang API only allow 10 usernames maximum, if more than 10 usernames are
         given to the function, multiple request will be made.
 

@@ -4,9 +4,8 @@ from typing import NamedTuple
 ## Security
 class ChallengeInfo(NamedTuple):
     """
-    Attributes:
-        id (int): The id of the challenge
-        challenge (str): The challenge to complete
+    :var int id: The id of the challenge
+    :var str challenge: The challenge to complete
     """
 
     id: int

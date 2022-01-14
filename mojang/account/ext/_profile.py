@@ -22,7 +22,8 @@ class AuthenticatedUser(metaclass=ABCMeta):
     :var bool is_legacy: Wether the account has migrated
     :var bool is_demo: Wether the account is demo
     :var NameInfoList names: The user name history
-    :var List[Skin] skin: All the skins of the user
+    :var Skin skin: The active user skin
+    :var List[Skin] skins: All the skins of the user
     :var Cape cape: The active user cape
     :var List[Cape] capes: All the capes of the user
     :var bool name_change_allowed:  Can the user change name
