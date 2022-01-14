@@ -1,6 +1,6 @@
 import socket
 from contextlib import contextmanager
-from typing import Callable, Optional, Tuple
+from typing import Callable, Optional, Tuple, Generator
 
 from .packets import Packets
 
@@ -8,25 +8,18 @@ from .packets import Packets
 @contextmanager
 def session(
     addr: Tuple[str, int], password: str, timeout: Optional[float] = 3
-) -> Callable[[str], str]:
+) -> Generator[Callable[[str], str], None, None]:
     """Open a RCON connection
 
-    Args:
-        addr (tuple): The address and the port to connect to
-        password (str): The RCON password set in the server properties
-        timeout (int, optional): Time to wait before closing pending connection (default to 3)
+    :param tuple addr: The address and the port to connect to
+    :param str password: The RCON password set in the server properties
+    :param int timeout: Time to wait before closing pending connection (default to 3)
 
-    Returns:
-        A function to send command
+    :Example:
 
-    Example:
-
-        ```python
-        from mojang.minecraft import rcon
-
-        with rcon.session(('localhost', 25575), 'my_super_password') as send:
-            result = send('help') # This execute the /help command
-        ```
+    >>> from mojang.minecraft import rcon
+    >>> with rcon.session(('localhost', 25575), 'my_super_password') as send:
+    ...     send('help') # This execute the /help command
 
     """
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

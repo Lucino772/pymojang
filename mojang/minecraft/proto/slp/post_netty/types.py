@@ -36,12 +36,12 @@ class VarInt:
 
 class String:
     @classmethod
-    def write(cls, buffer: IO, value: str, encoding: Optional[str] = "utf-8"):
-        value = value.encode(encoding)
-        VarInt.write(buffer, len(value))
-        buffer.write(value)
+    def write(cls, buffer: IO, value: str, encoding: str = "utf-8"):
+        encoded = value.encode(encoding)
+        VarInt.write(buffer, len(encoded))
+        buffer.write(encoded)
 
     @classmethod
-    def read(cls, buffer: IO, encoding: Optional[str] = "utf-8") -> str:
+    def read(cls, buffer: IO, encoding: str = "utf-8") -> str:
         length = VarInt.read(buffer)
         return buffer.read(length).decode(encoding)

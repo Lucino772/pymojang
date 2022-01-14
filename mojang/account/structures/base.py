@@ -1,13 +1,12 @@
 import datetime as dt
-from typing import NamedTuple, Tuple, Union
+from typing import Callable, NamedTuple, Optional, Tuple, Union
 
 
 # Status check
 class ServiceStatus(NamedTuple):
     """
-    Attributes:
-        name (str): The service name
-        status (str): The service status
+    :var str name: The service name
+    :var str status: The service status
     """
 
     name: str
@@ -18,25 +17,22 @@ class StatusCheck(Tuple[ServiceStatus, ...]):
     def get(self, name: str) -> Union[None, ServiceStatus]:
         """Get service by name
 
-        Args:
-            name (str): The service name
-
-        Returns:
-            ServiceStatus
+        :param str name: The service name
         """
         service = list(filter(lambda s: s.name == name, self))
         if len(service) > 0:
             return service[0]
 
+        return None
+
 
 # UUID and Name
 class UUIDInfo(NamedTuple):
     """
-    Attributes:
-        name (str): The user name
-        uuid (str): The user uuid
-        legacy (bool): Wether the account has migrated
-        demo (bool): Wether the account is demo
+    :var str name: The user name
+    :var str uuid: The user uuid
+    :var bool legacy: Wether the account has migrated
+    :var bool demo: Wether the account is demo
     """
 
     name: str
@@ -47,13 +43,12 @@ class UUIDInfo(NamedTuple):
 
 class NameInfo(NamedTuple):
     """
-    Attributes:
-        name (str): The player name
-        changed_to_at (dt.datetime): When it's was changed to
+    :var str name: The player name
+    :var datetime.datetime changed_to_at: When it's was changed to
     """
 
     name: str
-    changed_to_at: dt.datetime
+    changed_to_at: Optional[dt.datetime]
 
 
 class NameInfoList(Tuple[NameInfo, ...]):
@@ -63,8 +58,15 @@ class NameInfoList(Tuple[NameInfo, ...]):
         if len(self) == 1:
             return self[0]
 
-        _list = filter(lambda n: n.change_to_at is not None, self)
-        return max(_list, key=lambda n: n.change_to_at)
+        _max = self[0]
+        for n in self[1:]:
+            if (n.changed_to_at is not None) and (
+                _max.changed_to_at is None
+                or n.changed_to_at > _max.changed_to_at
+            ):
+                _max = n
+
+        return _max
 
     @property
     def first(self) -> NameInfo:

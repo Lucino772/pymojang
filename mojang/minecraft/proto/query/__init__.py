@@ -2,7 +2,7 @@ import io
 import socket
 import struct
 import time
-from typing import IO, Optional, Tuple
+from typing import IO, List, Optional, Tuple
 
 from ._structures import ServerStats
 from .packets import Packets
@@ -27,26 +27,40 @@ def _parse_stats(data: bytes) -> ServerStats:
             value = read_null_terminated_string(buffer)
             info[key] = value
 
+        motd = str(info.pop("hostname"))
+        game_type = str(info.pop("gametype"))
+        game_id = str(info.pop("game_id"))
+        version = str(info.pop("version"))
+        _map = str(info.pop("map"))
+        host = (str(info.pop("hostip")), int(info.pop("hostport")))
         # TODO: Parse plugins
-        info["motd"] = info.pop("hostname")
-        info["game_type"] = info.pop("gametype")
-        info["players"] = (
+        plugins: List[str] = []
+        players = (
             int(info.pop("numplayers")),
             int(info.pop("maxplayers")),
         )
-        info["host"] = (info.pop("hostip"), int(info.pop("hostport")))
 
         # Skip next 11 bytes
         buffer.seek(11, 1)
 
         # Read players
-        players = []
+        player_list = []
         player_name = read_null_terminated_string(buffer)
         while len(player_name) != 0:
-            players.append(player_name)
+            player_list.append(player_name)
             player_name = read_null_terminated_string(buffer)
 
-    return ServerStats(**info, player_list=players)
+    return ServerStats(
+        motd=motd,
+        game_type=game_type,
+        game_id=game_id,
+        version=version,
+        map=_map,
+        host=host,
+        plugins=plugins,
+        players=players,
+        player_list=player_list,
+    )
 
 
 def _handshake(
@@ -84,37 +98,26 @@ def _get_stats(
 
 def get_stats(
     addr: Tuple[str, int], timeout: Optional[float] = 3
-) -> ServerStats:
+) -> Optional[ServerStats]:
     """Returns full stats about server using the Query protocol
 
-    Args:
-        addr (tuple): tuple with the address and the port to connect to
-        timeout (int, optional): Time to wait before closing pending connection (default to 3)
+    :param tuple addr: tuple with the address and the port to connect to
+    :param int timeout: Time to wait before closing pending connection (default to 3)
 
-    Returns:
-        ServerStats
+    :Example:
 
-    Example:
-
-        ```python
-        from mojang.minecraft import query
-
-        stats = query.get_stats(('localhost', 25585))
-        print(stats)
-        ```
-        ```bash
-        ServerStats(
-            motd='A Minecraft Server',
-            game_type='SMP',
-            game_id='MINECRAFT',
-            version='1.16.5',
-            map='world',
-            host=('localhost', 25585),
-            players=(0, 20),
-            player_list=[]
-        )
-        ```
-
+    >>> from mojang.minecraft import query
+    >>> query.get_stats(('localhost', 25585))
+    ServerStats(
+        motd='A Minecraft Server',
+        game_type='SMP',
+        game_id='MINECRAFT',
+        version='1.16.5',
+        map='world',
+        host=('localhost', 25585),
+        players=(0, 20),
+        player_list=[]
+    )
     """
     session_id = int(time.time()) & 0x0F0F0F0F
 

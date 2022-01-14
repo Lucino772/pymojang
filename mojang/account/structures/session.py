@@ -1,7 +1,8 @@
+from ctypes import Union
 import datetime as dt
 import re
 from os import path
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 from urllib.parse import urlparse
 
 import requests
@@ -10,9 +11,8 @@ import validators
 
 class NameChange(NamedTuple):
     """
-    Attributes:
-        allowed (bool): Wether the user can change name
-        created_at (dt.datetime): When was the user created
+    :var bool allowed: Wether the user can change name
+    :var datetime.datetime created_at: When was the user created
     """
 
     allowed: bool
@@ -20,6 +20,13 @@ class NameChange(NamedTuple):
 
 
 class _Resource:
+    """Base class for downloadable resources
+
+    :var str source: The source where the skin is located
+    :var bytes data: Content of the resources in bytes
+    :var str extension: The type of file, if detected
+    """
+
     def __init__(self, source: str, load: bool = True) -> None:
         self.__source = source
         self.__data = bytes()
@@ -29,15 +36,15 @@ class _Resource:
             self.load()
 
     @property
-    def source(self):
+    def source(self) -> str:
         return self.__source
 
     @property
-    def data(self):
+    def data(self) -> bytes:
         return self.__data
 
     @property
-    def extension(self):
+    def extension(self) -> Optional[str]:
         return self.__extension
 
     @classmethod
@@ -69,13 +76,14 @@ class _Resource:
         response = requests.get(url)
         if response.ok:
             filename = (
-                cls._filename_from_headers(response.headers)
+                cls._filename_from_headers(dict(response.headers))
                 or cls._filename_from_url(url)
                 or ["download", None]
             )
             return filename, response.content
 
     def load(self):
+        """Load data from the source"""
         if validators.url(self.source):
             response = self._download_bytes(self.source)
             if response:
@@ -91,6 +99,7 @@ class _Resource:
             pass  # TODO: Raise Exception
 
     def save(self, dest: str, add_extension: bool = True):
+        """Save resource in a file"""
         if (
             len(path.splitext(dest)[1]) == 0
             and self.__extension is not None
@@ -106,9 +115,9 @@ class _Resource:
 
 class Skin(_Resource):
     """
-    Attributes:
-        source (str): The source where the skin is located
-        variant (str): The variant of skin (default to 'classic')
+    :var str variant: The variant of skin (default to 'classic')
+    :var str id: The id of the skin
+    :var str state: The state of the skin
     """
 
     def __init__(
@@ -125,15 +134,15 @@ class Skin(_Resource):
         self.__state = state
 
     @property
-    def variant(self):
+    def variant(self) -> str:
         return self.__variant
 
     @property
-    def id(self):
+    def id(self) -> Optional[str]:
         return self.__id
 
     @property
-    def state(self):
+    def state(self) -> Optional[str]:
         return self.__state
 
     def __hash__(self) -> int:
@@ -153,8 +162,8 @@ class Skin(_Resource):
 
 class Cape(_Resource):
     """
-    Attributes:
-        source (str): The source where the cape is located
+    :var str id: The id of the cape
+    :var str state: The state of the cape
     """
 
     def __init__(
@@ -165,11 +174,11 @@ class Cape(_Resource):
         self.__state = state
 
     @property
-    def id(self):
+    def id(self) -> Optional[str]:
         return self.__id
 
     @property
-    def state(self):
+    def state(self) -> Optional[str]:
         return self.__state
 
     def __hash__(self) -> int:

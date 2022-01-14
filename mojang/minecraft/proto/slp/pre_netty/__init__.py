@@ -8,8 +8,8 @@ from .._structures import Players, SLPResponse
 
 def ping_fe01(
     sock: socket.socket,
-    hostname: Optional[str] = None,
-    port: Optional[int] = -1,
+    hostname: str = None,
+    port: int = -1,
 ):
     if hostname is not None and len(hostname) > 0 and port > 0:
         encoded_hostname = hostname.encode("utf-16be")
@@ -33,13 +33,13 @@ def ping_fe01(
     sock.send(packet)
 
     with sock.makefile("rb") as buffer:
-        buffer.read1(9)  # Skip 9 first bytes
+        buffer.read(9)  # Skip 9 first bytes
         resp = buffer.read().decode("utf-16-be").split("\x00")
 
     latency = (time.time() * 1000) - start
 
     return SLPResponse(
-        protocol_version=resp[0],
+        protocol_version=int(resp[0]),
         version=resp[1],
         motd=resp[2],
         players=Players((int(resp[3]), int(resp[4])), []),
@@ -58,8 +58,8 @@ def ping_fe(sock: socket.socket):
     latency = (time.time() * 1000) - start
 
     return SLPResponse(
-        protocol_version=None,
-        version=None,
+        protocol_version=-1,
+        version="",
         motd=resp[0],
         players=Players((int(resp[1]), int(resp[2])), []),
         ping=latency,

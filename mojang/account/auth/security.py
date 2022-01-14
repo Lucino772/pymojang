@@ -2,85 +2,56 @@ from typing import List
 
 import requests
 
-from ...exceptions import (
-    handle_response,
-    PayloadError,
-    Unauthorized,
-    IPNotSecured,
-    IPVerificationError,
-)
+from ...exceptions import Unauthorized
 from ..structures.auth import ChallengeInfo
-from ..utils.auth import BearerAuth, URLs
+from ..utils import helpers, urls
 
 
 def check_ip(access_token: str) -> bool:
     """Check if authenticated user IP is secure
 
-    Args:
-        access_token (str): The session's access token
+    :param str access_token: The session's access token
 
-    Returns:
-        True if IP is secure else False
+    :raises Unauthorized: if access token is invalid
+    :raises PayloadError: if access token is not formated correctly
 
-    Raises:
-        Unauthorized: If access token is invalid
-        PayloadError: If access token is not formated correctly
+    :Example:
 
-    Example:
-
-        ```python
-        from mojang.account.auth import security
-
-        checked = security.check_ip('ACCESS_TOKEN')
-        print(checked)
-        ```
-        ```
-        True
-        ```
+    >>> from mojang.account.auth import security
+    >>> security.check_ip('ACCESS_TOKEN')
+    True
     """
-    response = requests.get(URLs.verify_ip(), auth=BearerAuth(access_token))
-    try:
-        handle_response(response, PayloadError, Unauthorized, IPNotSecured)
-    except IPNotSecured:
-        return False
-    else:
-        return True
+    headers = helpers.get_headers(bearer=access_token)
+    response = requests.get(urls.api_security_verify_ip, headers=headers)
+    code, _ = helpers.err_check(
+        response, (400, ValueError), (401, Unauthorized)
+    )
+    return code != 403
 
 
 def get_challenges(access_token: str) -> List["ChallengeInfo"]:
     """Return a list of challenges to verify IP
 
-    Args:
-        access_token (str): The session's access token
+    :param str access_token: The session's access token
 
-    Returns:
-        A list of ChallengeInfo
+    :raises Unauthorized: if access token is invalid
+    :raises PayloadError: if access token is not formated correctly
 
+    :Example:
 
-    Raises:
-        Unauthorized: If access token is invalid
-        PayloadError: If access token is not formated correctly
-
-    Example:
-
-        ```python
-        from mojang.account.auth import security
-
-        challenges = security.get_challenges('ACCESS_TOKEN')
-        print(challenges)
-        ```
-        ```bash
-        [
-            ChallengeInfo(id=123, challenge="What is your favorite pet's name?"),
-            ChallengeInfo(id=456, challenge="What is your favorite movie?"),
-            ChallengeInfo(id=589, challenge="What is your favorite author's last name?")
-        ]
-        ```
+    >>> from mojang.account.auth import security
+    >>> security.get_challenges('ACCESS_TOKEN')
+    [
+        ChallengeInfo(id=123, challenge="What is your favorite pet's name?"),
+        ChallengeInfo(id=456, challenge="What is your favorite movie?"),
+        ChallengeInfo(id=589, challenge="What is your favorite author's last name?")
+    ]
     """
-    response = requests.get(
-        URLs.get_challenges(), auth=BearerAuth(access_token)
+    headers = helpers.get_headers(bearer=access_token)
+    response = requests.get(urls.api_security_challenges, headers=headers)
+    _, data = helpers.err_check(
+        response, (400, ValueError), (401, Unauthorized)
     )
-    data = handle_response(response, PayloadError, Unauthorized)
 
     _challenges = []
     for item in data:
@@ -96,40 +67,29 @@ def get_challenges(access_token: str) -> List["ChallengeInfo"]:
 def verify_ip(access_token: str, answers: list) -> bool:
     """Verify IP with the given answers
 
-    Args:
-        access_token (str): The session's access token
-        answers (list): The answers to the question
+    :param str access_token: The session's access token
+    :param list answers: The answers to the question
 
-    Returns:
-        True if IP is secure else False
+    :raises Unauthorized: if access token is invalid
+    :raises PayloadError: if access token is not formated correctly
 
-    Raises:
-        Unauthorized: If access token is invalid
-        PayloadError: If access token is not formated correctly
+    :Example:
 
-    Example:
-
-        ```python
-        from mojang.account.auth import security
-
-        answers = [
-            (123, "foo"),
-            (456, "bar"),
-            (789, "baz")
-        ]
-
-        security.verify_user_ip('ACCESS_TOKEN', answers)
-        ```
+    >>> from mojang.account.auth import security
+    >>> answers = [
+    ...     (123, "foo"),
+    ...     (456, "bar"),
+    ...     (789, "baz")
+    ... ]
+    >>> security.verify_user_ip('ACCESS_TOKEN', answers)
+    True
     """
+    headers = helpers.get_headers(bearer=access_token)
     answers = list(map(lambda a: {"id": a[0], "answer": a[1]}, answers))
     response = requests.post(
-        URLs.verify_ip(), auth=BearerAuth(access_token), json=answers
+        urls.api_security_verify_ip, headers=headers, json=answers
     )
-    try:
-        handle_response(
-            response, PayloadError, Unauthorized, IPVerificationError
-        )
-    except IPVerificationError:
-        return False
-    else:
-        return True
+    code, _ = helpers.err_check(
+        response, (400, ValueError), (401, Unauthorized)
+    )
+    return code != 403

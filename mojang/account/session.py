@@ -3,46 +3,31 @@ import datetime as dt
 import jwt
 import requests
 
-from ..exceptions import (
-    handle_response,
-    PayloadError,
-    Unauthorized,
-    InvalidName,
-    UnavailableName,
-)
+from ..exceptions import InvalidName, Unauthorized, UnavailableName
 from .base import names
 from .structures.profile import AuthenticatedUserProfile
 from .structures.session import Cape, NameChange, Skin
-from .utils.auth import BearerAuth
-from .utils.urls import URLs
+from .utils import helpers, urls
 
 
 def get_user_name_change(access_token: str) -> NameChange:
     """Return if user can change name and when it was created
 
-    Args:
-        access_token (str): The session's access token
+    :param str access_token: The session access token
 
-    Returns:
-        NameChange
+    :raises Unauthorized: if the access token is invalid
 
-    Raises:
-        Unauthorized: If the access token is invalid
+    :Example:
 
-    Example:
-
-        ```python
-        from mojang.account import session
-
-        name_change = session.get_user_name_change('ACCESS_TOKEN')
-        print(name_change)
-        ```
-        ```bash
-        NameChange(allowed=True, created_at=datetime.datetime(2006, 4, 29, 10, 10, 10))
-        ```
+    >>> from mojang.account import session
+    >>> session.get_username_change('ACCESS_TOKEN')
+    NameChange(allowed=True, created_at=datetime.datetime(2006, 4, 29, 10, 10, 10))
     """
-    response = requests.get(URLs.name_change(), auth=BearerAuth(access_token))
-    data = handle_response(response, PayloadError, Unauthorized)
+    headers = helpers.get_headers(bearer=access_token)
+    response = requests.get(urls.api_session_name_change, headers=headers)
+    _, data = helpers.err_check(
+        response, (400, ValueError), (401, Unauthorized)
+    )
 
     data["created_at"] = dt.datetime.strptime(
         data.pop("createdAt"), "%Y-%m-%dT%H:%M:%SZ"
@@ -55,84 +40,82 @@ def get_user_name_change(access_token: str) -> NameChange:
 def change_user_name(access_token: str, name: str):
     """Change name of authenticated user
 
-    Args:
-        access_token (str): The session's access token
-        name (str): The new user name
+    :param str access_token: The session access token
+    :param str name: The new user name
 
-    Raises:
-        Unauthorized: If the access token is invalid
-        InvalidName: If the new user name is invalid
-        UnavailableName: If the new user name is unavailable
+    :raises Unauthorized: if the access token is invalid
+    :raises InvalidName: if the new user name is invalid
+    :raises UnavailableName: if the new user name is unavailable
 
-    Example:
+    :Example:
 
-        ```python
-        from mojang.account import session
-
-        session.change_user_name('ACCESS_TOKEN', 'my_super_cool_name')
-        ```
+    >>> from mojang.account import session
+    >>> session.change_user_name('ACCESS_NAME', 'NEW_NAME')
     """
+    headers = helpers.get_headers(bearer=access_token)
     response = requests.put(
-        URLs.change_name(name), auth=BearerAuth(access_token)
+        urls.api_session_change_name(name), headers=headers
     )
-    handle_response(response, InvalidName, UnavailableName, Unauthorized)
+    code, _ = helpers.err_check(
+        response,
+        (400, InvalidName),
+        (403, UnavailableName),
+        (401, Unauthorized),
+    )
+    return code == 200
 
 
 def change_user_skin(access_token: str, path: str, variant="classic"):
     """Change skin of authenticated user
 
-    Args:
-        access_token (str): The session's access token
-        path (str): The the path to the new skin, either local or remote
-        variant (str, optional): The skin variant, either `classic` or `slim`
+    :param str access_token: The session access token
+    :param str path: The the path to the new skin, either local or remote
+    :parama str variant: The skin variant, either `classic` or `slim`
 
-    Raises:
-        Unauthorized: If the access token is invalid
+    :raises Unauthorized: if the access token is invalid
 
-    Example:
+    :Example:
 
-        ```python
-        from mojang.account import session
-
-        session.change_user_skin('ACCESS_TOKEN', 'http://...')
-        ```
+    >>> from mojang.account import session
+    >>> session.change_user_skin('ACCESS_TOKEN', 'http://...')
     """
     skin = Skin(source=path, variant=variant)
     files = [
         ("variant", skin.variant),
         ("file", ("image.png", skin.data, "image/png")),
     ]
+    headers = helpers.get_headers(bearer=access_token)
+    headers["content-type"] = None
     response = requests.post(
-        URLs.change_skin(),
-        auth=BearerAuth(access_token),
-        files=files,
-        headers={"content-type": None},
+        urls.api_session_change_skin, headers=headers, files=files
     )
-    handle_response(response, PayloadError, Unauthorized)
+    code, _ = helpers.err_check(
+        response, (400, ValueError), (401, Unauthorized)
+    )
+    return code == 204
 
 
 def reset_user_skin(access_token: str, uuid: str):
     """Reset skin of authenticated user
 
-    Args:
-        access_token (str): The session's access token
-        uuid (str): The user uuid
+    :param str access_token: The session access token
+    :param str uuid: The user uuid
 
-    Raises:
-        Unauthorized: If the access token is invalid
+    :raises Unauthorized: if the access token is invalid
 
-    Example:
+    :Example:
 
-        ```python
-        from mojang.account import session
-
-        session.reset_user_skin('ACCESS_TOKEN', 'USER_UUID')
-        ```
+    >>> from mojang.account import session
+    >>> session.reset_user_skin('ACCESS_TOKEN', 'USER_UUID')
     """
+    headers = helpers.get_headers(bearer=access_token)
     response = requests.delete(
-        URLs.reset_skin(uuid), auth=BearerAuth(access_token)
+        urls.api_session_reset_skin(uuid), headers=headers
     )
-    handle_response(response, PayloadError, Unauthorized)
+    code, _ = helpers.err_check(
+        response, (400, ValueError), (401, Unauthorized)
+    )
+    return code == 204
 
 
 def owns_minecraft(
@@ -140,30 +123,21 @@ def owns_minecraft(
 ) -> bool:
     """Returns True if the authenticated user owns minecraft
 
-    Args:
-        access_token (str): The session's access token
-        verify_sig (bool, optional): If True, will check the jwt sig with the public key
-        public_key (str, optional): The key to use to verify jwt sig
+    :param str access_token: The session access token
+    :param str verify_sig: If True, will check the jwt sig with the public key
+    :param str public_key: The key to use to verify jwt sig
 
-    Returns:
-        True if user owns the game, else False
+    :raises Unauthorized: if the access token is invalid
 
-    Raises:
-        Unauthorized: If the access token is invalid
+    :Example:
 
-    Example:
-
-        ```python
-        from mojang.account import session
-
-        if session.owns_minecraft('ACCESS_TOKEN'):
-            print('This user owns minecraft')
-        ```
+    >>> from mojang.account import session
+    >>> session.owns_minecraft('ACCESS_TOKEN')
+    True
     """
-    response = requests.get(
-        URLs.check_minecraft_onwership(), auth=BearerAuth(access_token)
-    )
-    data = handle_response(response, Unauthorized)
+    headers = helpers.get_headers(bearer=access_token)
+    response = requests.get(urls.api_session_ownership, headers=headers)
+    _, data = helpers.err_check(response, (401, Unauthorized))
 
     if verify_sig:
         for i in data.get("items", []):
@@ -174,9 +148,17 @@ def owns_minecraft(
     return not len(data["items"]) == 0
 
 
-def get_profile(access_token: str):
-    response = requests.get(URLs.get_profile(), auth=BearerAuth(access_token))
-    data = handle_response(response, Unauthorized)
+def get_profile(access_token: str) -> AuthenticatedUserProfile:
+    """Returns the full profile of a authenticated user
+
+    :param str access_token: The session access token
+
+    :raises Unauthorized: if the access token is invalid
+    """
+
+    headers = helpers.get_headers(bearer=access_token)
+    response = requests.get(urls.api_session_profile, headers=headers)
+    _, data = helpers.err_check(response, (401, Unauthorized))
 
     skins = []
     for item in data["skins"]:

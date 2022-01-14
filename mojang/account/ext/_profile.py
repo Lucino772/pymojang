@@ -1,13 +1,35 @@
+import datetime
 from abc import ABCMeta, abstractmethod
-from typing import Optional
+from typing import List, Optional
 
 import msal
 
 from .. import session
 from ..auth import microsoft, security, yggdrasil
+from ..structures.profile import Cape, NameInfoList, Skin
+from ..structures.auth import ChallengeInfo
 
 
 class AuthenticatedUser(metaclass=ABCMeta):
+    """
+    Base class for every authenticated user
+
+    :param str access_token: The session token
+    :param str refresh_token: The refresh token
+
+    :var str name: The user name
+    :var str uuid: The user uuid
+    :var bool is_legacy: Wether the account has migrated
+    :var bool is_demo: Wether the account is demo
+    :var NameInfoList names: The user name history
+    :var Skin skin: The active user skin
+    :var List[Skin] skins: All the skins of the user
+    :var Cape cape: The active user cape
+    :var List[Cape] capes: All the capes of the user
+    :var bool name_change_allowed:  Can the user change name
+    :var datetime.datetime created_at: When was the user created
+    """
+
     def __init__(self, access_token: str, refresh_token: str) -> None:
         self.__name = None
         self.__uuid = None
@@ -18,7 +40,7 @@ class AuthenticatedUser(metaclass=ABCMeta):
         self.__capes = None
 
         self.__name_change_allowed = False
-        self.__created_at = False
+        self.__created_at = None
 
         self._access_token = access_token
         self._refresh_token = refresh_token
@@ -34,43 +56,49 @@ class AuthenticatedUser(metaclass=ABCMeta):
         raise NotImplementedError
 
     @property
-    def name(self):
+    def name(self) -> Optional[str]:
         return self.__name
 
     @property
-    def uuid(self):
+    def uuid(self) -> Optional[str]:
         return self.__uuid
 
     @property
-    def is_legacy(self):
+    def is_legacy(self) -> bool:
         return self.__is_legacy
 
     @property
-    def is_demo(self):
+    def is_demo(self) -> bool:
         return self.__is_demo
 
     @property
-    def names(self):
+    def names(self) -> Optional[NameInfoList]:
         return self.__names
 
     @property
-    def skins(self):
+    def skins(self) -> Optional[List[Skin]]:
         return self.__skins
 
     @property
-    def skin(self):
-        res = list(filter(lambda skin: skin.state == "ACTIVE", self.__skins))
+    def skin(self) -> Optional[Skin]:
+        if self.__skins is None:
+            return None
+
+        res = list(filter(lambda s: s.state == "ACTIVE", self.__skins))
         if len(res) > 0:
             return res[0]
 
         return None
 
     @property
-    def capes(self):
+    def capes(self) -> Optional[List[Cape]]:
         return self.__capes
 
     @property
-    def cape(self):
+    def cape(self) -> Optional[Cape]:
+        if self.__capes is None:
+            return None
+
         res = list(filter(lambda cape: cape.state == "ACTIVE", self.__capes))
         if len(res) > 0:
             return res[0]
@@ -78,11 +106,11 @@ class AuthenticatedUser(metaclass=ABCMeta):
         return None
 
     @property
-    def name_change_allowed(self):
+    def name_change_allowed(self) -> bool:
         return self.__name_change_allowed
 
     @property
-    def created_at(self):
+    def created_at(self) -> Optional[datetime.datetime]:
         return self.__created_at
 
     def _fetch_profile(self):
@@ -103,45 +131,30 @@ class AuthenticatedUser(metaclass=ABCMeta):
         self.__created_at = name_change.created_at
 
     def change_name(self, name: str):
-        """Change user name. For more details checkout [`change_user_name`][mojang.account.session.change_user_name]
+        """Change user name. For more details checkout :py:meth:`~mojang.account.session.change_user_name`
 
-        Args:
-            name (str): The new name
+        :param str name: The new name
         """
         session.change_user_name(self._access_token, name)
         self._fetch_profile()
 
     def change_skin(self, path: str, variant: Optional[str] = "classic"):
-        """Change user skin. For more details checkout [`change_user_skin`][mojang.account.session.change_user_skin]
+        """Change user skin. For more details checkout :py:meth:`~mojang.account.session.change_user_skin`
 
-        Args:
-            path (str): The path to the skin, either local or remote
-            variant (str, optional): The variant of skin (default to 'classic')
+        :param str path: The path to the skin, either local or remote
+        :param str variant: The variant of skin (default to 'classic')
         """
         session.change_user_skin(self._access_token, path, variant)
         self._fetch_profile()
 
     def reset_skin(self):
-        """Reset user skin. For more details checkout [`reset_user_skin`][mojang.account.session.reset_user_skin]"""
+        """Reset user skin. For more details checkout :py:meth:`~mojang.account.session.reset_user_skin`"""
         session.reset_user_skin(self._access_token, self.uuid)
         self._fetch_profile()
 
 
 class MojangAuthenticatedUser(AuthenticatedUser):
-    """
-    Attributes:
-        name (str): The user name
-        uuid (str): The user uuid
-        is_legacy (bool): Wether the account has migrated
-        is_demo (bool): Wether the account is demo
-        names (NameInfoList): The user name history
-        skin (Skin): The active user skin
-        skins (List[Skin]): All the skins of the user
-        cape (Cape): The active user cape
-        capes (List[Cape]): All the capes of the user
-        name_change_allowed (bool): Can the user change name
-        created_at (dt.datetime): When was the user created
-    """
+    """Class for user with a Mojang account"""
 
     def refresh(self):
         """Refresh current session"""
@@ -155,35 +168,22 @@ class MojangAuthenticatedUser(AuthenticatedUser):
         self._access_token, self._refresh_token = None
 
     @property
-    def secure(self):
-        """Check wether user IP is secured. For more details checkout [`check_ip`][mojang.account.auth.security.check_ip]"""
+    def secure(self) -> bool:
+        """Check wether user IP is secured. For more details checkout :py:meth:`~mojang.account.auth.security.check_ip`"""
         return security.check_ip(self._access_token)
 
     @property
-    def challenges(self):
-        """Returns the list of challenges to verify user IP. For more details checkout [`get_challenges`][mojang.account.auth.security.get_challenges]"""
+    def challenges(self) -> List[ChallengeInfo]:
+        """Returns the list of challenges to verify user IP. For more details checkout :py:meth:`~mojang.account.auth.security.get_challenges`"""
         return security.get_challenges(self._access_token)
 
-    def verify(self, answers: list):
-        """Verify user IP. For more details checkout [`verify_ip`][mojang.account.auth.security.verify_ip]"""
+    def verify(self, answers: list) -> bool:
+        """Verify user IP. For more details checkout :py:meth:`~mojang.account.auth.security.verify_ip`"""
         return security.verify_ip(self._access_token, answers)
 
 
 class MicrosoftAuthenticatedUser(AuthenticatedUser):
-    """
-    Attributes:
-        name (str): The user name
-        uuid (str): The user uuid
-        is_legacy (bool): Wether the account has migrated
-        is_demo (bool): Wether the account is demo
-        names (NameInfoList): The user name history
-        skin (Skin): The active user skin
-        skins (List[Skin]): All the skins of the user
-        cape (Cape): The active user cape
-        capes (List[Cape]): All the capes of the user
-        name_change_allowed (bool): Can the user change name
-        created_at (dt.datetime): When was the user created
-    """
+    """Class for user with a Microsoft account"""
 
     def __init__(
         self,

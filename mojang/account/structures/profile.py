@@ -1,16 +1,24 @@
-from typing import List
+from typing import List, Optional
 from .base import NameInfoList
 from .session import Skin, Cape
 
 
 class BaseUserProfile:
+    """
+    :var str name: The user name
+    :var str uuid: The user uuid
+    :var bool is_legacy: Wether the account has migrated
+    :var bool is_demo: Wether the account is demo
+    :var NameInfoList names: The user name history
+    """
+
     def __init__(
         self,
         name: str,
         uuid: str,
         is_legacy: bool,
         is_demo: bool,
-        names: NameInfoList,
+        names: Optional[NameInfoList],
     ) -> None:
         self.__name = name
         self.__uuid = uuid
@@ -36,36 +44,41 @@ class BaseUserProfile:
         return False
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self.__name
 
     @property
-    def uuid(self):
+    def uuid(self) -> str:
         return self.__uuid
 
     @property
-    def is_legacy(self):
+    def is_legacy(self) -> bool:
         return self.__is_legacy
 
     @property
-    def is_demo(self):
+    def is_demo(self) -> bool:
         return self.__is_demo
 
     @property
-    def names(self):
+    def names(self) -> Optional[NameInfoList]:
         return self.__names
 
 
 class UnauthenticatedProfile(BaseUserProfile):
+    """
+    :var Skin skin: The active user skin
+    :var Cape cape: The active user cape
+    """
+
     def __init__(
         self,
         name: str,
         uuid: str,
         is_legacy: bool,
         is_demo: bool,
-        names: NameInfoList,
-        skin: Skin,
-        cape: Cape,
+        names: Optional[NameInfoList],
+        skin: Optional[Skin],
+        cape: Optional[Cape],
     ) -> None:
         super().__init__(name, uuid, is_legacy, is_demo, names)
         self.__skin = skin
@@ -85,11 +98,11 @@ class UnauthenticatedProfile(BaseUserProfile):
         )
 
     @property
-    def skin(self):
+    def skin(self) -> Optional[Skin]:
         return self.__skin
 
     @property
-    def cape(self):
+    def cape(self) -> Optional[Cape]:
         return self.__cape
 
     def __repr__(self) -> str:
@@ -97,13 +110,18 @@ class UnauthenticatedProfile(BaseUserProfile):
 
 
 class AuthenticatedUserProfile(BaseUserProfile):
+    """
+    :var List[Skin] skins: All the skins of the user
+    :var List[Cape] capes: All the capes of the user
+    """
+
     def __init__(
         self,
         name: str,
         uuid: str,
         is_legacy: bool,
         is_demo: bool,
-        names: NameInfoList,
+        names: Optional[NameInfoList],
         skins: List[Skin],
         capes: List[Cape],
     ) -> None:
@@ -125,11 +143,11 @@ class AuthenticatedUserProfile(BaseUserProfile):
         )
 
     @property
-    def skins(self):
+    def skins(self) -> List[Skin]:
         return self.__skins
 
     @property
-    def capes(self):
+    def capes(self) -> List[Cape]:
         return self.__capes
 
     def __repr__(self) -> str:

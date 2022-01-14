@@ -20,7 +20,7 @@ class TestMojangAPI(unittest.TestCase):
         )
 
     def test_unexistent_uuid(self):
-        self.assertEqual(mojang.get_uuid("UNEXISTENT_PLAYER"), None)
+        self.assertEqual(mojang.get_uuid("UNEXISTENTPLAYER"), None)
 
     def test_existent_uuids(self):
         self.assertEqual(
@@ -40,11 +40,11 @@ class TestMojangAPI(unittest.TestCase):
 
     def test_unexistent_uuids(self):
         self.assertEqual(
-            mojang.get_uuids(["jeb_", "UNEXISTENT_PLAYER"]),
+            mojang.get_uuids(["jeb_", "UNEXISTENTPLAYER"]),
             [UUIDInfo("jeb_", "853c80ef3c3749fdaa49938b674adae6"), None],
         )
         self.assertEqual(
-            mojang.get_uuids(["UNEXISTENT_PLAYER1", "UNEXISTENT_PLAYER2"]),
+            mojang.get_uuids(["UNEXISTENTPL1", "UNEXISTENTPL2"]),
             [None, None],
         )
 
@@ -60,7 +60,7 @@ class TestMojangAPI(unittest.TestCase):
 
     def test_unexistent_names(self):
         self.assertEqual(
-            mojang.names("069a79f444e94726a5befca90e38aaf6"), NameInfoList([])
+            mojang.names("069a79f444e94726a5befca90e38aaf6"), None
         )
 
     def test_existent_profile(self):
