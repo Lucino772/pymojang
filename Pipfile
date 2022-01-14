@@ -11,6 +11,8 @@ pytest-cov = "*"
 importlib-metadata = "*"
 sphinx = "*"
 furo = "*"
+sphinxext-opengraph = "*"
+sphinx-copybutton = "*"
 
 [packages]
 requests = "*"
