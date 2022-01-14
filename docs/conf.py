@@ -12,9 +12,9 @@
 #
 import os
 import sys
-import mojang
 
 sys.path.insert(0, os.path.abspath(".."))
+import mojang
 
 
 # -- Project information -----------------------------------------------------

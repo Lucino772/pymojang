@@ -1,5 +1,5 @@
-mojang.account.session module
-=============================
+Account session
+===============
 
 .. automodule:: mojang.account.session
    :members:

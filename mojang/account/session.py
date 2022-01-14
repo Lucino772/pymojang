@@ -13,26 +13,15 @@ from .utils import helpers, urls
 def get_user_name_change(access_token: str) -> NameChange:
     """Return if user can change name and when it was created
 
-    Args:
-        access_token (str): The session's access token
+    :param str access_token: The session access token
 
-    Returns:
-        NameChange
+    :raises Unauthorized: if the access token is invalid
 
-    Raises:
-        Unauthorized: If the access token is invalid
+    :Example:
 
-    Example:
-
-        ```python
-        from mojang.account import session
-
-        name_change = session.get_user_name_change('ACCESS_TOKEN')
-        print(name_change)
-        ```
-        ```bash
-        NameChange(allowed=True, created_at=datetime.datetime(2006, 4, 29, 10, 10, 10))
-        ```
+    >>> from mojang.account import session
+    >>> session.get_username_change('ACCESS_TOKEN')
+    NameChange(allowed=True, created_at=datetime.datetime(2006, 4, 29, 10, 10, 10))
     """
     headers = helpers.get_headers(bearer=access_token)
     response = requests.get(urls.api_session_name_change, headers=headers)
@@ -51,22 +40,17 @@ def get_user_name_change(access_token: str) -> NameChange:
 def change_user_name(access_token: str, name: str):
     """Change name of authenticated user
 
-    Args:
-        access_token (str): The session's access token
-        name (str): The new user name
+    :param str access_token: The session access token
+    :param str name: The new user name
 
-    Raises:
-        Unauthorized: If the access token is invalid
-        InvalidName: If the new user name is invalid
-        UnavailableName: If the new user name is unavailable
+    :raises Unauthorized: if the access token is invalid
+    :raises InvalidName: if the new user name is invalid
+    :raises UnavailableName: if the new user name is unavailable
 
-    Example:
+    :Example:
 
-        ```python
-        from mojang.account import session
-
-        session.change_user_name('ACCESS_TOKEN', 'my_super_cool_name')
-        ```
+    >>> from mojang.account import session
+    >>> session.change_user_name('ACCESS_NAME', 'NEW_NAME')
     """
     headers = helpers.get_headers(bearer=access_token)
     response = requests.put(
@@ -84,21 +68,16 @@ def change_user_name(access_token: str, name: str):
 def change_user_skin(access_token: str, path: str, variant="classic"):
     """Change skin of authenticated user
 
-    Args:
-        access_token (str): The session's access token
-        path (str): The the path to the new skin, either local or remote
-        variant (str, optional): The skin variant, either `classic` or `slim`
+    :param str access_token: The session access token
+    :param str path: The the path to the new skin, either local or remote
+    :parama str variant: The skin variant, either `classic` or `slim`
 
-    Raises:
-        Unauthorized: If the access token is invalid
+    :raises Unauthorized: if the access token is invalid
 
-    Example:
+    :Example:
 
-        ```python
-        from mojang.account import session
-
-        session.change_user_skin('ACCESS_TOKEN', 'http://...')
-        ```
+    >>> from mojang.account import session
+    >>> session.change_user_skin('ACCESS_TOKEN', 'http://...')
     """
     skin = Skin(source=path, variant=variant)
     files = [
@@ -119,20 +98,15 @@ def change_user_skin(access_token: str, path: str, variant="classic"):
 def reset_user_skin(access_token: str, uuid: str):
     """Reset skin of authenticated user
 
-    Args:
-        access_token (str): The session's access token
-        uuid (str): The user uuid
+    :param str access_token: The session access token
+    :param str uuid: The user uuid
 
-    Raises:
-        Unauthorized: If the access token is invalid
+    :raises Unauthorized: if the access token is invalid
 
-    Example:
+    :Example:
 
-        ```python
-        from mojang.account import session
-
-        session.reset_user_skin('ACCESS_TOKEN', 'USER_UUID')
-        ```
+    >>> from mojang.account import session
+    >>> session.reset_user_skin('ACCESS_TOKEN', 'USER_UUID')
     """
     headers = helpers.get_headers(bearer=access_token)
     response = requests.delete(
@@ -149,25 +123,17 @@ def owns_minecraft(
 ) -> bool:
     """Returns True if the authenticated user owns minecraft
 
-    Args:
-        access_token (str): The session's access token
-        verify_sig (bool, optional): If True, will check the jwt sig with the public key
-        public_key (str, optional): The key to use to verify jwt sig
+    :param str access_token: The session access token
+    :param str verify_sig: If True, will check the jwt sig with the public key
+    :param str public_key: The key to use to verify jwt sig
 
-    Returns:
-        True if user owns the game, else False
+    :raises Unauthorized: if the access token is invalid
 
-    Raises:
-        Unauthorized: If the access token is invalid
+    :Example:
 
-    Example:
-
-        ```python
-        from mojang.account import session
-
-        if session.owns_minecraft('ACCESS_TOKEN'):
-            print('This user owns minecraft')
-        ```
+    >>> from mojang.account import session
+    >>> session.owns_minecraft('ACCESS_TOKEN')
+    True
     """
     headers = helpers.get_headers(bearer=access_token)
     response = requests.get(urls.api_session_ownership, headers=headers)
@@ -182,7 +148,14 @@ def owns_minecraft(
     return not len(data["items"]) == 0
 
 
-def get_profile(access_token: str):
+def get_profile(access_token: str) -> AuthenticatedUserProfile:
+    """Returns the full profile of a authenticated user
+
+    :param str access_token: The session access token
+
+    :raises Unauthorized: if the access token is invalid
+    """
+
     headers = helpers.get_headers(bearer=access_token)
     response = requests.get(urls.api_session_profile, headers=headers)
     _, data = helpers.err_check(response, (401, Unauthorized))
