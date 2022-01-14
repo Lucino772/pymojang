@@ -87,34 +87,23 @@ def get_stats(
 ) -> ServerStats:
     """Returns full stats about server using the Query protocol
 
-    Args:
-        addr (tuple): tuple with the address and the port to connect to
-        timeout (int, optional): Time to wait before closing pending connection (default to 3)
+    :param tuple addr: tuple with the address and the port to connect to
+    :param int timeout: Time to wait before closing pending connection (default to 3)
 
-    Returns:
-        ServerStats
+    :Example:
 
-    Example:
-
-        ```python
-        from mojang.minecraft import query
-
-        stats = query.get_stats(('localhost', 25585))
-        print(stats)
-        ```
-        ```bash
-        ServerStats(
-            motd='A Minecraft Server',
-            game_type='SMP',
-            game_id='MINECRAFT',
-            version='1.16.5',
-            map='world',
-            host=('localhost', 25585),
-            players=(0, 20),
-            player_list=[]
-        )
-        ```
-
+    >>> from mojang.minecraft import query
+    >>> query.get_stats(('localhost', 25585))
+    ServerStats(
+        motd='A Minecraft Server',
+        game_type='SMP',
+        game_id='MINECRAFT',
+        version='1.16.5',
+        map='world',
+        host=('localhost', 25585),
+        players=(0, 20),
+        player_list=[]
+    )
     """
     session_id = int(time.time()) & 0x0F0F0F0F
 

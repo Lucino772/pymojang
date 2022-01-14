@@ -11,29 +11,19 @@ def authenticate(
 ) -> Tuple[str, str]:
     """Authenticate a user with name and password
 
-    Args:
-        username (str): The username of email if account is not legacy
-        password (str): The user password
-        client_token (str, optional): The client token to use (default to None)
+    :param str username: The username of email if account is not legacy
+    :param str password: The user password
+    :param client_token: The client token to use
+    :type client_token: str or None
 
-    Returns:
-        AuthenticationInfo
+    :raises CredentialsError: if username and password are invalid
+    :raises PayloadError: if credentials are not formated correctly
 
-    Raises:
-        CredentialsError: If username and password are invalid
-        PayloadError: If credentials are not formated correctly
+    :Example:
 
-    Example:
-
-        ```python
-        from mojang.account.auth import yggdrasil
-
-        auth_info = yggdrasil.authenticate('USERNAME_OR_EMAIL','PASSWORD')
-        print(auth_info)
-        ```
-        ```
-        AuthenticationInfo(access_token='ACCESS_TOKEN', client_token='CLIENT_TOKEN', uuid='...', name='...', legacy=False, demo=False)
-        ```
+    >>> from mojang.account.auth import yggdrasil
+    >>> yggdrasil.authenticate('USERNAME_OR_EMAIL','PASSWORD')
+    AuthenticationInfo(access_token='ACCESS_TOKEN', client_token='CLIENT_TOKEN', uuid='...', name='...', legacy=False, demo=False)
     """
     payload = {
         "username": username,
@@ -55,28 +45,17 @@ def authenticate(
 def refresh(access_token: str, client_token: str) -> Tuple[str, str]:
     """Refresh an invalid access token
 
-    Args:
-        access_token (str): The access token to refresh
-        client_token (str): The client token used to generate the access token
+    :param str access_token: The access token to refresh
+    :param str client_token: The client token used to generate the access token
 
-    Returns:
-        AuthenticationInfo
+    :raises TokenError: if client token is not the one used to generate the access token
+    :raises PayloadError: if the tokens are not formated correctly
 
-    Raises:
-        TokenError: If client token is not the one used to generate the access token
-        PayloadError: If the tokens are not formated correctly
+    :Example:
 
-    Example:
-
-        ```python
-        from mojang.account.auth import yggdrasil
-
-        refresh_info = yggdrasil.refresh('CURRENT_ACCESS_TOKEN','CLIENT_TOKEN')
-        print(refresh_info)
-        ```
-        ```
-        AuthenticationInfo(access_token='NEW_ACCESS_TOKEN', client_token='CLIENT_TOKEN', uuid='...', name='...', legacy=False, demo=False)
-        ```
+    >>> from mojang.account.auth import yggdrasil
+    >>> yggdrasil.refresh('CURRENT_ACCESS_TOKEN','CLIENT_TOKEN')
+    AuthenticationInfo(access_token='NEW_ACCESS_TOKEN', client_token='CLIENT_TOKEN', uuid='...', name='...', legacy=False, demo=False)
     """
     payload = {"accessToken": access_token, "clientToken": client_token}
     response = requests.post(urls.api_yggdrasil_refresh, json=payload)
@@ -92,21 +71,16 @@ def refresh(access_token: str, client_token: str) -> Tuple[str, str]:
 def validate(access_token: str, client_token: str):
     """Validate an access token
 
-    Args:
-        access_token (str): The access token to validate
-        client_token (str): The client token used to generate the access token
+    :param str access_token: The access token to validate
+    :param str client_token: The client token used to generate the access token
 
-    Raises:
-        TokenError: If client token is not the one used to generate the access token
-        PayloadError: If the tokens are not formated correctly
+    :raises TokenError: if client token is not the one used to generate the access token
+    :raises PayloadError: if the tokens are not formated correctly
 
-    Example:
+    :Example:
 
-        ```python
-        from mojang.account.auth import yggdrasil
-
-        yggdrasil.validate('CURRENT_ACCESS_TOKEN','CLIENT_TOKEN')
-        ```
+    >>> from mojang.account.auth import yggdrasil
+    >>> yggdrasil.validate('CURRENT_ACCESS_TOKEN','CLIENT_TOKEN')
     """
     payload = {"accessToken": access_token, "clientToken": client_token}
     response = requests.post(urls.api_yggdrasil_validate, json=payload)
@@ -117,21 +91,16 @@ def validate(access_token: str, client_token: str):
 def signout(username: str, password: str):
     """Signout user with name and password
 
-    Args:
-        username (str): The username or email if account is not legacy
-        password (str): The user password
+    :param str username: The username of email if account is not legacy
+    :param str password: The user password
 
-    Raises:
-        CredentialsError: If username and password are invalid
-        PayloadError: If credentials are not formated correctly
+    :raises CredentialsError: if username and password are invalid
+    :raises PayloadError: if credentials are not formated correctly
 
-    Example:
+    :Example:
 
-        ```python
-        from mojang.account.auth import yggdrasil
-
-        yggdrasil.signout('USERNAME_OR_EMAIL','PASSWORD')
-        ```
+    >>> from mojang.account.auth import yggdrasil
+    >>> yggdrasil.signout('USERNAME_OR_EMAIL','PASSWORD')
     """
     payload = {"username": username, "password": password}
     response = requests.post(urls.api_yggdrasil_signout, json=payload)
@@ -146,21 +115,16 @@ def signout(username: str, password: str):
 def invalidate(access_token: str, client_token: str):
     """Invalidate an access token
 
-    Args:
-        access_token (str): The access token to invalidate
-        client_token (str): The client token used to generate the access token
+    :param str access_token: The access token to invalidate
+    :param str client_token: The client token used to generate the access token
 
-    Raises:
-        TokenError: If client token is not the one used to generate the access token
-        PayloadError: If the tokens are not formated correctly
+    :raises TokenError: if client token is not the one used to generate the access token
+    :raises PayloadError: if the tokens are not formated correctly
 
-    Example:
+    :Example:
 
-        ```python
-        from mojang.account.auth import yggdrasil
-
-        yggdrasil.invalidate('CURRENT_ACCESS_TOKEN','CLIENT_TOKEN')
-        ```
+    >>> from mojang.account.auth import yggdrasil
+    >>> yggdrasil.invalidate('CURRENT_ACCESS_TOKEN','CLIENT_TOKEN')
     """
     payload = {"accessToken": access_token, "clientToken": client_token}
     response = requests.post(urls.api_yggdrasil_invalidate, json=payload)

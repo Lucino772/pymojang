@@ -13,21 +13,17 @@ def microsoft_app(
     client_secret: str,
     redirect_uri: str = "http://example.com",
 ) -> "MicrosoftApp":
-    """It create an instance of [`MicrosoftApp`][mojang.account.ext.microsoft.MicrosoftApp] with the client id and client secret.
-    This app can then be used to get a [`UserSession`][mojang.account.ext.session.UserSession] like
-    [`connect`][mojang.account.ext.session.connect] for Microsoft users.
+    """It create an instance of :py:class:`~mojang.account.ext.microsoft.MicrosoftApp` with the client id and client secret.
+    This app can then be used to get a :py:class:`mojang.account.ext._profile.MicrosoftAuthenticatedUser`.
 
-    Args:
-        client_id (str): Your Azure App client id
-        client_secret (str): Your Azure App client secret
-        redirect_uri (str, optional): The default redirect uri for your app
+    :param str client_id: Azure App client id
+    :param str client_secret: Azure App client secret
+    :param str redirect_uri: The default redirect uri for your app
 
-    Returns:
-        An instance of the MicrosoftApp
+    :Examples:
 
-    Examples:
+    .. code-block:: python
 
-        ```python
         import mojang
 
         CLIENT_ID = ... # Your Azure App client id
@@ -45,7 +41,6 @@ def microsoft_app(
         # You can use this code to authenticate the user
         code = ...
         user = app.authenticate(code)
-        ```
     """
     client = msal.ClientApplication(
         client_id,
@@ -56,7 +51,11 @@ def microsoft_app(
 
 
 class MicrosoftApp:
-    """This class allows you to authenticate Microsoft users to Minecraft"""
+    """This class allows you to authenticate Microsoft users to Minecraft
+
+    :param msal.ClientApplication client: The msal client
+    :param str redirect_uri: The default redirect uri for your app
+    """
 
     def __init__(self, client: msal.ClientApplication, redirect_uri: str):
         self.__client = client
@@ -74,12 +73,10 @@ class MicrosoftApp:
     ) -> "MicrosoftAuthenticatedUser":
         """Authenticate a user with the auth code
 
-        Args:
-            auth_code (str): The auth code from the redirect
-            redirect_uri (str, optional): The redirect uri for your app
+        :param str auth_code: The auth code from the redirect
+        :param str redirect_uri: If set overwrite your app's redirect uri
 
-        Returns:
-            An instance of MicrosoftAuthenticatedUser
+        :raises MicrosoftInvalidGrant: if auth code is invalid
         """
         response = self.__client.acquire_token_by_authorization_code(
             auth_code,
