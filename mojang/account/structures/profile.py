@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from .base import NameInfoList
 from .session import Skin, Cape
 
@@ -18,7 +18,7 @@ class BaseUserProfile:
         uuid: str,
         is_legacy: bool,
         is_demo: bool,
-        names: NameInfoList,
+        names: Optional[NameInfoList],
     ) -> None:
         self.__name = name
         self.__uuid = uuid
@@ -60,7 +60,7 @@ class BaseUserProfile:
         return self.__is_demo
 
     @property
-    def names(self) -> NameInfoList:
+    def names(self) -> Optional[NameInfoList]:
         return self.__names
 
 
@@ -76,9 +76,9 @@ class UnauthenticatedProfile(BaseUserProfile):
         uuid: str,
         is_legacy: bool,
         is_demo: bool,
-        names: NameInfoList,
-        skin: Skin,
-        cape: Cape,
+        names: Optional[NameInfoList],
+        skin: Optional[Skin],
+        cape: Optional[Cape],
     ) -> None:
         super().__init__(name, uuid, is_legacy, is_demo, names)
         self.__skin = skin
@@ -98,11 +98,11 @@ class UnauthenticatedProfile(BaseUserProfile):
         )
 
     @property
-    def skin(self) -> Skin:
+    def skin(self) -> Optional[Skin]:
         return self.__skin
 
     @property
-    def cape(self) -> Cape:
+    def cape(self) -> Optional[Cape]:
         return self.__cape
 
     def __repr__(self) -> str:
@@ -121,7 +121,7 @@ class AuthenticatedUserProfile(BaseUserProfile):
         uuid: str,
         is_legacy: bool,
         is_demo: bool,
-        names: NameInfoList,
+        names: Optional[NameInfoList],
         skins: List[Skin],
         capes: List[Cape],
     ) -> None:

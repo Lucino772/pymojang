@@ -26,9 +26,9 @@ class PingVersion(enum.IntFlag):
 
 def ping(
     addr: Tuple[str, int],
-    timeout: Optional[int] = 3,
-    flags: Optional[int] = PingVersion.V_ALL,
-) -> SLPResponse:
+    timeout: int = 3,
+    flags: int = PingVersion.V_ALL,
+) -> Optional[SLPResponse]:
     """Ping the server for information
 
     :param tuple addr: The address and the port to connect to
@@ -43,7 +43,7 @@ def ping(
         protocol_version=754,
         version='1.16.5',
         motd='A Minecraft Server',
-        players=Players(count=(0, 20), list=[]),
+        players=Players(total=(0, 20), list=[]),
         ping=1
     )
     """
@@ -53,9 +53,9 @@ def ping(
     if PingVersion.V1_6 & flags:
         _methods.append(partial(ping_fe01, hostname=addr[0], port=addr[1]))
     if PingVersion.V1_4 & flags:
-        _methods.append(ping_fe01)
+        _methods.append(partial(ping_fe01))
     if PingVersion.V1_3 & flags:
-        _methods.append(ping_fe)
+        _methods.append(partial(ping_fe))
 
     response = None
     while len(_methods) > 0 and response is None:

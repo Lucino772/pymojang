@@ -1,7 +1,8 @@
+from ctypes import Union
 import datetime as dt
 import re
 from os import path
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 from urllib.parse import urlparse
 
 import requests
@@ -43,7 +44,7 @@ class _Resource:
         return self.__data
 
     @property
-    def extension(self) -> str:
+    def extension(self) -> Optional[str]:
         return self.__extension
 
     @classmethod
@@ -75,7 +76,7 @@ class _Resource:
         response = requests.get(url)
         if response.ok:
             filename = (
-                cls._filename_from_headers(response.headers)
+                cls._filename_from_headers(dict(response.headers))
                 or cls._filename_from_url(url)
                 or ["download", None]
             )
@@ -137,11 +138,11 @@ class Skin(_Resource):
         return self.__variant
 
     @property
-    def id(self) -> str:
+    def id(self) -> Optional[str]:
         return self.__id
 
     @property
-    def state(self) -> str:
+    def state(self) -> Optional[str]:
         return self.__state
 
     def __hash__(self) -> int:
@@ -173,11 +174,11 @@ class Cape(_Resource):
         self.__state = state
 
     @property
-    def id(self) -> str:
+    def id(self) -> Optional[str]:
         return self.__id
 
     @property
-    def state(self) -> str:
+    def state(self) -> Optional[str]:
         return self.__state
 
     def __hash__(self) -> int:
