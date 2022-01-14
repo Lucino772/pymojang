@@ -14,14 +14,11 @@ def authenticate_xbl(auth_token: str) -> Tuple[str, str]:
     """Authenticate with Xbox Live using the Microsoft access token
     received after the OAuth authentication
 
-    Args:
-        auth_token (str): The access token
+    :param str auth_token: The access token
 
-    Returns:
-        A tuple containing the Xbox Live token and user hash
+    :returns: A tuple with the Xbox Live token and user hash
 
-    Raises:
-        XboxLiveAuthenticationError: If the auth token is invalid
+    :raises XboxLiveAuthenticationError: if the auth token is invalid
     """
     headers = helpers.get_headers(json_content=True)
     data = {
@@ -46,14 +43,11 @@ def authenticate_xbl(auth_token: str) -> Tuple[str, str]:
 def authenticate_xsts(xbl_token: str) -> Tuple[str, str]:
     """Retrieve the XSTS Token using the Xbox Live token
 
-    Args:
-        xbl_token (str): The Xbox Live token
+    :params str xbl_token: The Xbox Live token
 
-    Returns:
-        A tuple containing the XSTS token and user hash
+    :returns: A tuple with the XSTS token and user hash
 
-    Raises:
-        XboxLiveAuthenticationError: If the xbl token is invalid
+    :raises XboxLiveAuthenticationError: if xbl is invalid
     """
     headers = helpers.get_headers(json_content=True)
     data = {
@@ -72,28 +66,21 @@ def authenticate_xsts(xbl_token: str) -> Tuple[str, str]:
 def authenticate_minecraft(userhash: str, xsts_token: str) -> str:
     """Retrieve the Minecraft access token loging in using Xbox Live
 
-    Args:
-        userhash (str): The user hash from Xbox Live
-        xsts_token (str): The XSTS Token from Xbox Live
+    :param str userhash: The user hash from Xbox Live
+    :param str xsts_token: The XSTS Token from Xbox Live
 
-    Returns:
-        The minecraft access token
+    :returns: The minecraft token
 
-    Raises:
-        XboxLiveInvalidUserHash: If the user hash is invalid
-        Unauthorized: If the XSTS token is invalid
+    :raises XboxLiveInvalidUserHash: if the user hash is invalid
+    :raises Unauthorized: if the XSTS token is invalid
 
-    Example:
+    :Example:
 
-        ```python
-        from mojang.account.auth import microsoft
-
-        ACCESS_TOKEN = '....' # Access token from Microsoft
-
-        xbl_token, _ = microsoft.authenticate_xbl(ACCESS_TOKEN)
-        xsts_token, userhash = microsoft.authenticate_xsts(xbl_token)
-        mc_access_token = microsoft.authenticate_minecraft(userhash, xsts_token)
-        ```
+    >>> from mojang.account.auth import microsoft
+    >>> ACCESS_TOKEN = '....' # Access token from Microsoft
+    >>> xbl_token, _ = microsoft.authenticate_xbl(ACCESS_TOKEN)
+    >>> xsts_token, userhash = microsoft.authenticate_xsts(xbl_token)
+    >>> mc_access_token = microsoft.authenticate_minecraft(userhash, xsts_token)
     """
     headers = helpers.get_headers(json_content=True)
     data = {"identityToken": f"XBL3.0 x={userhash};{xsts_token}"}

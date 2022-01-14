@@ -39,7 +39,7 @@ User Information
 ----------------
 
 UUID (:py:meth:`~mojang.account.base.get_uuid`)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: pycon
 
@@ -53,7 +53,7 @@ UUID (:py:meth:`~mojang.account.base.get_uuid`)
     )
 
 UUIDs (:py:meth:`~mojang.account.base.get_uuids`)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. admonition:: **Limited Endpoint**
     :class: note
@@ -80,7 +80,7 @@ UUIDs (:py:meth:`~mojang.account.base.get_uuids`)
     ]
 
 Name History (:py:meth:`~mojang.account.base.names`)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: pycon
 
@@ -98,7 +98,7 @@ Name History (:py:meth:`~mojang.account.base.names`)
     )
 
 User Profile (:py:meth:`~mojang.account.base.user`)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: pycon
 
