@@ -8,3 +8,4 @@ API Documentation
     session
     auth/index
     utils
+    minecraft/index

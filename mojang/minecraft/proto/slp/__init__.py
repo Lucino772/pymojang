@@ -10,12 +10,11 @@ from .pre_netty import ping_fe, ping_fe01
 
 class PingVersion(enum.IntFlag):
     """
-    Attributes:
-        V1_7 (int): Use the ping protocol for version 1.7 and higher
-        V1_6 (int): Use the ping protocol for version 1.6
-        V1_4 (int): Use the ping protocol for version 1.4 and 1.5
-        V1_3 (int): Use the ping protocol for version 1.3 and lower
-        V_ALL (int): Use all the ping protocol
+    :param int V1_7: Use the ping protocol for version 1.7 and higher
+    :param int V1_6: Use the ping protocol for version 1.6
+    :param int V1_4: Use the ping protocol for version 1.4 and 1.5
+    :param int V1_3: Use the ping protocol for version 1.3 and lower
+    :param int V_ALL: Use all the ping protocol
     """
 
     V1_7 = 1
@@ -32,32 +31,21 @@ def ping(
 ) -> SLPResponse:
     """Ping the server for information
 
-    Args:
-        addr (tuple): The address and the port to connect to
-        timeout (int, optional): Time to wait before closing pending connection (default to 3)
-        flags (int, optional): Which version of the ping version to use
+    :param tuple addr: The address and the port to connect to
+    :param int timeout: Time to wait before closing pending connection (default to 3)
+    :param int flags: Which version of the ping version to use
 
-    Returns:
-        SLPResponse
+    :Example:
 
-    Example:
-
-        ```python
-        from mojang.minecraft import slp
-
-        stats = slp.ping(('localhost', 25565))
-        print(stats)
-        ```
-        ```bash
-        SLPResponse(
-            protocol_version=754,
-            version='1.16.5',
-            motd='A Minecraft Server',
-            players=Players(count=(0, 20), list=[]),
-            ping=1
-        )
-        ```
-
+    >>> from mojang.minecraft import slp
+    >>> slp.ping(('localhost', 25565))
+    SLPResponse(
+        protocol_version=754,
+        version='1.16.5',
+        motd='A Minecraft Server',
+        players=Players(count=(0, 20), list=[]),
+        ping=1
+    )
     """
     _methods = []
     if PingVersion.V1_7 & flags:
