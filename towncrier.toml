@@ -2,4 +2,5 @@
 package = "mojang"
 filename = "CHANGELOG.rst"
 directory = "changelog"
+issue_format = "`#{issue} <https://github.com/Lucino772/pymojang/issues/{issue}>`__"
 title_format = "{version} ({project_date})"
