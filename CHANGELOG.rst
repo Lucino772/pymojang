@@ -1,4 +1,26 @@
-v1.3.1 (2021-10-20)v1.3.1 (2021-10-20)
+v1.3.2 (2021-11-13)
+===================
+
+Features
+--------
+
+- Separated `UserSession` class into 2 classes: `MojangAuthenticatedUser` for **Mojang** account and `MicrosoftAuthenticatedUser` for **Microsoft** account
+- Added attributes `id` and `state` to `Skin` and `Cape` classes
+
+
+Bugfixes
+--------
+
+- Fixed error in `get_user_name_change` function, `changedAt` is ignored (`#2 <https://github.com/Lucino772/pymojang/issues/2>`__)
+
+
+Deprecations and Removals
+-------------------------
+
+- Removed `AuthenticationInfo` class
+
+
+v1.3.1 (2021-10-20)
 ===================
 
 Bugfixes
