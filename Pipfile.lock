@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "757f9517d35962149c7951a305e25cbd616fa1e7746086becc9e6c2175107665"
+            "sha256": "247f725aad8f7b778d5d656e9925dca4c978e9b5edf232060cdf68cd0243c7a4"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -257,12 +257,26 @@
             "markers": "python_version >= '3'",
             "version": "==2.0.10"
         },
+        "click": {
+            "hashes": [
+                "sha256:353f466495adaeb40b6b5f592f9f91cb22372351c84caeb068132442a4518ef3",
+                "sha256:410e932b050f5eed773c4cda94de75971c89cdb3155a72a0831139a79e5ecb5b"
+            ],
+            "markers": "python_version >= '3.6'",
+            "version": "==8.0.3"
+        },
+        "click-default-group": {
+            "hashes": [
+                "sha256:d9560e8e8dfa44b3562fbc9425042a0fd6d21956fcc2db0077f63f34253ab904"
+            ],
+            "version": "==1.2.2"
+        },
         "colorama": {
             "hashes": [
                 "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b",
                 "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"
             ],
-            "markers": "sys_platform == 'win32' and sys_platform == 'win32'",
+            "markers": "sys_platform == 'win32' and sys_platform == 'win32' and platform_system == 'Windows'",
             "version": "==0.4.4"
         },
         "coverage": {
@@ -391,6 +405,13 @@
             ],
             "index": "pypi",
             "version": "==4.10.0"
+        },
+        "incremental": {
+            "hashes": [
+                "sha256:02f5de5aff48f6b9f665d99d48bfc7ec03b6e3943210de7cfc88856d755d6f57",
+                "sha256:92014aebc6a20b78a8084cdd5645eeaa7f74b8933f70fa3ada2cfbd1e3b54321"
+            ],
+            "version": "==21.3.0"
         },
         "iniconfig": {
             "hashes": [
@@ -747,6 +768,14 @@
                 "sha256:c292c34f58502a1eb2bbb9f5bbc9a5ebc37bee10ffb8c2d6bbdfa8eb13cc14e1"
             ],
             "version": "==2.0.0"
+        },
+        "towncrier": {
+            "hashes": [
+                "sha256:6eed0bc924d72c98c000cb8a64de3bd566e5cb0d11032b73fcccf8a8f956ddfe",
+                "sha256:e6ccec65418bbcb8de5c908003e130e37fe0e9d6396cb77c1338241071edc082"
+            ],
+            "index": "pypi",
+            "version": "==21.3.0"
         },
         "urllib3": {
             "hashes": [
