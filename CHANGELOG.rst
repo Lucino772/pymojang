@@ -1,3 +1,18 @@
+v1.3.0 (2021-09-16)
+===================
+
+Features
+--------
+
+- Added `Microsoft Authentication scheme <https://wiki.vg/Microsoft_Authentication_Scheme>`_ support
+
+
+Bugfixes
+--------
+
+- The `connect` function returns a `MigratedAccount` exception when trying to connect with a migrated account (`#1 <https://github.com/Lucino772/pymojang/issues/1>`__)
+
+
 v1.2.1 (2021-06-25)
 ===================
 
