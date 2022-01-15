@@ -1,3 +1,12 @@
+v1.3.1 (2021-10-20)v1.3.1 (2021-10-20)
+===================
+
+Bugfixes
+--------
+
+- The `status` function always returns the same response with an **unknown** status for each service.(`WEB-2303 <https://bugs.mojang.com/browse/WEB-2303?focusedCommentId=1086543&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-1086543>`_)
+
+
 v1.3.0 (2021-09-16)
 ===================
 
