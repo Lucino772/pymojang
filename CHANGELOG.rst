@@ -1,3 +1,18 @@
+v1.4.0 (2021-12-22)
+===================
+
+Features
+--------
+
+- Added support for multiple **Skins** and **Capes** in `MojangAuthenticatedUser` and `MicrosoftAuthenticatedUser` classes
+
+
+Bugfixes
+--------
+
+- Added missing import `import datetime as dt` in **mojang.account.base**
+
+
 v1.3.2 (2021-11-13)
 ===================
 
