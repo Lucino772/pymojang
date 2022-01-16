@@ -3,7 +3,12 @@ import datetime as dt
 import jwt
 import requests
 
-from ..exceptions import InvalidName, Unauthorized, UnavailableName
+from ..exceptions import (
+    InvalidName,
+    NotCapeOwner,
+    Unauthorized,
+    UnavailableName,
+)
 from .base import names
 from .structures.profile import AuthenticatedUserProfile
 from .structures.session import Cape, NameChange, Skin
@@ -118,7 +123,7 @@ def reset_user_skin(access_token: str, uuid: str):
     return code == 204
 
 
-def show_user_cape(access_token: str):
+def show_user_cape(access_token: str, cape_id: str):
     """Show user cape
 
     :param str access_token: The session access token
@@ -130,10 +135,13 @@ def show_user_cape(access_token: str):
     >>> from mojang.account import session
     >>> session.show_user_cape('ACCESS_TOKEN')
     """
+    payload = {"capeId": cape_id}
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.put(urls.api_session_cape_visibility, headers=headers)
+    response = requests.put(
+        urls.api_session_cape_visibility, headers=headers, data=payload
+    )
     code, _ = helpers.err_check(
-        response, (400, ValueError), (401, Unauthorized)
+        response, (400, NotCapeOwner), (401, Unauthorized)
     )
     return code == 200
 
