@@ -138,7 +138,7 @@ def show_user_cape(access_token: str, cape_id: str):
     payload = {"capeId": cape_id}
     headers = helpers.get_headers(bearer=access_token)
     response = requests.put(
-        urls.api_session_cape_visibility, headers=headers, data=payload
+        urls.api_session_cape_visibility, headers=headers, json=payload
     )
     code, _ = helpers.err_check(
         response, (400, NotCapeOwner), (401, Unauthorized)
