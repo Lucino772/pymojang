@@ -9,12 +9,12 @@ class TestUtilsHelpers(unittest.TestCase):
         self.headers2 = helpers.get_headers(bearer="mytoken")
 
     def test_get_headers_json(self):
-        self.assertDictContainsSubset(
+        self.assertDictEqual(
             {"content-type": "application/json", "accept": "application/json"},
             self.headers1,
         )
 
     def test_get_headers_token(self):
-        self.assertDictContainsSubset(
+        self.assertDictEqual(
             {"authorization": "Bearer mytoken"}, self.headers2
         )
