@@ -14,6 +14,7 @@ Welcome to PyMojang's documentation!
    auth
    minecraft
    references/index
+   changelog
 
 
 PyMojang is a full wrapper of the `Mojang API <https://wiki.vg/Mojang_API>`_ and `Mojang Authentication API <https://wiki.vg/Authentication>`_. It also support the `Microsoft Authentication Scheme <https://wiki.vg/Microsoft_Authentication_Scheme>`_.
