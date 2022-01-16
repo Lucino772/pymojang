@@ -13,7 +13,6 @@ sphinx = "*"
 furo = "*"
 sphinxext-opengraph = "*"
 sphinx-copybutton = "*"
-towncrier = "*"
 
 [packages]
 requests = "*"
