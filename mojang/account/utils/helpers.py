@@ -18,6 +18,8 @@ def get_headers(
     if bearer:
         headers["authorization"] = f"Bearer {bearer}"
 
+    return headers
+
 
 def err_check(
     response: requests.Response, *args, use_defaults: Optional[bool] = True
