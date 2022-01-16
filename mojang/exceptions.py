@@ -78,6 +78,14 @@ class UnavailableName(Exception):
         super().__init__("Name is unavailable")
 
 
+# Cape Errors
+class NotCapeOwner(Exception):
+    """The user does not own a cape. Only raised when showing a user cape"""
+
+    def __init__(self, *args) -> None:
+        super().__init__("User does not own a cape")
+
+
 # Security
 class IPNotSecured(Exception):
     """The current IP is not secured. Only raised when

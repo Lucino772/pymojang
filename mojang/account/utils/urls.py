@@ -29,6 +29,10 @@ api_session_ownership = (
 )
 api_session_profile = "https://api.minecraftservices.com/minecraft/profile"
 
+api_session_cape_visibility = (
+    "https://api.minecraftservices.com/minecraft/profile/capes/active"
+)
+
 # URLs for authentication with yggdrasil
 api_yggdrasil_authenticate = "https://authserver.mojang.com/authenticate"
 api_yggdrasil_refresh = "https://authserver.mojang.com/refresh"
