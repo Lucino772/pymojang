@@ -152,6 +152,25 @@ class AuthenticatedUser(metaclass=ABCMeta):
         session.reset_user_skin(self._access_token, self.uuid)
         self._fetch_profile()
 
+    def show_cape(self, cape_index: int = 0):
+        """Show user cape. For more details checkout :py:meth:`~mojang.account.session.show_user_cape`
+
+        :param int cape: The index of the cape
+        """
+        if not isinstance(self.capes, list):
+            return
+
+        if len(self.capes) == 0:
+            return
+
+        cape = self.capes[cape_index]
+        if isinstance(cape.id, str):
+            session.show_user_cape(self._access_token, cape.id)
+
+    def hide_cape(self):
+        """Hide user cape. For more details checkout :py:meth:`~mojang.account.session.hide_user_cape`"""
+        session.hide_user_cape(self._access_token)
+
 
 class MojangAuthenticatedUser(AuthenticatedUser):
     """Class for user with a Mojang account"""
