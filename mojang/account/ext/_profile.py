@@ -149,7 +149,7 @@ class AuthenticatedUser(metaclass=ABCMeta):
 
     def reset_skin(self):
         """Reset user skin. For more details checkout :py:meth:`~mojang.account.session.reset_user_skin`"""
-        session.reset_user_skin(self._access_token, self.uuid)
+        session.reset_user_skin(self._access_token)
         self._fetch_profile()
 
     def show_cape(self, cape_index: int = 0):

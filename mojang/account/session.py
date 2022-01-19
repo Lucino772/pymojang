@@ -100,11 +100,10 @@ def change_user_skin(access_token: str, path: str, variant="classic"):
     return code == 204
 
 
-def reset_user_skin(access_token: str, uuid: str):
+def reset_user_skin(access_token: str):
     """Reset skin of authenticated user
 
     :param str access_token: The session access token
-    :param str uuid: The user uuid
 
     :raises Unauthorized: if the access token is invalid
 
@@ -114,13 +113,11 @@ def reset_user_skin(access_token: str, uuid: str):
     >>> session.reset_user_skin('ACCESS_TOKEN', 'USER_UUID')
     """
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.delete(
-        urls.api_session_reset_skin(uuid), headers=headers
-    )
+    response = requests.delete(urls.api_session_reset_skin, headers=headers)
     code, _ = helpers.err_check(
         response, (400, ValueError), (401, Unauthorized)
     )
-    return code == 204
+    return code == 200
 
 
 def show_user_cape(access_token: str, cape_id: str):

@@ -22,7 +22,7 @@ api_session_change_skin = (
     "https://api.minecraftservices.com/minecraft/profile/skins"
 )
 api_session_reset_skin = (
-    lambda uuid: f"https://api.mojang.com/user/profile/{uuid}/skin"
+    "https://api.minecraftservices.com/minecraft/profile/skins/active"
 )
 api_session_ownership = (
     "https://api.minecraftservices.com/entitlements/mcstore"
