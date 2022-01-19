@@ -13,14 +13,11 @@ mock_server = MockSessionServer(VALID_ACCESS_TOKEN)
 class TestMojangResetSkin(unittest.TestCase):
     @mock.patch("requests.delete", side_effect=mock_server.reset_user_skin)
     def test_valid_token(self, mock_delete: mock.MagicMock):
-        ok = session.reset_user_skin(VALID_ACCESS_TOKEN, "arandomuuid")
+        ok = session.reset_user_skin(VALID_ACCESS_TOKEN)
         self.assertEqual(ok, True)
 
     @mock.patch("requests.delete", side_effect=mock_server.reset_user_skin)
     def test_invalid_token(self, mock_delete: mock.MagicMock):
         self.assertRaises(
-            Unauthorized,
-            session.reset_user_skin,
-            INVALID_ACCESS_TOKEN,
-            "aranndomuuid",
+            Unauthorized, session.reset_user_skin, INVALID_ACCESS_TOKEN
         )

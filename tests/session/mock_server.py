@@ -66,7 +66,7 @@ class MockSessionServer:
         if not self._is_token_valid(kwargs.get("headers", {})):
             response.status_code = 401
         else:
-            response.status_code = 204
+            response.status_code = 200
 
         return response
 
