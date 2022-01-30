@@ -52,8 +52,8 @@ def status() -> StatusCheck:
     return StatusCheck(_status)
 
 
-def get_uuid(username: str) -> Optional[UUIDInfo]:
-    """Get uuid of username
+def get_uuid(username: str) -> Optional[str]:
+    """Get uuid for a username
 
     :param str username: The username you want the uuid of
 
@@ -61,12 +61,7 @@ def get_uuid(username: str) -> Optional[UUIDInfo]:
 
     >>> import mojang
     >>> mojang.get_uuid('Notch')
-    UUIDInfo(
-        name='Notch',
-        uuid='069a79f444e94726a5befca90e38aaf5',
-        legacy=False,
-        demo=False
-    )
+    '069a79f444e94726a5befca90e38aaf5'
     """
     if len(username) == 0 or len(username) > 16:
         raise InvalidName()
@@ -77,12 +72,7 @@ def get_uuid(username: str) -> Optional[UUIDInfo]:
     if code == 204:
         return None
 
-    return UUIDInfo(
-        name=data["name"],
-        uuid=data["id"],
-        legacy=data.get("legacy", False),
-        demo=data.get("demo", False),
-    )
+    return data["uuid"]
 
 
 def get_uuids(usernames: list) -> List[Optional[UUIDInfo]]:
