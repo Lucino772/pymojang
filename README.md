@@ -37,7 +37,7 @@ Checkout the [documentation](https://pymojang.readthedocs.io/en/latest/)
 
 `mojang.account` is going to be renamed to `mojang.api`.
 
-### Mojang API
+### Mojang API (mojang.api.base)
 
 New features:
 - [ ] `get_sales`: This function retrieve sales statistics
@@ -49,7 +49,13 @@ The following functions are going to be renamed:
 - [ ] `names` &rarr; `get_names`
 - [ ] `user` &rarr; `get_profile`
 
-### Authentication
+Improvements:
+- [ ] `get_uuid` returns the uuid
+- [ ] `get_uuids` returns a dict<str, str>
+- [ ] `get_status` returns a dict<str, str>
+- [ ] `get_names` returns a list of tuple
+
+### Authentication (mojang.api.auth.*)
 
 The following features will be removed:
 - [ ] `connect`
@@ -58,26 +64,32 @@ The following features will be removed:
 And replaced by:
 - [ ] `app`
 
-### Session API
+Improvements:
+- [ ] `get_challenges` returns a list of tuple
+
+### Session API (mojang.api.session)
 
 New features:
 - [ ] `check_giftcode` : Check if redeem code is valid
 - [ ] `redeem` : Redeem a gift code
-- [ ] `check_name` : Check if a username is available
+- [ ] `check_username` : Check if a username is available
 
-### Realms API
+Improvements:
+- [ ] `get_user_name_change` returns a tuple
+
+### Realms API (mojang.api.realms)
 
 Later in V2 the **Realms API** will also be added
 
 ### Minecraft
 
-#### Game Files
+#### Game Files (mojang.minecraft.files.*)
 
 New features:
 - [ ] `get_versions` : Get a list of all the minecraft versions
 - [ ] `get_version`: Get a specific version
 
-#### Game Protocol
+#### Game Protocol (mojang.minecraft.proto.*)
 
 The following features will be moved/renamed:
 - [ ] `rcon.session` &rarr; `rcon`
