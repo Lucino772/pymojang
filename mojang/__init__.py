@@ -7,7 +7,7 @@ and [Mojang Authentication API](https://wiki.vg/Authentication)
 
 Checkout the [`documentation`](https://pymojang.readthedocs.io/en/latest/)
 """
-from .account import (
+from .api import (
     get_uuid,
     get_uuids,
     names,
