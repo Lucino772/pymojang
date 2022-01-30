@@ -14,11 +14,11 @@ Install
 Status
 ------
 
-Mojang have multiple APIs, you can check their status by calling the method :py:func:`~mojang.account.base.status`.
+Mojang have multiple APIs, you can check their status by calling the method :py:func:`~mojang.api.base.status`.
 
 .. caution::
 
-    Since the begin of October 2021, Mojang closed down the status page (Issue `WEB-2303 <https://bugs.mojang.com/browse/WEB-2303?focusedCommentId=1086543&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-1086543>`_). The :py:func:`~mojang.account.base.status` function now always returns the same response with an *unknown* status for each service.
+    Since the begin of October 2021, Mojang closed down the status page (Issue `WEB-2303 <https://bugs.mojang.com/browse/WEB-2303?focusedCommentId=1086543&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-1086543>`_). The :py:func:`~mojang.api.base.status` function now always returns the same response with an *unknown* status for each service.
 
 .. code-block:: pycon
 
@@ -38,7 +38,7 @@ Mojang have multiple APIs, you can check their status by calling the method :py:
 User Information
 ----------------
 
-UUID (:py:meth:`~mojang.account.base.get_uuid`)
+UUID (:py:meth:`~mojang.api.base.get_uuid`)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: pycon
@@ -52,7 +52,7 @@ UUID (:py:meth:`~mojang.account.base.get_uuid`)
         demo=False
     )
 
-UUIDs (:py:meth:`~mojang.account.base.get_uuids`)
+UUIDs (:py:meth:`~mojang.api.base.get_uuids`)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. admonition:: **Limited Endpoint**
@@ -79,7 +79,7 @@ UUIDs (:py:meth:`~mojang.account.base.get_uuids`)
         )
     ]
 
-Name History (:py:meth:`~mojang.account.base.names`)
+Name History (:py:meth:`~mojang.api.base.names`)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: pycon
@@ -97,7 +97,7 @@ Name History (:py:meth:`~mojang.account.base.names`)
         )
     )
 
-User Profile (:py:meth:`~mojang.account.base.user`)
+User Profile (:py:meth:`~mojang.api.base.user`)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: pycon

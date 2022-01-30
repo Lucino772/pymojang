@@ -2,7 +2,7 @@ import datetime as dt
 import unittest
 from unittest import mock
 
-from mojang.account import session
+from mojang.api import session
 from mojang.exceptions import Unauthorized
 
 from .mock_server import MockSessionServer

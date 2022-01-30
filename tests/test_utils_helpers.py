@@ -1,6 +1,6 @@
 import unittest
 
-from mojang.account.utils import helpers
+from mojang.api.utils import helpers
 
 
 class TestUtilsHelpers(unittest.TestCase):

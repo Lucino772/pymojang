@@ -1,7 +1,7 @@
 import unittest
 
 import mojang
-from mojang.account.structures.base import UUIDInfo
+from mojang.api.structures.base import UUIDInfo
 from mojang.exceptions import InvalidName
 
 

@@ -1,7 +1,7 @@
 Profile
 =======
 
-.. automodule:: mojang.account.ext._profile
+.. automodule:: mojang.api.ext._profile
    :members:
    :undoc-members:
    :show-inheritance:

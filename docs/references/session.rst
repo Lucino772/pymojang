@@ -1,7 +1,7 @@
 Account session
 ===============
 
-.. automodule:: mojang.account.session
+.. automodule:: mojang.api.session
    :members:
    :undoc-members:
    :show-inheritance:
