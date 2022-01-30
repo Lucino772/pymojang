@@ -1,7 +1,7 @@
 import unittest
 
 import mojang
-from mojang.account.structures.base import NameInfo, NameInfoList
+from mojang.api.structures.base import NameInfo, NameInfoList
 from mojang.exceptions import InvalidName
 
 

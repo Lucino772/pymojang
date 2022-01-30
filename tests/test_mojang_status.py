@@ -1,7 +1,7 @@
 import unittest
 
 import mojang
-from mojang.account.structures.base import ServiceStatus, StatusCheck
+from mojang.api.structures.base import ServiceStatus, StatusCheck
 
 
 class TestMojangStatus(unittest.TestCase):
