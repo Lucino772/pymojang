@@ -4,7 +4,7 @@ Microsoft
 High Level
 ----------
 
-.. automodule:: mojang.account.ext.microsoft
+.. automodule:: mojang.api.ext.microsoft
    :members:
    :undoc-members:
    :show-inheritance:
@@ -12,7 +12,7 @@ High Level
 Low Level
 ---------
 
-.. automodule:: mojang.account.auth.microsoft
+.. automodule:: mojang.api.auth.microsoft
    :members:
    :undoc-members:
    :show-inheritance:

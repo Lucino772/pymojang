@@ -5,9 +5,9 @@ Authentication
 Mojang Authentication
 ---------------------
 
-Getting a user profile is great, but you can also connect to your account and retrieve usefull information. The :py:meth:`~mojang.account.ext.session.connect` function is the easy way to doe it.
+Getting a user profile is great, but you can also connect to your account and retrieve usefull information. The :py:meth:`~mojang.api.ext.session.connect` function is the easy way to doe it.
 
-Both :py:meth:`~mojang.account.ext.session.connect` and :py:class:`~mojang.account.ext._profile.MojangAuthenticatedUser` use more low-level functions, you can view them in the following sections: :doc:`Session API </references/session>` and :doc:`Authentication & Security API </references/auth/mojang>`.
+Both :py:meth:`~mojang.api.ext.session.connect` and :py:class:`~mojang.api.ext._profile.MojangAuthenticatedUser` use more low-level functions, you can view them in the following sections: :doc:`Session API </references/session>` and :doc:`Authentication & Security API </references/auth/mojang>`.
 
 .. code-block:: pycon
 
@@ -28,11 +28,11 @@ Both :py:meth:`~mojang.account.ext.session.connect` and :py:class:`~mojang.accou
 Microsoft Authentication
 ------------------------
 
-If you have a migrated account, you can't use the :py:meth:`~mojang.account.ext.session.connect` function. You will need to use the OAuth flow provided by Microsoft.
+If you have a migrated account, you can't use the :py:meth:`~mojang.api.ext.session.connect` function. You will need to use the OAuth flow provided by Microsoft.
 
-To do so you will first need to create an **Microsoft Azure App** to get your **client id** and **client secret**. Once you have those credentials, you can call the :py:meth:`~mojang.account.ext.microsoft.microsoft_app` function with your credentials and it will create a :py:class:`~mojang.account.ext.microsoft.MicrosoftApp` for you.
+To do so you will first need to create an **Microsoft Azure App** to get your **client id** and **client secret**. Once you have those credentials, you can call the :py:meth:`~mojang.api.ext.microsoft.microsoft_app` function with your credentials and it will create a :py:class:`~mojang.api.ext.microsoft.MicrosoftApp` for you.
 
-Now to authenticate a user, he will need to visit the :py:attr:`~mojang.account.ext.microsoft.MicrosoftApp.authorization_url` and grant access to your app, he will then be redirected to an url with a **code** parameter. The value of this parameter can the be used when calling the function :py:meth:`~mojang.account.ext.microsoft.MicrosoftApp.authenticate` that will return a :py:class:`~mojang.account.ext._profile.MicrosoftAuthenticatedUser` object.
+Now to authenticate a user, he will need to visit the :py:attr:`~mojang.api.ext.microsoft.MicrosoftApp.authorization_url` and grant access to your app, he will then be redirected to an url with a **code** parameter. The value of this parameter can the be used when calling the function :py:meth:`~mojang.api.ext.microsoft.MicrosoftApp.authenticate` that will return a :py:class:`~mojang.api.ext._profile.MicrosoftAuthenticatedUser` object.
 
 
 Here is an example, you can find the `source code <https://github.com/Lucino772/pymojang/blob/1419595bcedaa1bfddf9ee6576675d3373181313/examples/microsoft_flask/app.py>`_ on github.

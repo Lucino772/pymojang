@@ -4,7 +4,7 @@ Mojang
 High Level
 ----------
 
-.. automodule:: mojang.account.ext.session
+.. automodule:: mojang.api.ext.session
    :members:
    :undoc-members:
    :show-inheritance:
@@ -16,7 +16,7 @@ Low Level
 Security
 ~~~~~~~~
 
-.. automodule:: mojang.account.auth.security
+.. automodule:: mojang.api.auth.security
    :members:
    :undoc-members:
    :show-inheritance:
@@ -24,7 +24,7 @@ Security
 Authentication
 ~~~~~~~~~~~~~~
 
-.. automodule:: mojang.account.auth.yggdrasil
+.. automodule:: mojang.api.auth.yggdrasil
    :members:
    :undoc-members:
    :show-inheritance:
