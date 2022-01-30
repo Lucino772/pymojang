@@ -33,6 +33,59 @@ print(profile.skin.source)
 
 Checkout the [documentation](https://pymojang.readthedocs.io/en/latest/)
 
+## V2 Roadmap
+
+`mojang.account` is going to be renamed to `mojang.api`.
+
+### Mojang API
+
+New features:
+- [ ] `get_sales`: This function retrieve sales statistics
+- [ ] `get_blocked_servers` : This function retrieve blocked server hashes
+- [ ] `get_username` : This function return the username for a given uuid
+
+The following functions are going to be renamed:
+- [ ] `status` &rarr; `get_status`
+- [ ] `names` &rarr; `get_names`
+- [ ] `user` &rarr; `get_profile`
+
+### Authentication
+
+The following features will be removed:
+- [ ] `connect`
+- [ ] `microsoft_app`
+
+And replaced by:
+- [ ] `app`
+
+### Session API
+
+New features:
+- [ ] `check_giftcode` : Check if redeem code is valid
+- [ ] `redeem` : Redeem a gift code
+- [ ] `check_name` : Check if a username is available
+
+### Realms API
+
+Later in V2 the **Realms API** will also be added
+
+### Minecraft
+
+#### Game Files
+
+New features:
+- [ ] `get_versions` : Get a list of all the minecraft versions
+- [ ] `get_version`: Get a specific version
+
+#### Game Protocol
+
+The following features will be moved/renamed:
+- [ ] `rcon.session` &rarr; `rcon`
+- [ ] `query.get_stats` &rarr; `get_stats`
+- [ ] `slp.ping` &rarr; `ping`
+
+Going forward, the **Minecraft Protocol** will be implemented
+
 ## Licence
 This project uses a
 **MIT** Licence [view](https://github.com/Lucino772/pymojang/blob/main/LICENSE)
