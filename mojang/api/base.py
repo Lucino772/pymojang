@@ -1,22 +1,15 @@
 import base64
-from ctypes import Union
 import datetime as dt
 import json
-from typing import List, Optional
+from typing import Dict, Iterable, Optional
 
 import requests
 
 from ..exceptions import InvalidName
-from .structures.base import (
-    NameInfo,
-    NameInfoList,
-    ServiceStatus,
-    StatusCheck,
-    UUIDInfo,
-)
+from .structures.base import NameInfo, NameInfoList, ServiceStatus, StatusCheck
 from .structures.profile import UnauthenticatedProfile
 from .structures.session import Cape, Skin
-from .utils import urls, helpers
+from .utils import helpers, urls
 
 
 def status() -> StatusCheck:
@@ -75,8 +68,8 @@ def get_uuid(username: str) -> Optional[str]:
     return data["uuid"]
 
 
-def get_uuids(usernames: list) -> List[Optional[UUIDInfo]]:
-    """Get uuid of multiple username
+def get_uuids(usernames: Iterable[str]) -> Dict[str, Optional[str]]:
+    """Get uuids for multiple usernames
 
     .. admonition:: Limited Endpoint
         :class: note
@@ -89,32 +82,29 @@ def get_uuids(usernames: list) -> List[Optional[UUIDInfo]]:
     :Example:
 
     >>> import mojang
-    >>> mojang.get_uuids()
-    [
-        UUIDInfo(name='Notch', uuid='069a79f444e94726a5befca90e38aaf5', legacy=False, demo=False),
-        UUIDInfo(name='_jeb', uuid='45f50155c09f4fdcb5cee30af2ebd1f0', legacy=False, demo=False)
-    ]
+    >>> mojang.get_uuids(['Notch', '_jeb'])
+    {
+        'notch': '069a79f444e94726a5befca90e38aaf5',
+        '_jeb': '45f50155c09f4fdcb5cee30af2ebd1f0'
+    }
     """
-    usernames = list(map(lambda u: u.lower(), usernames))
-    _uuids: List[Optional[UUIDInfo]] = [None] * len(usernames)
+    usernames = [u.lower() for u in usernames]
+    ret = dict.fromkeys(usernames, None)
 
     # Check for invalid names
-    valid_usernames = list(filter(lambda u: 0 < len(u) <= 16, usernames))
-    if len(valid_usernames) < len(usernames):
+    if not any([0 < len(u) <= 16 for u in usernames]):
         raise InvalidName()
 
-    for i in range(0, len(valid_usernames), 10):
+    for i in range(0, len(usernames), 10):
         response = requests.post(
-            urls.api_get_uuids, json=valid_usernames[i : i + 10]
+            urls.api_get_uuids, json=usernames[i : i + 10]
         )
         _, data = helpers.err_check(response)
 
         for item in data:
-            index = usernames.index(item["name"].lower())
-            item["uuid"] = item.pop("id")
-            _uuids[index] = UUIDInfo(**item)
+            ret[item["name"].lower()] = item["id"]
 
-    return _uuids
+    return ret
 
 
 def names(uuid: str) -> Optional[NameInfoList]:
