@@ -14,27 +14,32 @@ class TestMojangStatus(unittest.TestCase):
         self.unkown2 = mojang.get_uuids(["UNEXISTENTPL1", "UNEXISTENTPL2"])
 
     def test_existent_uuids(self):
-        self.assertEqual(
+        self.assertDictEqual(
             self.order1,
-            [
-                UUIDInfo("Notch", "069a79f444e94726a5befca90e38aaf5"),
-                UUIDInfo("jeb_", "853c80ef3c3749fdaa49938b674adae6"),
-            ],
+            {
+                "notch": "069a79f444e94726a5befca90e38aaf5",
+                "jeb_": "853c80ef3c3749fdaa49938b674adae6",
+            },
         )
-        self.assertEqual(
+        self.assertDictEqual(
             self.order2,
-            [
-                UUIDInfo("jeb_", "853c80ef3c3749fdaa49938b674adae6"),
-                UUIDInfo("Notch", "069a79f444e94726a5befca90e38aaf5"),
-            ],
+            {
+                "jeb_": "853c80ef3c3749fdaa49938b674adae6",
+                "notch": "069a79f444e94726a5befca90e38aaf5",
+            },
         )
 
     def test_unexistent_uuids(self):
-        self.assertEqual(
+        self.assertDictEqual(
             self.unkown1,
-            [UUIDInfo("jeb_", "853c80ef3c3749fdaa49938b674adae6"), None],
+            {
+                "jeb_": "853c80ef3c3749fdaa49938b674adae6",
+                "unexistentplayer": None,
+            },
         )
-        self.assertEqual(self.unkown2, [None, None])
+        self.assertDictEqual(
+            self.unkown2, {"unexistentpl1": None, "unexistentpl2": None}
+        )
 
     def test_invalid_uuids(self):
         self.assertRaises(InvalidName, mojang.get_uuids, ["", "jeb_"])

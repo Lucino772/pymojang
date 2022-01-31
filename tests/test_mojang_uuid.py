@@ -11,8 +11,8 @@ class TestMojangStatus(unittest.TestCase):
         self.unkown = mojang.get_uuid("UNEXISTENTPLAYER")
 
     def test_existent_uuid(self):
-        self.assertEqual(self.notch.uuid, "069a79f444e94726a5befca90e38aaf5")
-        self.assertEqual(self.jeb_.uuid, "853c80ef3c3749fdaa49938b674adae6")
+        self.assertEqual(self.notch, "069a79f444e94726a5befca90e38aaf5")
+        self.assertEqual(self.jeb_, "853c80ef3c3749fdaa49938b674adae6")
 
     def test_unexistent_uuid(self):
         self.assertEqual(self.unkown, None)
