@@ -92,7 +92,7 @@ def get_uuids(usernames: Iterable[str]) -> Dict[str, Optional[str]]:
     ret = dict.fromkeys(usernames, None)
 
     # Check for invalid names
-    if not any([0 < len(u) <= 16 for u in usernames]):
+    if any([not (0 < len(u) <= 16) for u in usernames]):
         raise InvalidName()
 
     for i in range(0, len(usernames), 10):
