@@ -6,7 +6,7 @@ from mojang.api.structures.base import ServiceStatus, StatusCheck
 
 class TestMojangStatus(unittest.TestCase):
     def setUp(self) -> None:
-        self.value = mojang.status()
+        self.value = mojang.get_status()
 
     def test_status(self):
         expected = StatusCheck(

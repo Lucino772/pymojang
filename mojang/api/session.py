@@ -9,7 +9,7 @@ from ..exceptions import (
     Unauthorized,
     UnavailableName,
 )
-from .base import names
+from .base import get_names
 from .structures.profile import AuthenticatedUserProfile
 from .structures.session import Cape, NameChange, Skin
 from .utils import helpers, urls
@@ -231,7 +231,7 @@ def get_profile(access_token: str) -> AuthenticatedUserProfile:
         uuid=data["id"],
         is_legacy=False,
         is_demo=False,
-        names=names(data["id"]),
+        names=get_names(data["id"]),
         skins=skins,
         capes=capes,
     )
