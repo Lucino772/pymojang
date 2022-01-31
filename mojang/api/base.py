@@ -1,25 +1,30 @@
 import base64
 import datetime as dt
 import json
-from typing import Dict, Iterable, Optional
+import typing
+from typing import Dict, Iterable, List, Optional
 
 import requests
 
 from ..exceptions import InvalidName
-from .structures.base import NameInfo, NameInfoList, ServiceStatus, StatusCheck
+from .structures.base import NameInfo, NameInfoList
 from .structures.profile import UnauthenticatedProfile
 from .structures.session import Cape, Skin
 from .utils import helpers, urls
 
+ServiceStatus = typing.NamedTuple(
+    "ServiceStatus", [("name", str), ("status", str)]
+)
 
-def get_status() -> StatusCheck:
+
+def get_status() -> List[ServiceStatus]:
     """Get the status of Mojang's services
 
     :Example:
 
     >>> import mojang
     >>> mojang.get_status()
-    (
+    [
         ServiceStatus(name='minecraft.net', status='green'),
         ServiceStatus(name='session.minecraft.net', status='green'),
         ServiceStatus(name='account.mojang.com', status='green'),
@@ -28,7 +33,7 @@ def get_status() -> StatusCheck:
         ServiceStatus(name='api.mojang.com', status='green'),
         ServiceStatus(name='textures.minecraft.net', status='green'),
         ServiceStatus(name='mojang.com', status='green')
-    )
+    ]
 
     """
     _status = [
@@ -42,7 +47,7 @@ def get_status() -> StatusCheck:
         ServiceStatus(name="mojang.com", status="unknown"),
     ]
 
-    return StatusCheck(_status)
+    return _status
 
 
 def get_uuid(username: str) -> Optional[str]:
