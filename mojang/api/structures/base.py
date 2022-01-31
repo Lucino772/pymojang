@@ -27,20 +27,6 @@ class StatusCheck(Tuple[ServiceStatus, ...]):
 
 
 # UUID and Name
-class UUIDInfo(NamedTuple):
-    """
-    :var str name: The user name
-    :var str uuid: The user uuid
-    :var bool legacy: Wether the account has migrated
-    :var bool demo: Wether the account is demo
-    """
-
-    name: str
-    uuid: str
-    legacy: bool = False
-    demo: bool = False
-
-
 class NameInfo(NamedTuple):
     """
     :var str name: The player name
