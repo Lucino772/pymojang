@@ -45,9 +45,9 @@ New features:
 - [ ] `get_username` : This function return the username for a given uuid
 
 The following functions are going to be renamed:
-- [ ] `status` &rarr; `get_status`
-- [ ] `names` &rarr; `get_names`
-- [ ] `user` &rarr; `get_profile`
+- [x] `status` &rarr; `get_status`
+- [x] `names` &rarr; `get_names`
+- [x] `user` &rarr; `get_profile`
 
 Improvements:
 - [x] `get_uuid` returns the uuid
