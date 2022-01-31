@@ -1,7 +1,7 @@
 import unittest
 
 import mojang
-from mojang.api.structures.base import ServiceStatus, StatusCheck
+from mojang.api.base import ServiceStatus
 
 
 class TestMojangStatus(unittest.TestCase):
@@ -9,19 +9,15 @@ class TestMojangStatus(unittest.TestCase):
         self.value = mojang.get_status()
 
     def test_status(self):
-        expected = StatusCheck(
-            [
-                ServiceStatus(name="minecraft.net", status="unknown"),
-                ServiceStatus(name="session.minecraft.net", status="unknown"),
-                ServiceStatus(name="account.mojang.com", status="unknown"),
-                ServiceStatus(name="authserver.mojang.com", status="unknown"),
-                ServiceStatus(
-                    name="sessionserver.mojang.com", status="unknown"
-                ),
-                ServiceStatus(name="api.mojang.com", status="unknown"),
-                ServiceStatus(name="textures.minecraft.net", status="unknown"),
-                ServiceStatus(name="mojang.com", status="unknown"),
-            ]
-        )
+        expected = [
+            ServiceStatus(name="minecraft.net", status="unknown"),
+            ServiceStatus(name="session.minecraft.net", status="unknown"),
+            ServiceStatus(name="account.mojang.com", status="unknown"),
+            ServiceStatus(name="authserver.mojang.com", status="unknown"),
+            ServiceStatus(name="sessionserver.mojang.com", status="unknown"),
+            ServiceStatus(name="api.mojang.com", status="unknown"),
+            ServiceStatus(name="textures.minecraft.net", status="unknown"),
+            ServiceStatus(name="mojang.com", status="unknown"),
+        ]
 
-        self.assertEqual(expected, self.value)
+        self.assertListEqual(expected, self.value)
