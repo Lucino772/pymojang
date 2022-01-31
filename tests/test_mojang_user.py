@@ -1,7 +1,7 @@
 import unittest
 
 import mojang
-from mojang.api.structures.base import NameInfo, NameInfoList
+from mojang.api.base import NameInfo
 from mojang.api.structures.profile import UnauthenticatedProfile
 from mojang.api.structures.session import Cape, Skin
 from mojang.exceptions import InvalidName
@@ -21,7 +21,7 @@ class TestMojangStatus(unittest.TestCase):
                 "069a79f444e94726a5befca90e38aaf5",
                 False,
                 False,
-                NameInfoList([NameInfo("Notch", None)]),
+                [NameInfo("Notch", None)],
                 Skin(
                     "http://textures.minecraft.net/texture/292009a4925b58f02c77dadc3ecef07ea4c7472f64e0fdc32ce5522489362680",
                     "classic",
@@ -37,7 +37,7 @@ class TestMojangStatus(unittest.TestCase):
                 "853c80ef3c3749fdaa49938b674adae6",
                 False,
                 False,
-                NameInfoList([NameInfo("jeb_", None)]),
+                [NameInfo("jeb_", None)],
                 Skin(
                     "http://textures.minecraft.net/texture/7fd9ba42a7c81eeea22f1524271ae85a8e045ce0af5a6ae16c6406ae917e68b5",
                     "classic",

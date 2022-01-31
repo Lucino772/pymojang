@@ -1,20 +1,15 @@
 import base64
 import datetime as dt
 import json
-import typing
 from typing import Dict, Iterable, List, Optional
 
 import requests
 
 from ..exceptions import InvalidName
-from .structures.base import NameInfo, NameInfoList
+from .structures.base import NameInfo, ServiceStatus
 from .structures.profile import UnauthenticatedProfile
 from .structures.session import Cape, Skin
 from .utils import helpers, urls
-
-ServiceStatus = typing.NamedTuple(
-    "ServiceStatus", [("name", str), ("status", str)]
-)
 
 
 def get_status() -> List[ServiceStatus]:
@@ -112,7 +107,7 @@ def get_uuids(usernames: Iterable[str]) -> Dict[str, Optional[str]]:
     return ret
 
 
-def get_names(uuid: str) -> Optional[NameInfoList]:
+def get_names(uuid: str) -> List[NameInfo]:
     """Get the user's name history
 
     :param str uuid: The user's uuid
@@ -120,28 +115,38 @@ def get_names(uuid: str) -> Optional[NameInfoList]:
     :Example:
 
     >>> import mojang
-    >>> mojang.get_names('65a8dd127668422e99c2383a07656f7a)
-    (
+    >>> mojang.get_names('65a8dd127668422e99c2383a07656f7a'')
+    [
         NameInfo(name='piewdipie', changed_to_at=None),
         NameInfo(name='KOtMotros', changed_to_at=datetime.datetime(2020, 3, 4, 17, 45, 26))
-    )
+    ]
     """
-    response = requests.get(urls.api_name_history(uuid))
-    code, data = helpers.err_check(response, (400, ValueError))
 
-    if code == 204:
-        return None
-
-    _names = []
-    for item in data:
+    def _parse_item(item: dict):
         changed_to_at = None
         if "changedToAt" in item.keys():
             changed_to_at = dt.datetime.fromtimestamp(
                 item["changedToAt"] / 1000
             )
-        _names.append(NameInfo(name=item["name"], changed_to_at=changed_to_at))
 
-    return NameInfoList(_names)
+        return NameInfo(name=item["name"], changed_to_at=changed_to_at)
+
+    response = requests.get(urls.api_name_history(uuid))
+    code, data = helpers.err_check(response, (400, ValueError))
+
+    if code == 204:
+        return []
+
+    # Names are sorted newer to older
+    _names = [_parse_item(item) for item in data]
+    _tosort = [
+        _names.pop(_names.index(item))
+        for item in _names.copy()
+        if item.changed_to_at is not None
+    ]
+    _tosort.sort(key=lambda i: i.changed_to_at, reverse=True)
+
+    return _tosort + _names
 
 
 def get_profile(uuid: str) -> Optional[UnauthenticatedProfile]:

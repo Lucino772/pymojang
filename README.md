@@ -53,7 +53,7 @@ Improvements:
 - [x] `get_uuid` returns the uuid
 - [x] `get_uuids` returns a dict<str, str>
 - [x] `get_status` returns a list of ServiceStatus
-- [ ] `get_names` returns a list of tuple
+- [x] `get_names` returns a sorted list of NameInfo
 
 ### Authentication (mojang.api.auth.*)
 

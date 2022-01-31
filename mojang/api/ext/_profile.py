@@ -6,7 +6,8 @@ import msal
 
 from .. import session
 from ..auth import microsoft, security, yggdrasil
-from ..structures.profile import Cape, NameInfoList, Skin
+from ..structures.profile import Cape, Skin
+from ..structures.base import NameInfo
 from ..structures.auth import ChallengeInfo
 
 
@@ -35,7 +36,7 @@ class AuthenticatedUser(metaclass=ABCMeta):
         self.__uuid = None
         self.__is_legacy = False
         self.__is_demo = False
-        self.__names = None
+        self.__names: List[NameInfo] = []
         self.__skins = None
         self.__capes = None
 
@@ -72,7 +73,7 @@ class AuthenticatedUser(metaclass=ABCMeta):
         return self.__is_demo
 
     @property
-    def names(self) -> Optional[NameInfoList]:
+    def names(self) -> List[NameInfo]:
         return self.__names
 
     @property
