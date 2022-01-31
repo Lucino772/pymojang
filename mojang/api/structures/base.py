@@ -1,29 +1,5 @@
 import datetime as dt
-from typing import Callable, NamedTuple, Optional, Tuple, Union
-
-
-# Status check
-class ServiceStatus(NamedTuple):
-    """
-    :var str name: The service name
-    :var str status: The service status
-    """
-
-    name: str
-    status: str
-
-
-class StatusCheck(Tuple[ServiceStatus, ...]):
-    def get(self, name: str) -> Union[None, ServiceStatus]:
-        """Get service by name
-
-        :param str name: The service name
-        """
-        service = list(filter(lambda s: s.name == name, self))
-        if len(service) > 0:
-            return service[0]
-
-        return None
+from typing import NamedTuple, Optional, Tuple, Union
 
 
 # UUID and Name

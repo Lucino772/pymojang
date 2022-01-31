@@ -7,7 +7,7 @@ from typing import Dict, Iterable, List, Optional
 import requests
 
 from ..exceptions import InvalidName
-from .structures.base import NameInfo, NameInfoList, StatusCheck
+from .structures.base import NameInfo, NameInfoList
 from .structures.profile import UnauthenticatedProfile
 from .structures.session import Cape, Skin
 from .utils import helpers, urls
