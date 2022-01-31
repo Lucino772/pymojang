@@ -12,13 +12,13 @@ from .structures.session import Cape, Skin
 from .utils import helpers, urls
 
 
-def status() -> StatusCheck:
+def get_status() -> StatusCheck:
     """Get the status of Mojang's services
 
     :Example:
 
     >>> import mojang
-    >>> mojang.status()
+    >>> mojang.get_status()
     (
         ServiceStatus(name='minecraft.net', status='green'),
         ServiceStatus(name='session.minecraft.net', status='green'),
@@ -107,7 +107,7 @@ def get_uuids(usernames: Iterable[str]) -> Dict[str, Optional[str]]:
     return ret
 
 
-def names(uuid: str) -> Optional[NameInfoList]:
+def get_names(uuid: str) -> Optional[NameInfoList]:
     """Get the user's name history
 
     :param str uuid: The user's uuid
@@ -115,7 +115,7 @@ def names(uuid: str) -> Optional[NameInfoList]:
     :Example:
 
     >>> import mojang
-    >>> mojang.names('65a8dd127668422e99c2383a07656f7a)
+    >>> mojang.get_names('65a8dd127668422e99c2383a07656f7a)
     (
         NameInfo(name='piewdipie', changed_to_at=None),
         NameInfo(name='KOtMotros', changed_to_at=datetime.datetime(2020, 3, 4, 17, 45, 26))
@@ -139,7 +139,7 @@ def names(uuid: str) -> Optional[NameInfoList]:
     return NameInfoList(_names)
 
 
-def user(uuid: str) -> Optional[UnauthenticatedProfile]:
+def get_profile(uuid: str) -> Optional[UnauthenticatedProfile]:
     """Returns the full profile of a user
 
     :param str uuid: The uuid of the profile
@@ -147,7 +147,7 @@ def user(uuid: str) -> Optional[UnauthenticatedProfile]:
     :Example:
 
     >>> import mojang
-    >>> mojang.user('069a79f444e94726a5befca90e38aaf5')
+    >>> mojang.get_profile('069a79f444e94726a5befca90e38aaf5')
     UnauthenticatedProfile(
         name='Notch',
         uuid='069a79f444e94726a5befca90e38aaf5',
@@ -187,7 +187,7 @@ def user(uuid: str) -> Optional[UnauthenticatedProfile]:
         uuid=uuid,
         is_legacy=data.get("legacy", False),
         is_demo=data.get("demo", False),
-        names=names(uuid),
+        names=get_names(uuid),
         skin=skin,
         cape=cape,
     )

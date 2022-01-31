@@ -10,9 +10,9 @@ Checkout the [`documentation`](https://pymojang.readthedocs.io/en/latest/)
 from .api import (
     get_uuid,
     get_uuids,
-    names,
-    status,
-    user,
+    get_names,
+    get_status,
+    get_profile,
     connect,
     microsoft_app,
 )
