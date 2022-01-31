@@ -50,8 +50,8 @@ The following functions are going to be renamed:
 - [ ] `user` &rarr; `get_profile`
 
 Improvements:
-- [ ] `get_uuid` returns the uuid
-- [ ] `get_uuids` returns a dict<str, str>
+- [x] `get_uuid` returns the uuid
+- [x] `get_uuids` returns a dict<str, str>
 - [ ] `get_status` returns a dict<str, str>
 - [ ] `get_names` returns a list of tuple
 
