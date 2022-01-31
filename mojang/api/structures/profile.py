@@ -1,5 +1,5 @@
 from typing import List, Optional
-from .base import NameInfoList
+from .base import NameInfo
 from .session import Skin, Cape
 
 
@@ -18,7 +18,7 @@ class BaseUserProfile:
         uuid: str,
         is_legacy: bool,
         is_demo: bool,
-        names: Optional[NameInfoList],
+        names: List[NameInfo],
     ) -> None:
         self.__name = name
         self.__uuid = uuid
@@ -33,7 +33,7 @@ class BaseUserProfile:
                 self.__uuid,
                 self.__is_legacy,
                 self.__is_demo,
-                self.__names,
+                tuple(self.__names),
             )
         )
 
@@ -60,7 +60,7 @@ class BaseUserProfile:
         return self.__is_demo
 
     @property
-    def names(self) -> Optional[NameInfoList]:
+    def names(self) -> List[NameInfo]:
         return self.__names
 
 
@@ -76,7 +76,7 @@ class UnauthenticatedProfile(BaseUserProfile):
         uuid: str,
         is_legacy: bool,
         is_demo: bool,
-        names: Optional[NameInfoList],
+        names: List[NameInfo],
         skin: Optional[Skin],
         cape: Optional[Cape],
     ) -> None:
@@ -91,7 +91,7 @@ class UnauthenticatedProfile(BaseUserProfile):
                 self.uuid,
                 self.is_legacy,
                 self.is_demo,
-                self.names,
+                tuple(self.names),
                 self.__skin,
                 self.__cape,
             )
@@ -121,7 +121,7 @@ class AuthenticatedUserProfile(BaseUserProfile):
         uuid: str,
         is_legacy: bool,
         is_demo: bool,
-        names: Optional[NameInfoList],
+        names: List[NameInfo],
         skins: List[Skin],
         capes: List[Cape],
     ) -> None:
@@ -136,7 +136,7 @@ class AuthenticatedUserProfile(BaseUserProfile):
                 self.uuid,
                 self.is_legacy,
                 self.is_demo,
-                self.names,
+                tuple(self.names),
                 self.__skins,
                 self.__capes,
             )
