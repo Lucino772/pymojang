@@ -65,7 +65,7 @@ def get_uuid(username: str) -> Optional[str]:
     if code == 204:
         return None
 
-    return data["uuid"]
+    return data["id"]
 
 
 def get_uuids(usernames: Iterable[str]) -> Dict[str, Optional[str]]:
