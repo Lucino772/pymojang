@@ -1,9 +1,10 @@
-from typing import Optional
-import requests
-import json
 import inspect
-from uuid import UUID
-from ...exceptions import NotFound, MethodNotAllowed, ServerError
+import json
+from typing import Optional
+
+import requests
+
+from ..exceptions import MethodNotAllowed, NotFound, ServerError
 
 
 def get_headers(
