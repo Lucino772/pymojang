@@ -5,10 +5,8 @@ from typing import (
     Dict,
     Iterable,
     List,
-    Literal,
     Optional,
     Sequence,
-    Sized,
     Tuple,
 )
 
@@ -57,7 +55,7 @@ def get_status() -> List[ServiceStatus]:
 def get_sales(keys: Sequence[str]) -> Tuple[int, int, int]:
     """Get sales statistics of Mojang games
 
-    :param keys Sized[str]: A list of sale identifiers
+    :param keys Sequence[str]: A list of sale identifiers
 
     Available values are: `item_sold_minecraft`, `prepaid_card_redeemed_minecraft`,
     `item_sold_cobalt`, `prepaid_card_redeemed_cobalt`, `item_sold_scrolls`
