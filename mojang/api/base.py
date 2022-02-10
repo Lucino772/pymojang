@@ -164,6 +164,26 @@ def get_uuids(usernames: Iterable[str]) -> Dict[str, Optional[str]]:
     return ret
 
 
+def get_username(uuid: str) -> Optional[str]:
+    """Get username for a uuid
+
+    :param uuid str: The uuid you want the username of
+
+    :Example:
+
+    >>> import mojang
+    >>> mojang.get_username('069a79f444e94726a5befca90e38aaf5')
+    'Notch'
+    """
+    response = requests.get(urls.api_get_username(uuid))
+    code, data = helpers.err_check(response, (400, ValueError))
+
+    if code == 204:
+        return None
+
+    return data["name"]
+
+
 def get_names(uuid: str) -> List[NameInfo]:
     """Get the user's name history
 
