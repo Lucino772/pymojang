@@ -94,6 +94,14 @@ def get_sales(keys: Sequence[str] = None) -> Tuple[int, int, float]:
     return (data["total"], data["last24h"], data["saleVelocityPerSeconds"])
 
 
+def get_blocked_servers() -> List[str]:
+    """Get a list of blocked servers hashes"""
+    response = requests.get(urls.api_get_blocked_servers)
+    _, data = helpers.err_check(response)
+
+    return data.split("\n")
+
+
 def get_uuid(username: str) -> Optional[str]:
     """Get uuid for a username
 

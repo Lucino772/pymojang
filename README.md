@@ -41,7 +41,7 @@ Checkout the [documentation](https://pymojang.readthedocs.io/en/latest/)
 
 New features:
 - [x] `get_sales`: This function retrieve sales statistics
-- [ ] `get_blocked_servers` : This function retrieve blocked server hashes
+- [x] `get_blocked_servers` : This function retrieve blocked server hashes
 - [ ] `get_username` : This function return the username for a given uuid
 
 The following functions are going to be renamed:
