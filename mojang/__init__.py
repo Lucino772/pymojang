@@ -10,6 +10,7 @@ Checkout the [`documentation`](https://pymojang.readthedocs.io/en/latest/)
 from .api import (
     get_uuid,
     get_uuids,
+    get_username,
     get_names,
     get_status,
     get_sales,

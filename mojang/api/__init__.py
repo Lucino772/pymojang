@@ -3,6 +3,7 @@ from .base import (
     get_sales,
     get_uuid,
     get_uuids,
+    get_username,
     get_names,
     get_profile,
 )
