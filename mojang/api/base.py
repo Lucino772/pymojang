@@ -52,7 +52,7 @@ def get_status() -> List[ServiceStatus]:
     return _status
 
 
-def get_sales(keys: Sequence[str]) -> Tuple[int, int, float]:
+def get_sales(keys: Sequence[str] = None) -> Tuple[int, int, float]:
     """Get sales statistics of Mojang games
 
     :param keys Sequence[str]: A list of sale identifiers
@@ -80,14 +80,14 @@ def get_sales(keys: Sequence[str]) -> Tuple[int, int, float]:
         ]
     )
 
-    if len(keys) == 0:
+    if keys is None or len(keys) == 0:
         return (0, 0, 0)
 
     if not set(keys).issubset(available_keys):
         invalid_keys = set(keys).difference(available_keys)
         raise ValueError("Invalid key(s): {}".format(",".join(invalid_keys)))
 
-    payload = {"metricKeys": list(invalid_keys)}
+    payload = {"metricKeys": list(keys)}
     response = requests.post(urls.api_get_sales, json=payload)
     _, data = helpers.err_check(response)
 
