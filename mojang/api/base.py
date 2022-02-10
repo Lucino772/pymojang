@@ -97,10 +97,7 @@ def get_sales(keys: Sequence[str] = None) -> Tuple[int, int, float]:
 def get_blocked_servers() -> List[str]:
     """Get a list of blocked servers hashes"""
     response = requests.get(urls.api_get_blocked_servers)
-    code, data = helpers.err_check(response)
-
-    if code != 200:
-        return []
+    _, data = helpers.err_check(response)
 
     return data.split("\n")
 
