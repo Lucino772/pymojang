@@ -12,6 +12,7 @@ from .api import (
     get_uuids,
     get_names,
     get_status,
+    get_blocked_servers,
     get_sales,
     get_profile,
     connect,
