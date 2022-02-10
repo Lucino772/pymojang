@@ -1,4 +1,5 @@
 import msal
+
 from mojang.exceptions import MicrosoftInvalidGrant, MicrosoftUserNotOwner
 
 from .. import session

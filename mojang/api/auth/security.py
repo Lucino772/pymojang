@@ -3,8 +3,8 @@ from typing import List
 import requests
 
 from ...exceptions import Unauthorized
+from .. import helpers, urls
 from ..structures.auth import ChallengeInfo
-from ..utils import helpers, urls
 
 
 def check_ip(access_token: str) -> bool:

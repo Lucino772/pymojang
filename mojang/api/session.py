@@ -9,10 +9,10 @@ from ..exceptions import (
     Unauthorized,
     UnavailableName,
 )
+from . import helpers, urls
 from .base import get_names
 from .structures.profile import AuthenticatedUserProfile
 from .structures.session import Cape, NameChange, Skin
-from .utils import helpers, urls
 
 
 def get_user_name_change(access_token: str) -> NameChange:

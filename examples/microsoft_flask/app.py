@@ -1,9 +1,10 @@
 import os
 
-import mojang
-import mojang.exceptions
 from dotenv import load_dotenv
 from flask import Flask, jsonify, redirect, request
+
+import mojang
+import mojang.exceptions
 
 load_dotenv()
 

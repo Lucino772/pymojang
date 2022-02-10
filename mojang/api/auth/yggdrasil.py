@@ -3,7 +3,7 @@ from typing import Optional, Tuple
 import requests
 
 from ...exceptions import CredentialsError, MigratedAccount, TokenError
-from ..utils import urls, helpers
+from .. import helpers, urls
 
 
 def authenticate(

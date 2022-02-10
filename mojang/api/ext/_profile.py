@@ -6,9 +6,9 @@ import msal
 
 from .. import session
 from ..auth import microsoft, security, yggdrasil
-from ..structures.profile import Cape, Skin
-from ..structures.base import NameInfo
 from ..structures.auth import ChallengeInfo
+from ..structures.base import NameInfo
+from ..structures.profile import Cape, Skin
 
 
 class AuthenticatedUser(metaclass=ABCMeta):

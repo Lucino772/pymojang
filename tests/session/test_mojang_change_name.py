@@ -1,7 +1,8 @@
 import unittest
 from unittest import mock
+
 from mojang.api import session
-from mojang.exceptions import InvalidName, UnavailableName, Unauthorized
+from mojang.exceptions import InvalidName, Unauthorized, UnavailableName
 from tests.session.mock_server import MockSessionServer
 
 VALID_ACCESS_TOKEN = "MY_ACCESS_TOKEN"

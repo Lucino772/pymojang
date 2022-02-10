@@ -7,6 +7,12 @@ repos:
     -   id: check-toml
     -   id: check-yaml
     -   id: trailing-whitespace
+-   repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
+    hooks:
+    -   id: isort
+        name: isort
+        args: [--profile, black, -l, '79']
 -   repo: https://github.com/psf/black
     rev: 21.9b0
     hooks:

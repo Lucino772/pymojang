@@ -1,6 +1,6 @@
-from ctypes import Union
 import datetime as dt
 import re
+from ctypes import Union
 from os import path
 from typing import NamedTuple, Optional
 from urllib.parse import urlparse

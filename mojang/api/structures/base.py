@@ -1,6 +1,5 @@
-import typing
 import datetime as dt
-
+import typing
 
 ServiceStatus = typing.NamedTuple(
     "ServiceStatus", [("name", str), ("status", str)]
