@@ -1,7 +1,16 @@
 import base64
 import datetime as dt
 import json
-from typing import Dict, Iterable, List, Optional
+from typing import (
+    Dict,
+    Iterable,
+    List,
+    Literal,
+    Optional,
+    Sequence,
+    Sized,
+    Tuple,
+)
 
 import requests
 
@@ -43,6 +52,40 @@ def get_status() -> List[ServiceStatus]:
     ]
 
     return _status
+
+
+def get_sales(keys: Sequence[str]) -> Tuple[int, int, int]:
+    """Get sales statistics of Mojang games
+
+    :param keys Sized[str]: A list of sale identifiers
+
+    Available values are: `item_sold_minecraft`, `prepaid_card_redeemed_minecraft`,
+    `item_sold_cobalt`, `prepaid_card_redeemed_cobalt`, `item_sold_scrolls`
+    `item_sold_dungeons`
+    """
+    available_keys = set(
+        [
+            "item_sold_minecraft",
+            "prepaid_card_redeemed_minecraft",
+            "item_sold_cobalt",
+            "prepaid_card_redeemed_cobalt",
+            "item_sold_scrolls",
+            "item_sold_dungeons",
+        ]
+    )
+
+    if len(keys) == 0:
+        return (0, 0, 0)
+
+    if not set(keys).issubset(available_keys):
+        invalid_keys = set(keys).difference(available_keys)
+        raise ValueError("Invalid key(s): {}".format(",".join(invalid_keys)))
+
+    payload = {"metricKeys": list(invalid_keys)}
+    response = requests.post(urls.api_get_sales, json=payload)
+    _, data = helpers.err_check(response)
+
+    return (data["total"], data["last24h"], data["saleVelocityPerSeconds"])
 
 
 def get_uuid(username: str) -> Optional[str]:
