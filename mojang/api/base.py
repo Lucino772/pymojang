@@ -52,7 +52,7 @@ def get_status() -> List[ServiceStatus]:
     return _status
 
 
-def get_sales(keys: Sequence[str]) -> Tuple[int, int, int]:
+def get_sales(keys: Sequence[str]) -> Tuple[int, int, float]:
     """Get sales statistics of Mojang games
 
     :param keys Sequence[str]: A list of sale identifiers
@@ -60,6 +60,14 @@ def get_sales(keys: Sequence[str]) -> Tuple[int, int, int]:
     Available values are: `item_sold_minecraft`, `prepaid_card_redeemed_minecraft`,
     `item_sold_cobalt`, `prepaid_card_redeemed_cobalt`, `item_sold_scrolls`
     `item_sold_dungeons`
+
+    :return: A tuple with the total amount of sales, sales in the last 24h and avg. sales per second
+
+    :Example:
+
+    >>> import mojang
+    >>> mojang.get_sales('item_sold_minecraft')
+    (40763561, 8743, 0.11)
     """
     available_keys = set(
         [
