@@ -1,6 +1,6 @@
 import socket
 from contextlib import contextmanager
-from typing import Callable, Optional, Tuple, Generator
+from typing import Callable, Generator, Optional, Tuple
 
 from .packets import Packets
 

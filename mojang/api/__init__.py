@@ -1,12 +1,12 @@
 from .base import (
-    get_status,
-    get_sales,
     get_blocked_servers,
-    get_uuid,
-    get_uuids,
-    get_username,
     get_names,
     get_profile,
+    get_sales,
+    get_status,
+    get_username,
+    get_uuid,
+    get_uuids,
 )
-from .ext.session import connect
 from .ext.microsoft import microsoft_app
+from .ext.session import connect

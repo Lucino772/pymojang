@@ -1,5 +1,6 @@
 import unittest
 from unittest import mock
+
 from mojang.api import session
 from mojang.exceptions import NotCapeOwner, Unauthorized
 from tests.session.mock_server import MockSessionServer

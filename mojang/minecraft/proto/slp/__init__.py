@@ -1,7 +1,7 @@
+import enum
 import socket
 from functools import partial
 from typing import Optional, Tuple
-import enum
 
 from ._structures import SLPResponse
 from .post_netty import ping as mping

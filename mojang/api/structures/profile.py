@@ -1,6 +1,7 @@
 from typing import List, Optional
+
 from .base import NameInfo
-from .session import Skin, Cape
+from .session import Cape, Skin
 
 
 class BaseUserProfile:

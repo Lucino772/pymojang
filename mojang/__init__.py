@@ -7,19 +7,18 @@ and [Mojang Authentication API](https://wiki.vg/Authentication)
 
 Checkout the [`documentation`](https://pymojang.readthedocs.io/en/latest/)
 """
+from . import _version
 from .api import (
+    connect,
+    get_blocked_servers,
+    get_names,
+    get_profile,
+    get_sales,
+    get_status,
+    get_username,
     get_uuid,
     get_uuids,
-    get_username,
-    get_names,
-    get_status,
-    get_blocked_servers,
-    get_sales,
-    get_profile,
-    connect,
     microsoft_app,
 )
-
-from . import _version
 
 __version__ = _version.get_versions()["version"]
