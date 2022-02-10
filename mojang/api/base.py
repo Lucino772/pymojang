@@ -1,22 +1,15 @@
 import base64
 import datetime as dt
 import json
-from typing import (
-    Dict,
-    Iterable,
-    List,
-    Optional,
-    Sequence,
-    Tuple,
-)
+from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
 import requests
 
 from ..exceptions import InvalidName
+from . import helpers, urls
 from .structures.base import NameInfo, ServiceStatus
 from .structures.profile import UnauthenticatedProfile
 from .structures.session import Cape, Skin
-from .utils import helpers, urls
 
 
 def get_status() -> List[ServiceStatus]:

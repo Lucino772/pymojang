@@ -1,13 +1,14 @@
 from typing import Tuple
 
 import requests
+
 from mojang.exceptions import (
     Unauthorized,
     XboxLiveAuthenticationError,
     XboxLiveInvalidUserHash,
 )
 
-from ..utils import helpers, urls
+from .. import helpers, urls
 
 
 def authenticate_xbl(auth_token: str) -> Tuple[str, str]:
