@@ -10,10 +10,14 @@ class MockSessionServer:
         access_token: str,
         unavailable_names: list = [],
         valid_cape_ids=[],
+        valid_vouchers=[],
+        used_vouchers=[],
     ) -> None:
         self._access_token = access_token
         self._unavailable_names = unavailable_names
         self._valid_cape_ids = valid_cape_ids
+        self._valid_vouchers = valid_vouchers
+        self._used_vouchers = used_vouchers
 
     def _is_token_valid(self, headers: dict):
         authorization = headers.get("authorization", None)
@@ -22,6 +26,49 @@ class MockSessionServer:
 
         token = str(authorization).split(" ")[1]
         return token == self._access_token
+
+    def product_voucher(self, url, **kwargs):
+        voucher = urlparse(url).path.split("/")[-1]
+        response = Response()
+        if not self._is_token_valid(kwargs.get("headers", {})):
+            response.status_code = 401
+        elif voucher not in self._valid_vouchers:
+            response.status_code = 404
+            response._content = json.dumps(
+                {
+                    "path": "/productvoucher/:voucher",
+                    "errorType": "NOT_FOUND",
+                    "error": "NOT_FOUND",
+                }
+            ).encode("utf-8")
+            response.encoding = "utf-8"
+        elif voucher in self._used_vouchers:
+            response.status_code = 404
+            response._content = json.dumps(
+                {
+                    "path": "/productvoucher/:voucher",
+                    "errorType": "NOT_FOUND",
+                    "error": "NOT_FOUND",
+                    "errorMessage": "The server has not found anything matching the request URI",
+                    "developerMessage": "The server has not found anything matching the request URI",
+                }
+            ).encode("utf-8")
+            response.encoding = "utf-8"
+        else:
+            response.status_code = 200
+            response._content = json.dumps(
+                {
+                    "voucherInfo": {
+                        "code": "00000-00000-00000-00000-00000",
+                        "productVariant": "minecraft",
+                        "status": "ACTIVE",
+                    },
+                    "productRedeemable": True,
+                }
+            ).encode("utf-8")
+            response.encoding = "utf-8"
+
+        return response
 
     def user_name_change(self, *args, **kwargs):
         response = Response()

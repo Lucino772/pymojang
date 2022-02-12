@@ -15,7 +15,7 @@ from .structures.profile import AuthenticatedUserProfile
 from .structures.session import Cape, NameChange, Skin
 
 
-def check_product_voucher(access_token: str, voucher: str):
+def check_product_voucher(access_token: str, voucher: str) -> bool:
     """Check if a voucher is available.
 
     :param str access_token: The session access token
@@ -32,7 +32,9 @@ def check_product_voucher(access_token: str, voucher: str):
     response = requests.get(
         urls.api_session_product_voucher(voucher), headers=headers
     )
-    code, data = helpers.err_check(response, (401, Unauthorized))
+    code, data = helpers.err_check(
+        response, (401, Unauthorized), use_defaults=False
+    )
 
     if code == 404 and "errorMessage" not in data:
         raise ValueError("Invalid voucher")
