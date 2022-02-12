@@ -70,7 +70,7 @@ Improvements:
 ### Session API (mojang.api.session)
 
 New features:
-- [ ] `check_giftcode` : Check if redeem code is valid
+- [x] `check_product_voucher` : Check if a product voucher is valid
 - [ ] `redeem` : Redeem a gift code
 - [ ] `check_username` : Check if a username is available
 
