@@ -25,6 +25,7 @@ def check_product_voucher(access_token: str, voucher: str) -> bool:
     :raises ValueError: if the voucher is not a real code
 
     :Example:
+
     >>> from mojang.api import session
     >>> session.check_product_voucher('ACCESS_TOKEN', 'JHRD2-HWGTY-WP3MW-QR4MC-CGGHZ')
     True
