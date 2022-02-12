@@ -15,6 +15,9 @@ api_user_profile = (
 )
 
 # URLs for Authenticated users
+api_session_product_voucher = (
+    lambda voucher: f"https://api.minecraftservices.com/productvoucher/{voucher}"
+)
 api_session_name_change = (
     "https://api.minecraftservices.com/minecraft/profile/namechange"
 )
