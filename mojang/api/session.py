@@ -27,6 +27,7 @@ def check_product_voucher(access_token: str, voucher: str) -> bool:
     :Example:
     >>> from mojang.api import session
     >>> session.check_product_voucher('ACCESS_TOKEN', 'JHRD2-HWGTY-WP3MW-QR4MC-CGGHZ')
+    True
     """
     headers = helpers.get_headers(bearer=access_token)
     response = requests.get(
