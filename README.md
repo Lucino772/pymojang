@@ -74,9 +74,6 @@ New features:
 - [ ] `redeem` : Redeem a gift code
 - [x] `check_username` : Check if a username is available
 
-Improvements:
-- [ ] `get_user_name_change` returns a tuple
-
 ### Realms API (mojang.api.realms)
 
 Later in V2 the **Realms API** will also be added
