@@ -18,6 +18,9 @@ api_user_profile = (
 api_session_product_voucher = (
     lambda voucher: f"https://api.minecraftservices.com/productvoucher/{voucher}"
 )
+api_session_check_username = (
+    lambda username: f"https://api.minecraftservices.com/minecraft/profile/name/{username}/available"
+)
 api_session_name_change = (
     "https://api.minecraftservices.com/minecraft/profile/namechange"
 )
