@@ -1,22 +1,17 @@
 import datetime as dt
 import re
+import typing
 from ctypes import Union
 from os import path
-from typing import NamedTuple, Optional
+from typing import Optional
 from urllib.parse import urlparse
 
 import requests
 import validators
 
-
-class NameChange(NamedTuple):
-    """
-    :var bool allowed: Wether the user can change name
-    :var datetime.datetime created_at: When was the user created
-    """
-
-    allowed: bool
-    created_at: dt.datetime
+NameChange = typing.NamedTuple(
+    "NameChange", [("allowed", bool), ("created_at", dt.datetime)]
+)
 
 
 class _Resource:
