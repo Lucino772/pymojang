@@ -44,6 +44,31 @@ def check_product_voucher(access_token: str, voucher: str) -> bool:
     return code == 200
 
 
+def check_username(access_token: str, username: str) -> bool:
+    """Check if username is available
+
+    .. caution::
+
+        This endpoint is limited, the function will return a RuntimeError if
+        you sent too many requests.
+
+    :param str access_token: The session access token
+    :param str username: The username you want to checkt
+
+    :raises Unauthorized: if the access token is invalid
+    :raises RuntimeError: if you sent to many requests
+    """
+    headers = helpers.get_headers(bearer=access_token)
+    response = requests.get(
+        urls.api_session_check_username(username), headers=headers
+    )
+    code, data = helpers.err_check(
+        response, (401, Unauthorized), (429, RuntimeError("Limited Endpoint"))
+    )
+
+    return data["status"] == "AVAILABLE"
+
+
 def get_user_name_change(access_token: str) -> NameChange:
     """Return if user can change name and when it was created
 

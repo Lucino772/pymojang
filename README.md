@@ -72,7 +72,7 @@ Improvements:
 New features:
 - [x] `check_product_voucher` : Check if a product voucher is valid
 - [ ] `redeem` : Redeem a gift code
-- [ ] `check_username` : Check if a username is available
+- [x] `check_username` : Check if a username is available
 
 Improvements:
 - [ ] `get_user_name_change` returns a tuple

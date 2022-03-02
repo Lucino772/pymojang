@@ -70,6 +70,40 @@ class MockSessionServer:
 
         return response
 
+    def check_username(self, url, *args, **kwargs):
+        username = urlparse(url).path.split("/")[-2]
+        response = Response()
+        if not self._is_token_valid(kwargs.get("headers", {})):
+            response.status_code = 401
+        elif username in self._unavailable_names:
+            response.status_code = 200
+            response._content = json.dumps({"status": "DUPLICATE"}).encode(
+                "utf-8"
+            )
+            response.encoding = "utf-8"
+        else:
+            response.status_code = 200
+            response._content = json.dumps({"status": "AVAILABLE"}).encode(
+                "utf-8"
+            )
+            response.encoding = "utf-8"
+
+        return response
+
+    def check_username_429(self, url, *args, **kwargs):
+        response = self.check_username(url, *args, **kwargs)
+        response.status_code = 429
+        response._content = json.dumps(
+            {
+                "path": "/minecraft/profile/name/:username/available",
+                "errorType": "TooManyRequestsException",
+                "error": "TooManyRequestsException",
+                "errorMessage": "The client has sent too many requests within a certain amount of time",
+                "developerMessage": "The client has sent too many requests within a certain amount of time",
+            }
+        ).encode("utf-8")
+        return response
+
     def user_name_change(self, *args, **kwargs):
         response = Response()
         if not self._is_token_valid(kwargs.get("headers", {})):
