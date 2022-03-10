@@ -58,14 +58,11 @@ Improvements:
 ### Authentication (mojang.api.auth.*)
 
 The following features will be removed:
-- [ ] `connect`
-- [ ] `microsoft_app`
+- [x] `connect`
+- [x] `microsoft_app`
 
 And replaced by:
-- [ ] `app`
-
-Improvements:
-- [ ] `get_challenges` returns a list of tuple
+- [x] `app`
 
 ### Session API (mojang.api.session)
 
