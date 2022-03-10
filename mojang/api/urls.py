@@ -1,6 +1,5 @@
 # URLs for basic api
 api_check_status = "https://status.mojang.com/check"
-api_get_sales = "https://api.mojang.com/orders/statistics"
 api_get_blocked_servers = "https://sessionserver.mojang.com/blockedservers"
 api_get_uuid = (
     lambda username: f"https://api.mojang.com/users/profiles/minecraft/{username}"

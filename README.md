@@ -40,7 +40,7 @@ Checkout the [documentation](https://pymojang.readthedocs.io/en/latest/)
 ### Mojang API (mojang.api.base)
 
 New features:
-- [x] `get_sales`: This function retrieve sales statistics
+- [x] `get_sales`: This function retrieve sales statistics. :exclamation: This method has been removed, the endpoint for statistics is no longer active
 - [x] `get_blocked_servers` : This function retrieve blocked server hashes
 - [x] `get_username` : This function return the username for a given uuid
 
