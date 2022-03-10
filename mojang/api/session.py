@@ -12,8 +12,7 @@ from ..exceptions import (
 from . import helpers, urls
 from .base import get_names
 from .models import Cape, Skin
-from .structures.profile import AuthenticatedUserProfile
-from .structures.session import NameChange
+from .structures import AuthenticatedUserProfile, NameChange
 
 
 def check_product_voucher(access_token: str, voucher: str) -> bool:

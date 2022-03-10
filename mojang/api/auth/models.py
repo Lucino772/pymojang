@@ -10,8 +10,7 @@ from mojang.exceptions import MicrosoftInvalidGrant, MicrosoftUserNotOwner
 from .. import session
 from ..auth import microsoft, security, yggdrasil
 from ..models import Cape, Skin
-from ..structures.auth import ChallengeInfo
-from ..structures.base import NameInfo
+from ..structures import ChallengeInfo, NameInfo
 
 _DEFAULT_SCOPES = ["XboxLive.signin"]
 

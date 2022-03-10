@@ -1,8 +1,30 @@
+import datetime as dt
 import typing
 
-from ..models import Cape, Skin
-from .base import NameInfo
+from .models import Cape, Skin
 
+## Security
+ChallengeInfo = typing.NamedTuple(
+    "ChallengeInfo",
+    [("id", int), ("challenge", str)],
+)
+
+## Base
+ServiceStatus = typing.NamedTuple(
+    "ServiceStatus", [("name", str), ("status", str)]
+)
+
+NameInfo = typing.NamedTuple(
+    "NameInfo",
+    [("name", str), ("changed_to_at", typing.Optional[dt.datetime])],
+)
+
+## Session
+NameChange = typing.NamedTuple(
+    "NameChange", [("allowed", bool), ("created_at", dt.datetime)]
+)
+
+## Profile
 UnauthenticatedProfile = typing.NamedTuple(
     "UnauthenticatedProfile",
     [
@@ -15,6 +37,7 @@ UnauthenticatedProfile = typing.NamedTuple(
         ("cape", typing.Optional[Cape]),
     ],
 )
+
 
 AuthenticatedUserProfile = typing.NamedTuple(
     "AuthenticatedUserProfile",

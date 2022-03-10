@@ -4,7 +4,7 @@ import requests
 
 from ...exceptions import Unauthorized
 from .. import helpers, urls
-from ..structures.auth import ChallengeInfo
+from ..structures import ChallengeInfo
 
 
 def check_ip(access_token: str) -> bool:

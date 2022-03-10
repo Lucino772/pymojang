@@ -8,8 +8,7 @@ import requests
 from ..exceptions import InvalidName
 from . import helpers, urls
 from .models import Cape, Skin
-from .structures.base import NameInfo, ServiceStatus
-from .structures.profile import UnauthenticatedProfile
+from .structures import NameInfo, ServiceStatus, UnauthenticatedProfile
 
 
 def get_status() -> List[ServiceStatus]:
