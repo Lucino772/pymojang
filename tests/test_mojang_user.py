@@ -2,8 +2,8 @@ import unittest
 
 import mojang
 from mojang.api.base import NameInfo
+from mojang.api.models import Cape, Skin
 from mojang.api.structures.profile import UnauthenticatedProfile
-from mojang.api.structures.session import Cape, Skin
 from mojang.exceptions import InvalidName
 
 
