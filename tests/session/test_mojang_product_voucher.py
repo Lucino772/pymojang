@@ -17,7 +17,7 @@ mock_server = MockSessionServer(
 )
 
 
-class TestMojangProductVoucher(unittest.TestCase):
+class TestMojangCheckProductVoucher(unittest.TestCase):
     @mock.patch("requests.get", side_effect=mock_server.product_voucher)
     def test_invalid_voucher(self, mock_get: mock.MagicMock):
         self.assertRaises(
@@ -44,6 +44,38 @@ class TestMojangProductVoucher(unittest.TestCase):
         self.assertRaises(
             Unauthorized,
             session.check_product_voucher,
+            INVALID_ACCESS_TOKEN,
+            "8901854197",
+        )
+
+
+class TestMojangRedeemProductVoucher(unittest.TestCase):
+    @mock.patch("requests.put", side_effect=mock_server.product_voucher)
+    def test_invalid_voucher(self, mock_put: mock.MagicMock):
+        self.assertRaises(
+            ValueError,
+            session.redeem_product_voucher,
+            VALID_ACCESS_TOKEN,
+            "12345",
+        )
+
+    @mock.patch("requests.put", side_effect=mock_server.product_voucher)
+    def test_used_voucher(self, mock_put: mock.MagicMock):
+        res = session.redeem_product_voucher(
+            VALID_ACCESS_TOKEN, "JHRD2-HWGTY-WP3MW-QR4MC-CGGHZ"
+        )
+        self.assertEqual(res, False)
+
+    @mock.patch("requests.put", side_effect=mock_server.product_voucher)
+    def test_unused_voucher(self, mock_put: mock.MagicMock):
+        res = session.redeem_product_voucher(VALID_ACCESS_TOKEN, "8901854197")
+        self.assertEqual(res, True)
+
+    @mock.patch("requests.put", side_effect=mock_server.product_voucher)
+    def test_invalid_token(self, mock_put: mock.MagicMock):
+        self.assertRaises(
+            Unauthorized,
+            session.redeem_product_voucher,
             INVALID_ACCESS_TOKEN,
             "8901854197",
         )
