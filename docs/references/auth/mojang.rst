@@ -1,18 +1,6 @@
 Mojang
 ======
 
-High Level
-----------
-
-.. automodule:: mojang.api.ext.session
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Low Level
----------
-
 Security
 ~~~~~~~~
 

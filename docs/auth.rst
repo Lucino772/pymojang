@@ -2,17 +2,25 @@
 Authentication
 **************
 
-Mojang Authentication
----------------------
-
-Getting a user profile is great, but you can also connect to your account and retrieve usefull information. The :py:meth:`~mojang.api.ext.session.connect` function is the easy way to doe it.
-
-Both :py:meth:`~mojang.api.ext.session.connect` and :py:class:`~mojang.api.ext._profile.MojangAuthenticatedUser` use more low-level functions, you can view them in the following sections: :doc:`Session API </references/session>` and :doc:`Authentication & Security API </references/auth/mojang>`.
+The basic method allows you to easily retrieve information about users and Mojang games, but you might want to go further by authenticating to your minecraft account. To do so you must first create a :py:class:`~mojang.api.auth.models.MojangAuthenticationApp`, this app will then allow you to authenticate to your account.
 
 .. code-block:: pycon
 
     >>> import mojang
-    >>> mojang.connect('USERNAME_OR_EMAIL', 'PASSWORD')
+    >>> CLIENT_ID = ... # This is your Azure client id
+    >>> CLIENT_SECRET = ... # This is your Azure client secret
+    >>> app = mojang.app(CLIENT_ID, CLIENT_SECRET)
+
+After creating your app you have 2 options: you have migrated your Mojang account to Microsoft or still use a Mojang account.
+
+Mojang Account
+~~~~~~~~~~~~~~
+
+In this case :py:meth:`~mojang.api.auth.models.MojangAuthenticationApp.get_session` will return a :py:class:`~~mojang.api.auth.models.MojangAuthenticatedUser`.
+
+.. code-block:: pycon
+
+    >>> app.get_session('YOUR_USERNAME', 'YOUR_PASSWORD')
     MojangAuthenticatedUser(
         name='PLAYER_NAME',
         uuid='PLAYER_UUID',
@@ -25,17 +33,30 @@ Both :py:meth:`~mojang.api.ext.session.connect` and :py:class:`~mojang.api.ext._
         name_change_allowed=True
     )
 
-Microsoft Authentication
-------------------------
+Microsoft Account
+~~~~~~~~~~~~~~~~~
 
-If you have a migrated account, you can't use the :py:meth:`~mojang.api.ext.session.connect` function. You will need to use the OAuth flow provided by Microsoft.
+In this case :py:meth:`~mojang.api.auth.models.MojangAuthenticationApp.get_session` will return a :py:class:`~~mojang.api.auth.models.MicrosoftAuthenticatedUser`.
 
-To do so you will first need to create an **Microsoft Azure App** to get your **client id** and **client secret**. Once you have those credentials, you can call the :py:meth:`~mojang.api.ext.microsoft.microsoft_app` function with your credentials and it will create a :py:class:`~mojang.api.ext.microsoft.MicrosoftApp` for you.
+.. code-block:: pycon
 
-Now to authenticate a user, he will need to visit the :py:attr:`~mojang.api.ext.microsoft.MicrosoftApp.authorization_url` and grant access to your app, he will then be redirected to an url with a **code** parameter. The value of this parameter can the be used when calling the function :py:meth:`~mojang.api.ext.microsoft.MicrosoftApp.authenticate` that will return a :py:class:`~mojang.api.ext._profile.MicrosoftAuthenticatedUser` object.
+    >>> # First you must visit the url given by: `app.authorization_url`
+    >>> # this will redirect you to a url with a code parameter
+    >>> # you can then use this code to get a session
+    >>> app.get_session('here goes the code')
+    MicrosoftAuthenticatedUser(
+        name='PLAYER_NAME',
+        uuid='PLAYER_UUID',
+        is_legacy=False,
+        is_demo=False,
+        names=(NameInfo(name='PLAYER_NAME', changed_to_at=None),),
+        skin=Skin(source='http://...', variant='classic'),
+        cape=None,
+        created_at=datetime.datetime(2006, 4, 29, 10, 10, 10),
+        name_change_allowed=True
+    )
 
-
-Here is an example, you can find the `source code <https://github.com/Lucino772/pymojang/blob/1419595bcedaa1bfddf9ee6576675d3373181313/examples/microsoft_flask/app.py>`_ on github.
+Here is a full example, you can find the `source code <https://github.com/Lucino772/pymojang/blob/1419595bcedaa1bfddf9ee6576675d3373181313/examples/microsoft_flask/app.py>`_ on github.
 
 .. literalinclude:: ../examples/microsoft_flask/app.py
     :emphasize-lines: 11-13,16-29,36-37

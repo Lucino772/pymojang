@@ -4,6 +4,6 @@ Authentication
 
 .. toctree::
 
-    profile
+    models
     mojang
     microsoft

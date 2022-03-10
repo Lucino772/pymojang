@@ -1,7 +1,7 @@
-Profile
+Models
 =======
 
-.. automodule:: mojang.api.ext._profile
+.. automodule:: mojang.api.auth.models
    :members:
    :undoc-members:
    :show-inheritance:

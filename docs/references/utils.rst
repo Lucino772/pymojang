@@ -1,22 +1,18 @@
 Utilities
 =========
 
-.. automodule:: mojang.api.structures.auth
+Structures
+~~~~~~~~~~
+
+.. automodule:: mojang.api.structures
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: mojang.api.structures.base
-   :members:
-   :undoc-members:
-   :show-inheritance:
+Models
+~~~~~~
 
-.. automodule:: mojang.api.structures.profile
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. automodule:: mojang.api.structures.session
+.. automodule:: mojang.api.models
    :members:
    :undoc-members:
    :show-inheritance:
