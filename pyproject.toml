@@ -17,3 +17,8 @@ exclude = '''
   | docs
 )/
 '''
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "1.4.0"
+tag_format = "v$version"
