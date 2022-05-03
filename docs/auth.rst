@@ -59,4 +59,4 @@ In this case :py:meth:`~mojang.api.auth.models.MojangAuthenticationApp.get_sessi
 Here is a full example, you can find the `source code <https://github.com/Lucino772/pymojang/blob/1419595bcedaa1bfddf9ee6576675d3373181313/examples/microsoft_flask/app.py>`_ on github.
 
 .. literalinclude:: ../examples/microsoft_flask/app.py
-    :emphasize-lines: 11-13,16-29,36-37
+    :emphasize-lines: 12-14,17-33,40,45
