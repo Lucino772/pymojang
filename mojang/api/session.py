@@ -268,7 +268,7 @@ def owns_minecraft(
     response = requests.get(urls.api_session_ownership, headers=headers)
     _, data = helpers.err_check(response, (401, Unauthorized))
 
-    if verify_sig:
+    if verify_sig is True:
         for i in data.get("items", []):
             jwt.decode(i["signature"], public_key, algorithms=["RS256"])
 

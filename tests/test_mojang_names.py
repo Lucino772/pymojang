@@ -1,3 +1,4 @@
+import datetime
 import unittest
 
 import mojang
@@ -9,12 +10,31 @@ class TestMojangStatus(unittest.TestCase):
     def setUp(self) -> None:
         self.notch = mojang.get_names("069a79f444e94726a5befca90e38aaf5")
         self.jeb_ = mojang.get_names("853c80ef3c3749fdaa49938b674adae6")
+        self.mumbo = mojang.get_names("ac224782efff4296b08cdbde8e47abdb")
 
         self.unkown = mojang.get_names("069a79f444e94726a5befca90e38aaf6")
 
     def test_existent_names(self):
         self.assertEqual(self.notch, [NameInfo("Notch", None)])
         self.assertEqual(self.jeb_, [NameInfo("jeb_", None)])
+        self.assertEqual(
+            self.mumbo,
+            [
+                NameInfo(
+                    name="Mumbo",
+                    changed_to_at=datetime.datetime(2016, 4, 5, 16, 50, 11),
+                ),
+                NameInfo(
+                    name="MedShow",
+                    changed_to_at=datetime.datetime(2016, 3, 19, 6, 45, 51),
+                ),
+                NameInfo(
+                    name="Mumbo",
+                    changed_to_at=datetime.datetime(2015, 2, 4, 13, 40, 8),
+                ),
+                NameInfo(name="MrMumbo", changed_to_at=None),
+            ],
+        )
 
     def test_unexistent_names(self):
         self.assertEqual(self.unkown, [])
