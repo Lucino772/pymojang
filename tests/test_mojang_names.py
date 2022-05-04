@@ -15,9 +15,9 @@ class TestMojangStatus(unittest.TestCase):
         self.unkown = mojang.get_names("069a79f444e94726a5befca90e38aaf6")
 
     def test_existent_names(self):
-        self.assertEqual(self.notch, [NameInfo("Notch", None)])
-        self.assertEqual(self.jeb_, [NameInfo("jeb_", None)])
-        self.assertEqual(
+        self.assertListEqual(self.notch, [NameInfo("Notch", None)])
+        self.assertListEqual(self.jeb_, [NameInfo("jeb_", None)])
+        self.assertListEqual(
             self.mumbo,
             [
                 NameInfo(
@@ -37,7 +37,7 @@ class TestMojangStatus(unittest.TestCase):
         )
 
     def test_unexistent_names(self):
-        self.assertEqual(self.unkown, [])
+        self.assertListEqual(self.unkown, [])
 
     def test_invalid_names(self):
         self.assertRaises(ValueError, mojang.get_names, "thisisnotauuid")
