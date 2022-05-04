@@ -4,15 +4,9 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pytest = "*"
-flake8 = "*"
 pre-commit = "*"
-pytest-cov = "*"
 importlib-metadata = "*"
-sphinx = "*"
-furo = "*"
-sphinxext-opengraph = "*"
-sphinx-copybutton = "*"
+nox = "*"
 
 [packages]
 requests = "*"
