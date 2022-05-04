@@ -46,7 +46,7 @@ class _Resource:
             return match.groups()
 
     @classmethod
-    def _filename_from_headers(cls, headers: CaseInsensitiveDict[str]):
+    def _filename_from_headers(cls, headers: CaseInsensitiveDict):
         # Check content-disposition
         if "content-disposition" in headers.keys():
             cdisp = headers["content-disposition"]
