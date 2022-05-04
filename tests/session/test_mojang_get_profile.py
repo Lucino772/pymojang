@@ -2,7 +2,7 @@ import unittest
 from unittest import mock
 
 from mojang.api import session
-from mojang.api.models import Skin
+from mojang.api.models import Cape, Skin
 from mojang.exceptions import Unauthorized
 from tests.session.mock_server import MockSessionServer
 
@@ -29,7 +29,16 @@ class TestMojangGetProfile(unittest.TestCase):
                 )
             ],
         )
-        self.assertEqual(profile.capes, [])
+        self.assertEqual(
+            profile.capes,
+            [
+                Cape(
+                    "http://textures.minecraft.net/texture/1a4af718455d4aab528e7a61f86fa25e6a369d1768dcb13f7df319a713eb810b",
+                    "6a6e65e5-76dd-4c3c-a625-162924514568",
+                    "ACTIVE",
+                )
+            ],
+        )
 
     @mock.patch("requests.get", side_effect=mock_server.get_profile)
     def test_invalid_token(self, mock_get: mock.MagicMock):
