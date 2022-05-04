@@ -3,7 +3,6 @@ import unittest
 
 import mojang
 from mojang.api.structures import NameInfo
-from mojang.exceptions import InvalidName
 
 
 class TestMojangStatus(unittest.TestCase):
@@ -22,15 +21,15 @@ class TestMojangStatus(unittest.TestCase):
             [
                 NameInfo(
                     name="Mumbo",
-                    changed_to_at=datetime.datetime(2016, 4, 5, 16, 50, 11),
+                    changed_to_at=datetime.datetime(2016, 4, 5, 14, 50, 11),
                 ),
                 NameInfo(
                     name="MedShow",
-                    changed_to_at=datetime.datetime(2016, 3, 19, 6, 45, 51),
+                    changed_to_at=datetime.datetime(2016, 3, 19, 5, 45, 51),
                 ),
                 NameInfo(
                     name="Mumbo",
-                    changed_to_at=datetime.datetime(2015, 2, 4, 13, 40, 8),
+                    changed_to_at=datetime.datetime(2015, 2, 4, 12, 40, 8),
                 ),
                 NameInfo(name="MrMumbo", changed_to_at=None),
             ],

@@ -152,7 +152,7 @@ def get_names(uuid: str) -> List[NameInfo]:
     def _parse_item(item: dict):
         changed_to_at = None
         if "changedToAt" in item.keys():
-            changed_to_at = dt.datetime.fromtimestamp(
+            changed_to_at = dt.datetime.utcfromtimestamp(
                 item["changedToAt"] / 1000
             )
 
