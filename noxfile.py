@@ -20,3 +20,11 @@ def docs(session: nox.Session):
 def lint(session: nox.Session):
     session.install("pre-commit")
     session.run("pre-commit", "run", *session.posargs)
+
+
+@nox.session
+def example(session: nox.Session):
+    session.install(".")
+    with session.chdir("examples/microsoft_flask"):
+        session.install("-r", "requirements.txt")
+        session.run("python", "app.py")
