@@ -135,7 +135,9 @@ class Skin(_Resource):
         return self.__state
 
     def __hash__(self) -> int:
-        return hash((self.source, self.variant, self.data))
+        return hash(
+            (self.source, self.id, self.state, self.variant, self.data)
+        )
 
     def __eq__(self, o: object) -> bool:
         if isinstance(o, Skin):
@@ -171,7 +173,7 @@ class Cape(_Resource):
         return self.__state
 
     def __hash__(self) -> int:
-        return hash((self.source, self.data))
+        return hash((self.source, self.id, self.state, self.data))
 
     def __eq__(self, o: object) -> bool:
         if isinstance(o, Cape):
