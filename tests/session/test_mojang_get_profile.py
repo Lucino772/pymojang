@@ -2,7 +2,7 @@ import unittest
 from unittest import mock
 
 from mojang.api import session
-from mojang.api.structures.session import Skin
+from mojang.api.models import Skin
 from mojang.exceptions import Unauthorized
 from tests.session.mock_server import MockSessionServer
 

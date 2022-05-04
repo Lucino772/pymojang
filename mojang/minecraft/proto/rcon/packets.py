@@ -9,7 +9,7 @@ class Packets:
         self.__sock = sock
 
     def _new_id(self) -> int:
-        return random.randint(0, 2 ** 31)
+        return random.randint(0, 2**31)
 
     def send(self, _type: int, payload: str) -> Tuple[int, int]:
         packet_id = self._new_id()

@@ -1,17 +1,10 @@
-import datetime as dt
+import os
 import re
-import typing
-from ctypes import Union
-from os import path
 from typing import Optional
 from urllib.parse import urlparse
 
 import requests
 import validators
-
-NameChange = typing.NamedTuple(
-    "NameChange", [("allowed", bool), ("created_at", dt.datetime)]
-)
 
 
 class _Resource:
@@ -46,7 +39,7 @@ class _Resource:
     def _filename_from_url(cls, url: str):
         url_path = urlparse(url).path
         match = re.match(
-            r"^([\w,\s-]+)\.([A-Za-z]{3})$", path.basename(url_path)
+            r"^([\w,\s-]+)\.([A-Za-z]{3})$", os.path.basename(url_path)
         )
         if match:
             return match.groups()
@@ -84,9 +77,9 @@ class _Resource:
             if response:
                 self.__extension = response[0][1]
                 self.__data = response[1]
-        elif path.exists(self.source):
-            basename = path.basename(self.source)
-            self.__extension = path.splitext(basename)[1][1:]
+        elif os.path.exists(self.source):
+            basename = os.path.basename(self.source)
+            self.__extension = os.path.splitext(basename)[1][1:]
 
             with open(self.source, "rb") as fp:
                 self.__data = fp.read()
@@ -96,7 +89,7 @@ class _Resource:
     def save(self, dest: str, add_extension: bool = True):
         """Save resource in a file"""
         if (
-            len(path.splitext(dest)[1]) == 0
+            len(os.path.splitext(dest)[1]) == 0
             and self.__extension is not None
             and add_extension is True
         ):

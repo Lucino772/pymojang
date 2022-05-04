@@ -1,3 +1,4 @@
+from .auth import app
 from .base import (
     get_blocked_servers,
     get_names,
@@ -7,5 +8,3 @@ from .base import (
     get_uuid,
     get_uuids,
 )
-from .ext.microsoft import microsoft_app
-from .ext.session import connect

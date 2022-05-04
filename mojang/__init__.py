@@ -9,7 +9,7 @@ Checkout the [`documentation`](https://pymojang.readthedocs.io/en/latest/)
 """
 from . import _version
 from .api import (
-    connect,
+    app,
     get_blocked_servers,
     get_names,
     get_profile,
@@ -17,7 +17,6 @@ from .api import (
     get_username,
     get_uuid,
     get_uuids,
-    microsoft_app,
 )
 
 __version__ = _version.get_versions()["version"]
