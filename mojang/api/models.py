@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 
 import requests
 import validators
+from requests.structures import CaseInsensitiveDict
 
 
 class _Resource:
@@ -20,7 +21,7 @@ class _Resource:
         self.__data = bytes()
         self.__extension = None
 
-        if load:
+        if load is True:
             self.load()
 
     @property
@@ -45,7 +46,7 @@ class _Resource:
             return match.groups()
 
     @classmethod
-    def _filename_from_headers(cls, headers: dict):
+    def _filename_from_headers(cls, headers: CaseInsensitiveDict[str]):
         # Check content-disposition
         if "content-disposition" in headers.keys():
             cdisp = headers["content-disposition"]
@@ -64,8 +65,8 @@ class _Resource:
         response = requests.get(url)
         if response.ok:
             filename = (
-                cls._filename_from_headers(dict(response.headers))
-                or cls._filename_from_url(url)
+                cls._filename_from_url(url)
+                or cls._filename_from_headers(response.headers)
                 or ["download", None]
             )
             return filename, response.content
@@ -93,7 +94,7 @@ class _Resource:
             and self.__extension is not None
             and add_extension is True
         ):
-            dest += self.__extension
+            dest += "." + self.__extension
 
         with open(dest, "wb") as fp:
             fp.write(self.__data)
