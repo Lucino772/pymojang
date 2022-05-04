@@ -1,6 +1,7 @@
 import json
 from urllib.parse import urlparse
 
+import jwt
 from requests.models import Response
 
 
@@ -12,12 +13,16 @@ class MockSessionServer:
         valid_cape_ids=[],
         valid_vouchers=[],
         used_vouchers=[],
+        game_private_key: str = None,
+        game_public_key: str = None,
     ) -> None:
         self._access_token = access_token
         self._unavailable_names = unavailable_names
         self._valid_cape_ids = valid_cape_ids
         self._valid_vouchers = valid_vouchers
         self._used_vouchers = used_vouchers
+        self._game_private_key = game_private_key
+        self._game_public_key = game_public_key
 
     def _is_token_valid(self, headers: dict):
         authorization = headers.get("authorization", None)
@@ -178,14 +183,42 @@ class MockSessionServer:
         if not self._is_token_valid(kwargs.get("headers", {})):
             response.status_code = 401
         else:
+            product_minecraft_sig = jwt.encode(
+                {"signerId": "2535416586892404", "name": "product_minecraft"},
+                self._game_private_key,
+                algorithm="RS256",
+            )
+            game_minecraft_sig = jwt.encode(
+                {"signerId": "2535416586892404", "name": "game_minecraft"},
+                self._game_private_key,
+                algorithm="RS256",
+            )
+            signature = jwt.encode(
+                {
+                    "entitlements": [
+                        {"name": "product_minecraft"},
+                        {"name": "game_minecraft"},
+                    ],
+                    "signerId": "2535416586892404",
+                },
+                self._game_private_key,
+                algorithm="RS256",
+            )
+
             response.status_code = 200
             response._content = json.dumps(
                 {
                     "items": [
-                        {"name": "product_minecraft", "signature": None},
-                        {"name": "game_minecraft", "signature": None},
+                        {
+                            "name": "product_minecraft",
+                            "signature": product_minecraft_sig,
+                        },
+                        {
+                            "name": "game_minecraft",
+                            "signature": game_minecraft_sig,
+                        },
                     ],
-                    "signature": None,
+                    "signature": signature,
                     "keyId": "1",
                 }
             ).encode("utf-8")
