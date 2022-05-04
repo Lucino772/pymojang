@@ -23,6 +23,6 @@ sphinx:
 # Install dev requirements and package
 python:
   install:
-  - requirements: requirements-dev.txt
+  - requirements: requirements/requirements-docs.txt
   - method: setuptools
     path: .
