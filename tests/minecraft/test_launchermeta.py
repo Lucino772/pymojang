@@ -27,3 +27,7 @@ class TestMojangAPIModels(unittest.TestCase):
     def test_get_random_version(self):
         version = minecraft.get_version(version="1.12.1")
         self.assertEqual(version.id, "1.12.1")
+
+    def test_get_unknown_version(self):
+        version = minecraft.get_version(version="NOT_A_VERSION")
+        self.assertIsNone(version)
