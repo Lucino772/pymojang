@@ -80,15 +80,15 @@ Later in V2 the **Realms API** will also be added
 #### Game Files (mojang.minecraft.files.*)
 
 New features:
-- [ ] `get_versions` : Get a list of all the minecraft versions
-- [ ] `get_version`: Get a specific version
+- [x] `get_versions` : Get a list of all the minecraft versions
+- [x] `get_version`: Get a specific version
 
 #### Game Protocol (mojang.minecraft.proto.*)
 
 The following features will be moved/renamed:
-- [ ] `rcon.session` &rarr; `rcon`
-- [ ] `query.get_stats` &rarr; `get_stats`
-- [ ] `slp.ping` &rarr; `ping`
+- [x] `rcon.session` &rarr; `rcon`
+- [x] `query.get_stats` &rarr; `get_stats`
+- [x] `slp.ping` &rarr; `ping`
 
 Going forward, the **Minecraft Protocol** will be implemented
 
