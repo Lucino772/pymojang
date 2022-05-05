@@ -55,7 +55,7 @@ def get_versions():
 
     >>> from mojang.minecraft import launchermeta
     >>> launchermeta.get_versions()
-    ['22w18a', '22w17a', '22w16b', ..., 'rd-20090515', 'rd-132328', 'rd-132211']
+    (['22w18a', '22w17a', '22w16b', ..., 'rd-20090515', 'rd-132328', 'rd-132211'], '1.18.2', '22w18a')
     """
     versions, latest_rel, latest_snap = _load_meta()
     version_list = list(map(lambda meta: meta.id, versions))
