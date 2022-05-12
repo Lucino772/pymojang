@@ -1,5 +1,5 @@
-Microsoft
-=========
+mojang.api.auth.microsoft
+=========================
 
 .. automodule:: mojang.api.auth.microsoft
    :members:
