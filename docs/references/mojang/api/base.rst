@@ -1,5 +1,5 @@
-Account base
-============
+mojang.api.base
+===============
 
 .. automodule:: mojang.api.base
    :members:
