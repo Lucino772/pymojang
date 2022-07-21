@@ -1,6 +1,34 @@
 Minecraft
 =========
 
+Versions
+--------
+
+List versions (:py:meth:`~mojang.minecraft.launchermeta.get_versions`)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pycon
+
+    >>> from mojang import minecraft
+    >>> minecraft.get_versions()
+    (['22w18a', '22w17a', '22w16b', ..., 'rd-20090515', 'rd-132328', 'rd-132211'], '1.18.2', '22w18a')
+
+Get a specific version (:py:meth:`~mojang.minecraft.launchermeta.get_version`)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pycon
+
+    >>> from mojang import minecraft
+    >>> minecraft.get_version("1.18.1")
+    VersionMeta(
+        id='1.18.2',
+        type='release',
+        url='https://launchermeta.mojang.com/v1/packages/86f9645f8398ec902cd17769058851e6fead68cf/1.18.2.json',
+        time=datetime.datetime(2022, 2, 28, 10, 48, 16, tzinfo=datetime.timezone.utc),
+        release_time=datetime.datetime(2022, 2, 28, 10, 42, 45, tzinfo=datetime.timezone.utc)
+    )
+
+
 RCON
 ----
 
