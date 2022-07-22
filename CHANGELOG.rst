@@ -1,5 +1,5 @@
-v1.4.0 (2021-12-22)
-===================
+`v1.4.0`_ (2021-12-22)
+======================
 
 Features
 --------
@@ -13,8 +13,8 @@ Bugfixes
 - Added missing import `import datetime as dt` in **mojang.account.base**
 
 
-v1.3.2 (2021-11-13)
-===================
+`v1.3.2`_ (2021-11-13)
+======================
 
 Features
 --------
@@ -35,8 +35,8 @@ Deprecations and Removals
 - Removed `AuthenticationInfo` class
 
 
-v1.3.1 (2021-10-20)
-===================
+`v1.3.1`_ (2021-10-20)
+======================
 
 Bugfixes
 --------
@@ -44,8 +44,8 @@ Bugfixes
 - The `status` function always returns the same response with an **unknown** status for each service.(`WEB-2303 <https://bugs.mojang.com/browse/WEB-2303?focusedCommentId=1086543&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-1086543>`_)
 
 
-v1.3.0 (2021-09-16)
-===================
+`v1.3.0`_ (2021-09-16)
+======================
 
 Features
 --------
@@ -59,8 +59,8 @@ Bugfixes
 - The `connect` function returns a `MigratedAccount` exception when trying to connect with a migrated account (`#1 <https://github.com/Lucino772/pymojang/issues/1>`__)
 
 
-v1.2.1 (2021-06-25)
-===================
+`v1.2.1`_ (2021-06-25)
+======================
 
 Features
 --------
@@ -80,8 +80,8 @@ Deprecations and Removals
 - Removed argument `session_id` from `get_stats` function
 
 
-v1.2.0 (2021-05-10)
-===================
+`v1.2.0`_ (2021-05-10)
+======================
 
 Features
 --------
@@ -103,8 +103,8 @@ Deprecations and Removals
 - `get_username` was removed, instead use `user` to retrieve username by UUID
 
 
-v1.1.0 (2021-03-24)
-===================
+`v1.1.0`_ (2021-03-24)
+======================
 
 Features
 --------
@@ -116,3 +116,12 @@ Features
 - Added `name_history` function
 - Added `user` function
 - Added `connect` function
+
+
+.. _v1.4.0: https://github.com/Lucino772/pymojang/compare/v1.3.2...v1.4.0
+.. _v1.3.2: https://github.com/Lucino772/pymojang/compare/v1.3.1...v1.3.2
+.. _v1.3.1: https://github.com/Lucino772/pymojang/compare/v1.3.0...v1.3.1
+.. _v1.3.0: https://github.com/Lucino772/pymojang/compare/v1.2.1...v1.3.0
+.. _v1.2.1: https://github.com/Lucino772/pymojang/compare/v1.2.0...v1.2.1
+.. _v1.2.0: https://github.com/Lucino772/pymojang/compare/v1.1.0...v1.2.0
+.. _v1.1.0: https://github.com/Lucino772/pymojang/releases/tag/v1.1.0
