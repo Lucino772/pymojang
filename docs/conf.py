@@ -37,6 +37,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
     "sphinxext.opengraph",
+    "sphinx_issues",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -69,3 +70,6 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "msal": ("https://msal-python.readthedocs.io/en/latest", None),
 }
+
+# Sphinx Issues
+issues_github_path = "Lucino772/pymojang"

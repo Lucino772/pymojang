@@ -1,121 +1,82 @@
 `v1.4.0`_ (2021-12-22)
 ======================
+Added
+-----
+- Add support for multiple **Skins** and **Capes** in `MojangAuthenticatedUser` and `MicrosoftAuthenticatedUser` classes
 
-Features
---------
-
-- Added support for multiple **Skins** and **Capes** in `MojangAuthenticatedUser` and `MicrosoftAuthenticatedUser` classes
-
-
-Bugfixes
---------
-
-- Added missing import `import datetime as dt` in **mojang.account.base**
+Fixed
+-----
+- Fix missing import `import datetime as dt` in **mojang.account.base**
 
 
 `v1.3.2`_ (2021-11-13)
 ======================
+Changed
+-------
+- Change the `UserSession` class into `MojangAuthenticatedUser` for **Mojang** account and `MicrosoftAuthenticatedUser` for **Microsoft** account
+- Add attributes `id` and `state` to `Skin` and `Cape` classes
 
-Features
---------
+Fixed
+-----
+- Fix error in `get_user_name_change` function, `changedAt` is ignored (:issue:`2`)
 
-- Separated `UserSession` class into 2 classes: `MojangAuthenticatedUser` for **Mojang** account and `MicrosoftAuthenticatedUser` for **Microsoft** account
-- Added attributes `id` and `state` to `Skin` and `Cape` classes
-
-
-Bugfixes
---------
-
-- Fixed error in `get_user_name_change` function, `changedAt` is ignored (`#2 <https://github.com/Lucino772/pymojang/issues/2>`__)
-
-
-Deprecations and Removals
--------------------------
-
-- Removed `AuthenticationInfo` class
+Removed
+-------
+- Remov `AuthenticationInfo` class
 
 
 `v1.3.1`_ (2021-10-20)
 ======================
-
-Bugfixes
---------
-
-- The `status` function always returns the same response with an **unknown** status for each service.(`WEB-2303 <https://bugs.mojang.com/browse/WEB-2303?focusedCommentId=1086543&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-1086543>`_)
+Changed
+-------
+- The `status` function always returns the same response with an **unknown** status for each service.(`WEB-2303 <https://bugs.mojang.com/browse/WEB-2303>`_)
 
 
 `v1.3.0`_ (2021-09-16)
 ======================
+Added
+-----
+- Add `Microsoft Authentication scheme <https://wiki.vg/Microsoft_Authentication_Scheme>`_ support
 
-Features
---------
-
-- Added `Microsoft Authentication scheme <https://wiki.vg/Microsoft_Authentication_Scheme>`_ support
-
-
-Bugfixes
---------
-
-- The `connect` function returns a `MigratedAccount` exception when trying to connect with a migrated account (`#1 <https://github.com/Lucino772/pymojang/issues/1>`__)
+Changed
+-------
+- The `connect` function returns a `MigratedAccount` exception when trying to connect with a migrated account (:issue:`1`)
 
 
 `v1.2.1`_ (2021-06-25)
 ======================
-
-Features
---------
-
-- Added argument `flags` to the `ping` function
-
-
-Bugfixes
---------
-
-- The `ping` function now returns a `SLPresponse` even when the server is not ready instead of raising an `Exception`
-
-
-Deprecations and Removals
--------------------------
-
-- Removed argument `session_id` from `get_stats` function
+Changed
+-------
+- The `ping` function takes a new argument `flags`
+- The `get_stats` function does not take a `session_id` argument anymore
+- The `ping` function returns a `SLPresponse` even when the server is not ready instead of raising an `Exception`
 
 
 `v1.2.0`_ (2021-05-10)
 ======================
+Added
+-----
+- Add `user` function
+- Add **RCON Client** for executing command on a Minecraft Server
+- Add **Query Client** for querying server properties
+- Add **Server List Ping** (SLP) for querying the MOTD, player count, max players and server version via the usual port. It's an alternative to **Query**
 
-Features
---------
-
-- Added **RCON Client** for executing command on a Minecraft Server
-- Added **Query Client** for querying server properties
-- Added **Server List Ping** (SLP) for querying the MOTD, player count, max players and server version via the usual port. It's an alternative to **Query**
-
-
-Improved Documentation
-----------------------
-
-- The Documentation has been completely renewed
-
-
-Deprecations and Removals
--------------------------
-
-- `get_username` was removed, instead use `user` to retrieve username by UUID
+Removed
+-------
+- Remove `get_username` function
 
 
 `v1.1.0`_ (2021-03-24)
 ======================
-
-Features
---------
-
-- Added `api_status` function
-- Added `get_username` function
-- Added `get_uuid` function
-- Added `get_uuids` function
-- Added `name_history` function
-- Added `user` function
-- Added `connect` function
+Added
+-----
+- Add `api_status` function
+- Add `get_username` function
+- Add `get_uuid` function
+- Add `get_uuids` function
+- Add `name_history` function
+- Add `user` function
+- Add `connect` function
 
 
 .. _v1.4.0: https://github.com/Lucino772/pymojang/compare/v1.3.2...v1.4.0
