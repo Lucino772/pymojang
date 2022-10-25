@@ -8,7 +8,7 @@ import requests
 from ..exceptions import InvalidName
 from . import helpers, urls
 from .models import Cape, Skin
-from .structures import NameInfo, ServiceStatus, UnauthenticatedProfile
+from .structures import ServiceStatus, UnauthenticatedProfile
 
 
 def get_status() -> List[ServiceStatus]:
@@ -134,48 +134,6 @@ def get_username(uuid: str) -> Optional[str]:
     return data["name"]
 
 
-def get_names(uuid: str) -> List[NameInfo]:
-    """Get the user's name history
-
-    :param str uuid: The user's uuid
-
-    :Example:
-
-    >>> import mojang
-    >>> mojang.get_names('65a8dd127668422e99c2383a07656f7a'')
-    [
-        NameInfo(name='piewdipie', changed_to_at=None),
-        NameInfo(name='KOtMotros', changed_to_at=datetime.datetime(2020, 3, 4, 17, 45, 26))
-    ]
-    """
-
-    def _parse_item(item: dict):
-        changed_to_at = None
-        if "changedToAt" in item.keys():
-            changed_to_at = dt.datetime.utcfromtimestamp(
-                item["changedToAt"] / 1000
-            )
-
-        return NameInfo(name=item["name"], changed_to_at=changed_to_at)
-
-    response = requests.get(urls.api_name_history(uuid))
-    code, data = helpers.err_check(response, (400, ValueError))
-
-    if code == 204:
-        return []
-
-    # Names are sorted newer to older
-    _names = [_parse_item(item) for item in data]
-    _tosort = [
-        _names.pop(_names.index(item))
-        for item in _names.copy()
-        if item.changed_to_at is not None
-    ]
-    _tosort.sort(key=lambda i: i.changed_to_at, reverse=True)
-
-    return _tosort + _names
-
-
 def get_profile(uuid: str) -> Optional[UnauthenticatedProfile]:
     """Returns the full profile of a user
 
@@ -190,7 +148,6 @@ def get_profile(uuid: str) -> Optional[UnauthenticatedProfile]:
         uuid='069a79f444e94726a5befca90e38aaf5',
         is_legacy=False,
         is_demo=False,
-        names=(NameInfo(name='Notch', changed_to_at=None),),
         skin=Skin(source='...', variant='classic'),
         cape=None
     )
@@ -224,7 +181,6 @@ def get_profile(uuid: str) -> Optional[UnauthenticatedProfile]:
         uuid=uuid,
         is_legacy=data.get("legacy", False),
         is_demo=data.get("demo", False),
-        names=get_names(uuid),
         skin=skin,
         cape=cape,
     )

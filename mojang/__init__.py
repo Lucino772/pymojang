@@ -11,7 +11,6 @@ from . import _version
 from .api import (
     app,
     get_blocked_servers,
-    get_names,
     get_profile,
     get_status,
     get_username,

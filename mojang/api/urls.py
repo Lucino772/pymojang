@@ -6,9 +6,6 @@ api_get_uuid = (
 )
 api_get_uuids = "https://api.mojang.com/profiles/minecraft"
 api_get_username = lambda uuid: f"https://api.mojang.com/user/profile/{uuid}"
-api_name_history = (
-    lambda uuid: f"https://api.mojang.com/user/profiles/{uuid}/names"
-)
 api_user_profile = (
     lambda uuid: f"https://sessionserver.mojang.com/session/minecraft/profile/{uuid}"
 )

@@ -14,11 +14,6 @@ ServiceStatus = typing.NamedTuple(
     "ServiceStatus", [("name", str), ("status", str)]
 )
 
-NameInfo = typing.NamedTuple(
-    "NameInfo",
-    [("name", str), ("changed_to_at", typing.Optional[dt.datetime])],
-)
-
 ## Session
 NameChange = typing.NamedTuple(
     "NameChange", [("allowed", bool), ("created_at", dt.datetime)]
@@ -32,7 +27,6 @@ UnauthenticatedProfile = typing.NamedTuple(
         ("uuid", str),
         ("is_legacy", bool),
         ("is_demo", bool),
-        ("names", typing.List[NameInfo]),
         ("skin", typing.Optional[Skin]),
         ("cape", typing.Optional[Cape]),
     ],
@@ -46,7 +40,6 @@ AuthenticatedUserProfile = typing.NamedTuple(
         ("uuid", str),
         ("is_legacy", bool),
         ("is_demo", bool),
-        ("names", typing.List[NameInfo]),
         ("skins", typing.List[Skin]),
         ("capes", typing.List[Cape]),
     ],
