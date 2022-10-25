@@ -73,24 +73,6 @@ Username (:py:meth:`~mojang.api.base.get_username`)
     >>> mojang.get_username('069a79f444e94726a5befca90e38aaf5')
     'Notch'
 
-Name History (:py:meth:`~mojang.api.base.get_names`)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: pycon
-
-    >>> import mojang
-    >>> mojang.get_names('65a8dd127668422e99c2383a07656f7a')
-    [
-        NameInfo(
-            name='piewdipie',
-            changed_to_at=None
-        ),
-        NameInfo(
-            name='KOtMotros',
-            changed_to_at=datetime.datetime(2020, 3, 4, 17, 45, 26)
-        )
-    ]
-
 User Profile (:py:meth:`~mojang.api.base.get_profile`)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -103,7 +85,6 @@ User Profile (:py:meth:`~mojang.api.base.get_profile`)
         uuid='069a79f444e94726a5befca90e38aaf5',
         is_legacy=False,
         is_demo=False,
-        names=(NameInfo(name='Notch', changed_to_at=None),),
         skin=Skin(source='...', variant='classic'),
         cape=None
     )

@@ -10,7 +10,7 @@ from mojang.exceptions import MicrosoftInvalidGrant, MicrosoftUserNotOwner
 from .. import session
 from ..auth import microsoft, security, yggdrasil
 from ..models import Cape, Skin
-from ..structures import ChallengeInfo, NameInfo
+from ..structures import ChallengeInfo
 
 _DEFAULT_SCOPES = ["XboxLive.signin"]
 
@@ -27,7 +27,6 @@ class AuthenticatedUser(metaclass=ABCMeta):
     :var str uuid: The user uuid
     :var bool is_legacy: Wether the account has migrated
     :var bool is_demo: Wether the account is demo
-    :var NameInfoList names: The user name history
     :var Skin skin: The active user skin
     :var List[Skin] skins: All the skins of the user
     :var Cape cape: The active user cape
@@ -41,7 +40,6 @@ class AuthenticatedUser(metaclass=ABCMeta):
         self.__uuid = None
         self.__is_legacy = False
         self.__is_demo = False
-        self.__names: List[NameInfo] = []
         self.__skins = None
         self.__capes = None
 
@@ -76,10 +74,6 @@ class AuthenticatedUser(metaclass=ABCMeta):
     @property
     def is_demo(self) -> bool:
         return self.__is_demo
-
-    @property
-    def names(self) -> List[NameInfo]:
-        return self.__names
 
     @property
     def skins(self) -> Optional[List[Skin]]:
@@ -124,7 +118,6 @@ class AuthenticatedUser(metaclass=ABCMeta):
         profile = session.get_profile(self._access_token)
         self.__name = profile.name
         self.__uuid = profile.uuid
-        self.__names = profile.names
         self.__skins = profile.skins
         self.__capes = profile.capes
         self.__is_legacy = profile.is_legacy
