@@ -61,7 +61,7 @@ Example
 Query
 -----
 
-**Query** can be used for querying server properties. An alternative is the :ref:`minecraft:server list ping`.
+**Query** can be used for querying server properties. An alternative is the `Server List Ping`_.
 
 Server Config
 ~~~~~~~~~~~~~
@@ -94,7 +94,7 @@ Example
 Server List Ping
 ----------------
 
-**Server List Ping** (SLP) is an interface provided by Minecraft servers which supports querying the MOTD, player count, max players and server version via the usual port. **SLP is part of the Protocol**, so unlike :ref:`minecraft:query`, the interface is always enabled.
+**Server List Ping** (SLP) is an interface provided by Minecraft servers which supports querying the MOTD, player count, max players and server version via the usual port. **SLP is part of the Protocol**, so unlike `Query`_, the interface is always enabled.
 
 Example
 ~~~~~~~
