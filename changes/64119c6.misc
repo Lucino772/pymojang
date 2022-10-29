@@ -1,0 +1,1 @@
+Moved _structures.py to structures/. Moved _auth.py & _urls.py to utils/. Moved _session.py to ext/
