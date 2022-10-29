@@ -1,3 +1,18 @@
+pymojang v1.4.0 (2021-12-22)
+============================
+
+Features
+--------
+
+- Add support for multiple Skins & Capes (`1ea73f6 <https://github.com/Lucino772/pymojang/commit/1ea73f6>`_)
+
+
+Misc
+----
+
+- `326f486 <https://github.com/Lucino772/pymojang/commit/326f486>`_, `7ad3960 <https://github.com/Lucino772/pymojang/commit/7ad3960>`_, `8d2e749 <https://github.com/Lucino772/pymojang/commit/8d2e749>`_, `8f6fa73 <https://github.com/Lucino772/pymojang/commit/8f6fa73>`_, `c505de2 <https://github.com/Lucino772/pymojang/commit/c505de2>`_, `da6cd27 <https://github.com/Lucino772/pymojang/commit/da6cd27>`_, `6127716 <https://github.com/Lucino772/pymojang/commit/6127716>`_
+
+
 pymojang v1.3.2 (2021-11-13)
 ============================
 
