@@ -1,3 +1,24 @@
+pymojang v1.3.2 (2021-11-13)
+============================
+
+Bugfixes
+--------
+
+- Fixed issue with keywords in mojang.account.session.get_user_name_change (`03f6ae9 <https://github.com/Lucino772/pymojang/commit/03f6ae9>`_)
+
+
+Improved Documentation
+----------------------
+
+- Fixed docs due to refactoring (`9740ed7 <https://github.com/Lucino772/pymojang/commit/9740ed7>`_)
+
+
+Misc
+----
+
+- `5645a93 <https://github.com/Lucino772/pymojang/commit/5645a93>`_, `969c5c4 <https://github.com/Lucino772/pymojang/commit/969c5c4>`_, `9749e10 <https://github.com/Lucino772/pymojang/commit/9749e10>`_, `cc55c99 <https://github.com/Lucino772/pymojang/commit/cc55c99>`_, `d7a482b <https://github.com/Lucino772/pymojang/commit/d7a482b>`_
+
+
 pymojang v1.3.1 (2021-10-20)
 ============================
 
