@@ -1,0 +1,1 @@
+Added change_name, upload_skin & reset_skin methods to UserSession class
