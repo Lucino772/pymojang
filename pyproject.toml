@@ -17,3 +17,10 @@ exclude = '''
   | docs
 )/
 '''
+
+[tool.towncrier]
+name = "PyMojang"
+directory = "changes"
+package = "mojang"
+filename = "CHANGELOG.rst"
+issue_format = "`#{issue} <https://github.com/Lucino772/pymojang/issues/{issue}>`_"
