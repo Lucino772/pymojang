@@ -1,3 +1,46 @@
+pymojang v2.0.0 (2022-10-27)
+============================
+
+Features
+--------
+
+- Added cape visibility toggle API (`#14 <https://github.com/Lucino772/pymojang/issues/14>`_)
+- Added blocked server API (`#26 <https://github.com/Lucino772/pymojang/issues/26>`_)
+- Added get_username function (`#27 <https://github.com/Lucino772/pymojang/issues/27>`_)
+- Added check_product_voucher function (`#29 <https://github.com/Lucino772/pymojang/issues/29>`_)
+- Added check_username function (`#30 <https://github.com/Lucino772/pymojang/issues/30>`_)
+- Added redeem_product_voucher method (`#32 <https://github.com/Lucino772/pymojang/issues/32>`_)
+- Added get_version & get_versions methods (`#36 <https://github.com/Lucino772/pymojang/issues/36>`_)
+
+
+Bugfixes
+--------
+
+- Fixed mypy errors (`#7 <https://github.com/Lucino772/pymojang/issues/7>`_)
+- Updated reset skin endpoint (`#18 <https://github.com/Lucino772/pymojang/issues/18>`_)
+
+
+Improved Documentation
+----------------------
+
+- Migrate documentation from mkdocs to sphinx (`#5 <https://github.com/Lucino772/pymojang/issues/5>`_)
+- Added changelog section in documentation (`#13 <https://github.com/Lucino772/pymojang/issues/13>`_)
+- Updated references section in docs (`#39 <https://github.com/Lucino772/pymojang/issues/39>`_)
+- Added documentation for get_version & get_versions (`#42 <https://github.com/Lucino772/pymojang/issues/42>`_)
+
+
+Deprecations and Removals
+-------------------------
+
+- Removed username history API (`#46 <https://github.com/Lucino772/pymojang/issues/46>`_)
+
+
+Misc
+----
+
+- `#6 <https://github.com/Lucino772/pymojang/issues/6>`_, `#8 <https://github.com/Lucino772/pymojang/issues/8>`_, `#9 <https://github.com/Lucino772/pymojang/issues/9>`_, `#10 <https://github.com/Lucino772/pymojang/issues/10>`_, `#11 <https://github.com/Lucino772/pymojang/issues/11>`_, `#12 <https://github.com/Lucino772/pymojang/issues/12>`_, `#15 <https://github.com/Lucino772/pymojang/issues/15>`_, `#20 <https://github.com/Lucino772/pymojang/issues/20>`_, `#21 <https://github.com/Lucino772/pymojang/issues/21>`_, `#22 <https://github.com/Lucino772/pymojang/issues/22>`_, `#23 <https://github.com/Lucino772/pymojang/issues/23>`_, `#24 <https://github.com/Lucino772/pymojang/issues/24>`_, `#28 <https://github.com/Lucino772/pymojang/issues/28>`_, `#33 <https://github.com/Lucino772/pymojang/issues/33>`_, `#34 <https://github.com/Lucino772/pymojang/issues/34>`_, `#35 <https://github.com/Lucino772/pymojang/issues/35>`_, `#37 <https://github.com/Lucino772/pymojang/issues/37>`_
+
+
 pymojang v1.4.0 (2021-12-22)
 ============================
 

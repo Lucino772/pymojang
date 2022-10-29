@@ -1,1 +1,0 @@
-Added cape visibility toggle API
