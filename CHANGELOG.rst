@@ -1,3 +1,12 @@
+pymojang v1.2.1 (2021-06-25)
+============================
+
+Misc
+----
+
+- `8081cf8 <https://github.com/Lucino772/pymojang/commit/8081cf8>`_, `a2dd3f0 <https://github.com/Lucino772/pymojang/commit/a2dd3f0>`_, `c8e91b3 <https://github.com/Lucino772/pymojang/commit/c8e91b3>`_, `f978ad7 <https://github.com/Lucino772/pymojang/commit/f978ad7>`_
+
+
 pymojang v1.2.0 (2021-05-10)
 ============================
 
