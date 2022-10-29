@@ -1,1 +1,0 @@
-Added authententication with Yggdrasil
