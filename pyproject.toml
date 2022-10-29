@@ -19,7 +19,7 @@ exclude = '''
 '''
 
 [tool.towncrier]
-name = "pymojang"
+name = "PyMojang"
 directory = "changes"
 package = "mojang"
 filename = "CHANGELOG.rst"

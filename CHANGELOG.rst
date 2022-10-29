@@ -1,4 +1,4 @@
-pymojang v2.0.0 (2022-10-27)
+PyMojang v2.0.0 (2022-10-27)
 ============================
 
 Features
@@ -41,7 +41,7 @@ Misc
 - `#6 <https://github.com/Lucino772/pymojang/issues/6>`_, `#8 <https://github.com/Lucino772/pymojang/issues/8>`_, `#9 <https://github.com/Lucino772/pymojang/issues/9>`_, `#10 <https://github.com/Lucino772/pymojang/issues/10>`_, `#11 <https://github.com/Lucino772/pymojang/issues/11>`_, `#12 <https://github.com/Lucino772/pymojang/issues/12>`_, `#15 <https://github.com/Lucino772/pymojang/issues/15>`_, `#20 <https://github.com/Lucino772/pymojang/issues/20>`_, `#21 <https://github.com/Lucino772/pymojang/issues/21>`_, `#22 <https://github.com/Lucino772/pymojang/issues/22>`_, `#23 <https://github.com/Lucino772/pymojang/issues/23>`_, `#24 <https://github.com/Lucino772/pymojang/issues/24>`_, `#28 <https://github.com/Lucino772/pymojang/issues/28>`_, `#33 <https://github.com/Lucino772/pymojang/issues/33>`_, `#34 <https://github.com/Lucino772/pymojang/issues/34>`_, `#35 <https://github.com/Lucino772/pymojang/issues/35>`_, `#37 <https://github.com/Lucino772/pymojang/issues/37>`_
 
 
-pymojang v1.4.0 (2021-12-22)
+PyMojang v1.4.0 (2021-12-22)
 ============================
 
 Features
@@ -56,7 +56,7 @@ Misc
 - `326f486 <https://github.com/Lucino772/pymojang/commit/326f486>`_, `7ad3960 <https://github.com/Lucino772/pymojang/commit/7ad3960>`_, `8d2e749 <https://github.com/Lucino772/pymojang/commit/8d2e749>`_, `8f6fa73 <https://github.com/Lucino772/pymojang/commit/8f6fa73>`_, `c505de2 <https://github.com/Lucino772/pymojang/commit/c505de2>`_, `da6cd27 <https://github.com/Lucino772/pymojang/commit/da6cd27>`_, `6127716 <https://github.com/Lucino772/pymojang/commit/6127716>`_
 
 
-pymojang v1.3.2 (2021-11-13)
+PyMojang v1.3.2 (2021-11-13)
 ============================
 
 Bugfixes
@@ -77,7 +77,7 @@ Misc
 - `5645a93 <https://github.com/Lucino772/pymojang/commit/5645a93>`_, `969c5c4 <https://github.com/Lucino772/pymojang/commit/969c5c4>`_, `9749e10 <https://github.com/Lucino772/pymojang/commit/9749e10>`_, `cc55c99 <https://github.com/Lucino772/pymojang/commit/cc55c99>`_, `d7a482b <https://github.com/Lucino772/pymojang/commit/d7a482b>`_
 
 
-pymojang v1.3.1 (2021-10-20)
+PyMojang v1.3.1 (2021-10-20)
 ============================
 
 Improved Documentation
@@ -92,7 +92,7 @@ Deprecations and Removals
 - Deprecation of mojang.account.base.status method (`b8cafb1 <https://github.com/Lucino772/pymojang/commit/b8cafb1>`_)
 
 
-pymojang v1.3.0 (2021-09-16)
+PyMojang v1.3.0 (2021-09-16)
 ============================
 
 Features
@@ -114,7 +114,7 @@ Misc
 - `23aa9f3 <https://github.com/Lucino772/pymojang/commit/23aa9f3>`_, `c8784fa <https://github.com/Lucino772/pymojang/commit/c8784fa>`_
 
 
-pymojang v1.2.1 (2021-06-25)
+PyMojang v1.2.1 (2021-06-25)
 ============================
 
 Misc
@@ -123,7 +123,7 @@ Misc
 - `8081cf8 <https://github.com/Lucino772/pymojang/commit/8081cf8>`_, `a2dd3f0 <https://github.com/Lucino772/pymojang/commit/a2dd3f0>`_, `c8e91b3 <https://github.com/Lucino772/pymojang/commit/c8e91b3>`_, `f978ad7 <https://github.com/Lucino772/pymojang/commit/f978ad7>`_
 
 
-pymojang v1.2.0 (2021-05-10)
+PyMojang v1.2.0 (2021-05-10)
 ============================
 
 Features
@@ -162,7 +162,7 @@ Misc
 - `0d7548f <https://github.com/Lucino772/pymojang/commit/0d7548f>`_, `17f7634 <https://github.com/Lucino772/pymojang/commit/17f7634>`_, `474f807 <https://github.com/Lucino772/pymojang/commit/474f807>`_, `54ac4e3 <https://github.com/Lucino772/pymojang/commit/54ac4e3>`_, `5d618fb <https://github.com/Lucino772/pymojang/commit/5d618fb>`_, `64119c6 <https://github.com/Lucino772/pymojang/commit/64119c6>`_, `69f789f <https://github.com/Lucino772/pymojang/commit/69f789f>`_, `6e61e1c <https://github.com/Lucino772/pymojang/commit/6e61e1c>`_, `74cef82 <https://github.com/Lucino772/pymojang/commit/74cef82>`_, `7e42c31 <https://github.com/Lucino772/pymojang/commit/7e42c31>`_, `883434d <https://github.com/Lucino772/pymojang/commit/883434d>`_, `8d97049 <https://github.com/Lucino772/pymojang/commit/8d97049>`_, `a283f76 <https://github.com/Lucino772/pymojang/commit/a283f76>`_, `a32eeca <https://github.com/Lucino772/pymojang/commit/a32eeca>`_, `a66fcd6 <https://github.com/Lucino772/pymojang/commit/a66fcd6>`_, `b19bada <https://github.com/Lucino772/pymojang/commit/b19bada>`_, `be10006 <https://github.com/Lucino772/pymojang/commit/be10006>`_, `c31d13f <https://github.com/Lucino772/pymojang/commit/c31d13f>`_, `e16effb <https://github.com/Lucino772/pymojang/commit/e16effb>`_, `e27c570 <https://github.com/Lucino772/pymojang/commit/e27c570>`_, `ef937a2 <https://github.com/Lucino772/pymojang/commit/ef937a2>`_, `f501c02 <https://github.com/Lucino772/pymojang/commit/f501c02>`_, `f901059 <https://github.com/Lucino772/pymojang/commit/f901059>`_, `3528161 <https://github.com/Lucino772/pymojang/commit/3528161>`_
 
 
-pymojang v1.1.0 (2021-03-24)
+PyMojang v1.1.0 (2021-03-24)
 ============================
 
 Features
