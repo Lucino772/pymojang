@@ -1,3 +1,42 @@
+pymojang v1.2.0 (2021-05-10)
+============================
+
+Features
+--------
+
+- Added Server List Ping (SLP) support (`04024b0 <https://github.com/Lucino772/pymojang/commit/04024b0>`_)
+- Added API wrapper for minecraft versions (`32043a1 <https://github.com/Lucino772/pymojang/commit/32043a1>`_)
+- Added SLP support for minecraft version 1.6 (`a235196 <https://github.com/Lucino772/pymojang/commit/a235196>`_)
+- Added RCON & Query protocol support (`c3b5895 <https://github.com/Lucino772/pymojang/commit/c3b5895>`_)
+
+
+Improved Documentation
+----------------------
+
+- Added documentation for mojang.api.base (`1e6020f <https://github.com/Lucino772/pymojang/commit/1e6020f>`_)
+- Added documentation for mojang.main (`26a39bd <https://github.com/Lucino772/pymojang/commit/26a39bd>`_)
+- Added documentation for mojang.api.session (`2c0a31c <https://github.com/Lucino772/pymojang/commit/2c0a31c>`_)
+- Added documentation for mojang.profile.UserProfile class (`5e9c091 <https://github.com/Lucino772/pymojang/commit/5e9c091>`_)
+- Added documentation for mojang.api.auth.yggdrasil (`609ce40 <https://github.com/Lucino772/pymojang/commit/609ce40>`_)
+- Improved docstrings for mojang/account/* (`67579b9 <https://github.com/Lucino772/pymojang/commit/67579b9>`_)
+- Added cross-ref in documentation (`a1fc805 <https://github.com/Lucino772/pymojang/commit/a1fc805>`_)
+- Added documentation for mojang.session.UserSession class (`d0b590a <https://github.com/Lucino772/pymojang/commit/d0b590a>`_)
+- Added documentation for mojang.api.auth.security (`f0e5116 <https://github.com/Lucino772/pymojang/commit/f0e5116>`_)
+- Added documentation for mojang.error.exceptions (`6241513 <https://github.com/Lucino772/pymojang/commit/6241513>`_)
+
+
+Deprecations and Removals
+-------------------------
+
+- Removed get_profile method (`74cef82 <https://github.com/Lucino772/pymojang/commit/74cef82>`_)
+
+
+Misc
+----
+
+- `0d7548f <https://github.com/Lucino772/pymojang/commit/0d7548f>`_, `17f7634 <https://github.com/Lucino772/pymojang/commit/17f7634>`_, `474f807 <https://github.com/Lucino772/pymojang/commit/474f807>`_, `54ac4e3 <https://github.com/Lucino772/pymojang/commit/54ac4e3>`_, `5d618fb <https://github.com/Lucino772/pymojang/commit/5d618fb>`_, `64119c6 <https://github.com/Lucino772/pymojang/commit/64119c6>`_, `69f789f <https://github.com/Lucino772/pymojang/commit/69f789f>`_, `6e61e1c <https://github.com/Lucino772/pymojang/commit/6e61e1c>`_, `74cef82 <https://github.com/Lucino772/pymojang/commit/74cef82>`_, `7e42c31 <https://github.com/Lucino772/pymojang/commit/7e42c31>`_, `883434d <https://github.com/Lucino772/pymojang/commit/883434d>`_, `8d97049 <https://github.com/Lucino772/pymojang/commit/8d97049>`_, `a283f76 <https://github.com/Lucino772/pymojang/commit/a283f76>`_, `a32eeca <https://github.com/Lucino772/pymojang/commit/a32eeca>`_, `a66fcd6 <https://github.com/Lucino772/pymojang/commit/a66fcd6>`_, `b19bada <https://github.com/Lucino772/pymojang/commit/b19bada>`_, `be10006 <https://github.com/Lucino772/pymojang/commit/be10006>`_, `c31d13f <https://github.com/Lucino772/pymojang/commit/c31d13f>`_, `e16effb <https://github.com/Lucino772/pymojang/commit/e16effb>`_, `e27c570 <https://github.com/Lucino772/pymojang/commit/e27c570>`_, `ef937a2 <https://github.com/Lucino772/pymojang/commit/ef937a2>`_, `f501c02 <https://github.com/Lucino772/pymojang/commit/f501c02>`_, `f901059 <https://github.com/Lucino772/pymojang/commit/f901059>`_, `3528161 <https://github.com/Lucino772/pymojang/commit/3528161>`_
+
+
 pymojang v1.1.0 (2021-03-24)
 ============================
 

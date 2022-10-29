@@ -1,1 +1,0 @@
-Added SLP support for minecraft version 1.6

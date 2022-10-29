@@ -1,1 +1,0 @@
-Added RCON & Query protocol support

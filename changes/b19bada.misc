@@ -1,1 +1,0 @@
-All query packets are now build using the BasePacket class
