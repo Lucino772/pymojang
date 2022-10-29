@@ -1,3 +1,18 @@
+pymojang v1.3.1 (2021-10-20)
+============================
+
+Improved Documentation
+----------------------
+
+- Added Microsoft authentication example with Flask (`1419595 <https://github.com/Lucino772/pymojang/commit/1419595>`_)
+
+
+Deprecations and Removals
+-------------------------
+
+- Deprecation of mojang.account.base.status method (`b8cafb1 <https://github.com/Lucino772/pymojang/commit/b8cafb1>`_)
+
+
 pymojang v1.3.0 (2021-09-16)
 ============================
 
