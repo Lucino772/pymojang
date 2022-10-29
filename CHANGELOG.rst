@@ -1,3 +1,25 @@
+pymojang v1.3.0 (2021-09-16)
+============================
+
+Features
+--------
+
+- Added support for Microsoft Authentication API (`381bb4d <https://github.com/Lucino772/pymojang/commit/381bb4d>`_)
+- Added microsoft_app function (`c69ef52 <https://github.com/Lucino772/pymojang/commit/c69ef52>`_)
+
+
+Improved Documentation
+----------------------
+
+- Updated authentication documentation (`b909ba7 <https://github.com/Lucino772/pymojang/commit/b909ba7>`_)
+
+
+Misc
+----
+
+- `23aa9f3 <https://github.com/Lucino772/pymojang/commit/23aa9f3>`_, `c8784fa <https://github.com/Lucino772/pymojang/commit/c8784fa>`_
+
+
 pymojang v1.2.1 (2021-06-25)
 ============================
 

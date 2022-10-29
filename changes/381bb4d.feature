@@ -1,1 +1,0 @@
-Added support for Microsoft Authentication API
