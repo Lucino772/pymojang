@@ -14,7 +14,8 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath(".."))
-import mojang
+
+import importlib_metadata
 
 # -- Project information -----------------------------------------------------
 
@@ -23,8 +24,7 @@ copyright = "2022, Lucino772"
 author = "Lucino772"
 
 # The full version, including alpha/beta/rc tags
-release = mojang.__version__
-
+release = importlib_metadata.version("pymojang")
 
 # -- General configuration ---------------------------------------------------
 
