@@ -12,8 +12,18 @@ def tests(session: nox.Session):
 def docs(session: nox.Session):
     session.install("-r", "requirements/requirements-docs.txt")
     session.install(".")
-    with session.chdir("docs/"):
-        session.run("make", "html")
+
+    if "--serve" in session.posargs:
+        session.run(
+            "sphinx-autobuild",
+            "-b",
+            "html",
+            "docs/",
+            "docs/_build/html/",
+            "--open-browser",
+        )
+    else:
+        session.run("sphinx-build", "-b", "html", "docs/", "docs/_build/html/")
 
 
 @nox.session
