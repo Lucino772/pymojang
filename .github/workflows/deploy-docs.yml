@@ -25,7 +25,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: actions/configure-pages@v2
-    - uses: wntrblm/nox
+    - uses: wntrblm/nox@2022.8.7
       with:
         python-versions: "3.8"
     - name: Build Docs
@@ -37,7 +37,7 @@ jobs:
         path: './docs/_build/html'
 
   deploy:
-    need: build
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
