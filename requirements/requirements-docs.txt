@@ -4,4 +4,5 @@ sphinxext-opengraph==0.6.3
 sphinx-copybutton==0.5.0
 sphinx_issues==3.0.1
 sphinx-autobuild==2021.3.14
+importlib-metadata==4.11.3
 furo==2022.4.7
