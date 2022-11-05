@@ -17,13 +17,15 @@ def docs(session: nox.Session):
         session.run(
             "sphinx-autobuild",
             "-b",
-            "html",
+            "dirhtml",
             "docs/",
             "docs/_build/html/",
             "--open-browser",
         )
     else:
-        session.run("sphinx-build", "-b", "html", "docs/", "docs/_build/html/")
+        session.run(
+            "sphinx-build", "-b", "dirhtml", "docs/", "docs/_build/html/"
+        )
 
 
 @nox.session
