@@ -1,5 +1,4 @@
 [![PyPI](https://img.shields.io/pypi/v/pymojang)](https://pypi.org/project/pymojang/)
-[![Read the Docs](https://img.shields.io/readthedocs/pymojang)](https://pymojang.readthedocs.io/en/latest/)
 [![CI](https://github.com/Lucino772/pymojang/actions/workflows/ci.yml/badge.svg)](https://github.com/Lucino772/pymojang/actions/workflows/ci.yml)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Lucino772/pymojang/main.svg)](https://results.pre-commit.ci/latest/github/Lucino772/pymojang/main)
 [![codecov](https://codecov.io/gh/Lucino772/pymojang/branch/main/graph/badge.svg?token=5Q6PRUXL4T)](https://codecov.io/gh/Lucino772/pymojang)
@@ -18,7 +17,7 @@ To install the library use the following command:
 pip install pymojang
 ```
 
-Checkout the [documentation](https://pymojang.readthedocs.io/en/stable/)
+Checkout the [documentation](https://lucino772.github.io/pymojang/)
 
 ## Licence
 This project uses a
