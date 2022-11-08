@@ -35,6 +35,30 @@ Mojang have multiple APIs, you can check their status by calling the method :py:
         ServiceStatus(name='mojang.com', status='green')
     )
 
+
+Blocked Servers
+---------------
+
+You can fetch a list of all the blocked servers by calling the method :py:meth:`~mojang.api.base.get_blocked_servers`.
+For more details checkout `wiki.vg <https://wiki.vg/Mojang_API#Blocked_Servers>`_.
+
+.. code-block:: pycon
+
+    >>> import mojang
+    >>> mojang.get_blocked_servers()
+    [
+        'dc2c735b3e6aba51ece294d7de21b947379aac4d',
+        'dc2c735b3e6aba51ece294d7de21b947379aac4d',
+        '780874bcade721dfccdf2ccd51cec3eb3a35c958',
+        'efed28c35a3bf3433c582397f238f824bf4494b3',
+        'ac7e715494da3b381bd37e87419c44e7d506f01b',
+        'e41ddcf7d4b37611b676701060eae90fa65f11d1',
+        'ab8724e0fac2ec56bda2f774dc5464bf0520da27',
+        'c8f090859ea7c0afdab8b22a842532b979235951',
+        ...
+    ]
+
+
 User Information
 ----------------
 
@@ -88,4 +112,3 @@ User Profile (:py:meth:`~mojang.api.base.get_profile`)
         skin=Skin(source='...', variant='classic'),
         cape=None
     )
-
