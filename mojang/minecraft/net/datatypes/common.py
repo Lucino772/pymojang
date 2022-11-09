@@ -30,6 +30,42 @@ class _FloatingNumber:
         return struct.unpack(self._formats[self.length], _bytes)[0]
 
 
+class _VarNumber:
+    # FIXME: This class does not support negative numbers
+
+    def __init__(self, length: int) -> None:
+        self.length = length
+
+    def write(self, buffer: io.BytesIO, value: int):
+        written = 0
+        while True:
+            byte = value & 0x7F
+            value >>= 7
+
+            if value > 0:
+                byte |= 0x80
+
+            written += Byte.write(buffer, byte, False)
+
+            if value == 0:
+                break
+
+        return written
+
+    def read(self, buffer: io.BytesIO):
+        val = 0
+
+        for i in range(self.length):
+            byte = Byte.read(buffer, False)
+
+            val |= (byte & 0x7F) << (7 * i)
+
+            if byte & 0x80 == 0:
+                break
+
+        return val
+
+
 class Bool:
     @staticmethod
     def write(buffer: io.BytesIO, value: bool):
@@ -49,3 +85,6 @@ Long = _Number(8)
 
 Float = _FloatingNumber(4)
 Double = _FloatingNumber(8)
+
+VarInt = _VarNumber(5)
+VarLong = _VarNumber(10)
