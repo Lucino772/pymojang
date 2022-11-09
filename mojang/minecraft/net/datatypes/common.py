@@ -2,6 +2,7 @@ import io
 import json
 import re
 import struct
+import uuid
 from typing import Union
 
 
@@ -128,6 +129,17 @@ class Chat:
     def read(cls, buffer: io.BytesIO) -> Union[dict, list]:
         value_str = _String(262144).read(buffer)
         return json.loads(value_str)
+
+
+class UUID:
+    @classmethod
+    def write(cls, buffer: io.BytesIO, value: uuid.UUID):
+        return buffer.write(value.bytes)
+
+    @classmethod
+    def read(cls, buffer: io.BytesIO):
+        value = buffer.read(16)
+        return uuid.UUID(bytes=value)
 
 
 Byte = _Number(1)
