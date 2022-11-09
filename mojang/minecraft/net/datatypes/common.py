@@ -78,6 +78,23 @@ class Bool:
         return bool.from_bytes(_bytes, "big")
 
 
+class _String:
+    def __init__(self, length: int) -> None:
+        self.length = length
+
+    def write(self, buffer: io.BytesIO, value: str):
+        if len(value) > self.length:
+            raise RuntimeError("Max len for String is {}".format(self.length))
+
+        written = VarInt.write(buffer, len(value))
+        written += buffer.write(value.encode("utf-8"))
+        return written
+
+    def read(self, buffer: io.BytesIO):
+        _len = VarInt.read(buffer)
+        return buffer.read(_len).decode("utf-8")
+
+
 Byte = _Number(1)
 Short = _Number(2)
 Int = _Number(4)
@@ -88,3 +105,5 @@ Double = _FloatingNumber(8)
 
 VarInt = _VarNumber(5)
 VarLong = _VarNumber(10)
+
+String = _String(32767)
