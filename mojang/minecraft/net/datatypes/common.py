@@ -1,5 +1,8 @@
 import io
+import json
+import re
 import struct
+from typing import Union
 
 
 class _Number:
@@ -93,6 +96,38 @@ class _String:
     def read(self, buffer: io.BytesIO):
         _len = VarInt.read(buffer)
         return buffer.read(_len).decode("utf-8")
+
+
+class Identifier:
+    @classmethod
+    def check_value(cls, value: str):
+        results = re.fullmatch("(([a-z0-9.-_]*):)?([a-z0-9.-_/]*)", value)
+        if results is None:
+            raise RuntimeError("Identifier is not valid: {}".format(value))
+
+        return results.groups()[1:]
+
+    @classmethod
+    def write(cls, buffer: io.BytesIO, value: str):
+        cls.check_value(value)
+        return _String(32767).write(buffer, value)
+
+    @classmethod
+    def read(cls, buffer: io.BytesIO):
+        value = _String(32767).read(buffer)
+        return cls.check_value(value)
+
+
+class Chat:
+    @classmethod
+    def write(cls, buffer: io.BytesIO, value: Union[dict, list]):
+        value_str = json.dumps(value)
+        return _String(262144).write(buffer, value_str)
+
+    @classmethod
+    def read(cls, buffer: io.BytesIO) -> Union[dict, list]:
+        value_str = _String(262144).read(buffer)
+        return json.loads(value_str)
 
 
 Byte = _Number(1)
