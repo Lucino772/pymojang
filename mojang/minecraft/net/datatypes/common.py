@@ -1,3 +1,4 @@
+import ctypes
 import json
 import re
 import struct
@@ -34,12 +35,14 @@ class _FloatingNumber:
 
 
 class _VarNumber:
-    # FIXME: This class does not support negative numbers
-
-    def __init__(self, length: int) -> None:
+    def __init__(self, length: int, bits) -> None:
         self.length = length
 
+        self.ctype_u = ctypes.c_uint32 if bits == 32 else ctypes.c_uint64
+        self.ctype_i = ctypes.c_int32 if bits == 32 else ctypes.c_int64
+
     def write(self, buffer: BinaryIO, value: int):
+        value = self.ctype_u(value).value
         written = 0
         while True:
             byte = value & 0x7F
@@ -66,7 +69,7 @@ class _VarNumber:
             if byte & 0x80 == 0:
                 break
 
-        return val
+        return self.ctype_i(val).value
 
 
 class Bool:
@@ -149,7 +152,7 @@ Long = _Number(8)
 Float = _FloatingNumber(4)
 Double = _FloatingNumber(8)
 
-VarInt = _VarNumber(5)
-VarLong = _VarNumber(10)
+VarInt = _VarNumber(5, 32)
+VarLong = _VarNumber(10, 64)
 
 String = _String(32767)
