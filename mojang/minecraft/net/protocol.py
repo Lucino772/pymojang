@@ -2,7 +2,7 @@ import io
 import zlib
 from typing import BinaryIO
 
-from .datatypes.common import VarInt
+from .datatypes import varint_t
 from .packets import _Packet
 
 
@@ -10,7 +10,7 @@ from .packets import _Packet
 def _make_packet_data(packet: _Packet):
     _bytes = packet.serialize()
     with io.BytesIO() as buffer:
-        VarInt.write(buffer, packet.packet_id)
+        varint_t.write(buffer, packet.packet_id)
         buffer.write(_bytes)
 
         packet_data = buffer.getvalue()
@@ -27,14 +27,14 @@ def _compressed_packet_data(data: bytes, threshold: int = 0):
         compressed_data = data
 
     with io.BytesIO() as buffer:
-        VarInt.write(buffer, data_length)
+        varint_t.write(buffer, data_length)
         buffer.write(compressed_data)
 
         return buffer.getvalue()
 
 
 def _write_len_prefixed(buffer: BinaryIO, data: bytes):
-    written = VarInt.write(buffer, len(data))
+    written = varint_t.write(buffer, len(data))
     written += buffer.write(data)
     return written
 
@@ -55,7 +55,7 @@ def write(
 # read
 def _make_packet(data: bytes):
     with io.BytesIO(data) as buffer:
-        packet_id = VarInt.read(buffer)
+        packet_id = varint_t.read(buffer)
         packet_data = buffer.read()
 
     return packet_id, packet_data
@@ -63,7 +63,7 @@ def _make_packet(data: bytes):
 
 def _uncompressed_packet_data(data: bytes):
     with io.BytesIO(data) as buffer:
-        data_length = VarInt.read(buffer)
+        data_length = varint_t.read(buffer)
         compressed_data = buffer.read()
 
     if data_length == 0:
@@ -73,7 +73,7 @@ def _uncompressed_packet_data(data: bytes):
 
 
 def _read_len_prefixed(buffer: BinaryIO):
-    length = VarInt.read(buffer)
+    length = varint_t.read(buffer)
     return buffer.read(length)
 
 
