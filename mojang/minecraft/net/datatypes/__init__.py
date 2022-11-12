@@ -15,6 +15,8 @@ from .basic import (
 from .bytearray import bytearray_t, chat_t, identifier_t, string_t, uuid_t
 from .functions import enum_t, optional_t
 from .nbt import (
+    Tag,
+    nbt_tags_t,
     tag_byte_t,
     tag_bytearray_t,
     tag_double_t,
@@ -58,6 +60,8 @@ __all__ = [
     "tag_long_t",
     "tag_short_t",
     "tag_string_t",
+    "nbt_tags_t",
+    "Tag",
     "varint_t",
     "varlong_t",
 ]
