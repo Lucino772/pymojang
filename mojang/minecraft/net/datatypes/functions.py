@@ -1,28 +1,35 @@
-from typing import Any, BinaryIO, Generic, Iterable, TypeVar
+from typing import BinaryIO, Iterable, Optional, TypeVar
 
 from .basic import _GenericDataType
 
 T = TypeVar("T")
 
 
-class optional_t(Generic[T]):
-    def __init__(self, data_t: _GenericDataType[T]) -> None:
+class optional_t(_GenericDataType[Optional[T]]):
+    def __init__(
+        self,
+        data_t: _GenericDataType[T],
+        present: bool,
+        default: Optional[T] = None,
+    ) -> None:
         self.__data_t = data_t
+        self.__present = present
+        self.__default = default
 
-    def write(self, buffer: BinaryIO, value: T, present: bool):
-        if present:
+    def write(self, buffer: BinaryIO, value: Optional[T]):
+        if self.__present and value is not None:
             return self.__data_t.write(buffer, value)
 
         return 0
 
-    def read(self, buffer: BinaryIO, present: bool, default: Any = None):
-        if present:
+    def read(self, buffer: BinaryIO) -> Optional[T]:
+        if self.__present:
             return self.__data_t.read(buffer)
 
-        return default
+        return self.__default
 
 
-class enum_t(Generic[T]):
+class enum_t(_GenericDataType[T]):
     def __init__(
         self, data_t: _GenericDataType[T], values: Iterable[T]
     ) -> None:

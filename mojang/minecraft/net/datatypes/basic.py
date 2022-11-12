@@ -5,7 +5,7 @@ DataType_T = TypeVar("DataType_T")
 
 
 class _GenericDataType(Generic[DataType_T]):
-    def write(self, buffer: BinaryIO, value: DataType_T):
+    def write(self, buffer: BinaryIO, value: DataType_T) -> int:
         raise NotImplementedError
 
     def read(self, buffer: BinaryIO) -> DataType_T:
