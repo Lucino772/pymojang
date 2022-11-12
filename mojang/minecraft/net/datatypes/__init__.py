@@ -1,4 +1,3 @@
-from .array import uuid_t
 from .basic import (
     bool_t,
     float32_t,
