@@ -1,5 +1,6 @@
 from .basic import (
     bool_t,
+    bytearray_t,
     float32_t,
     float64_t,
     int8_t,
