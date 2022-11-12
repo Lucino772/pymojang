@@ -102,7 +102,7 @@ class Tag(NamedTuple, Generic[TagDataType_T]):
 Tag_End = Tag(0, None, None)
 
 
-class tags_t:
+class nbt_tags_t:
     tags: List[TagType] = [
         tag_byte_t,
         tag_short_t,
