@@ -1,10 +1,10 @@
 import ctypes
 from typing import BinaryIO
 
-from .basic import uint8_t
+from .basic import _GenericDataType, uint8_t
 
 
-class _VarNumberDataType:
+class _VarNumberDataType(_GenericDataType[int]):
     def __init__(self, length: int, intXX_t, uintXX_t) -> None:
         self.__length = length
         self.__ctype_u = intXX_t

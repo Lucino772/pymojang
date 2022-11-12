@@ -1,12 +1,12 @@
 from typing import Any, BinaryIO, Generic, Iterable, TypeVar
 
-from ._protocols import _DataTypeProtocol
+from .basic import _GenericDataType
 
 T = TypeVar("T")
 
 
 class optional_t(Generic[T]):
-    def __init__(self, data_t: _DataTypeProtocol[T]) -> None:
+    def __init__(self, data_t: _GenericDataType[T]) -> None:
         self.__data_t = data_t
 
     def write(self, buffer: BinaryIO, value: T, present: bool):
@@ -24,7 +24,7 @@ class optional_t(Generic[T]):
 
 class enum_t(Generic[T]):
     def __init__(
-        self, data_t: _DataTypeProtocol[T], values: Iterable[T]
+        self, data_t: _GenericDataType[T], values: Iterable[T]
     ) -> None:
         self.__data_t = data_t
         self.__values = values

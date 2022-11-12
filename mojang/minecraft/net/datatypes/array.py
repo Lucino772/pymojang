@@ -1,17 +1,17 @@
-from typing import BinaryIO, Generic, Sequence, TypeVar
+from typing import BinaryIO, Sequence, TypeVar
 
-from ._protocols import _DataTypeProtocol
+from .basic import _GenericDataType
 
 T = TypeVar("T")
 
 
-class _AdvancedArray(Generic[T]):
+class _AdvancedArray(_GenericDataType[Sequence[T]]):
     def __init__(
         self,
-        item_t: _DataTypeProtocol[T],
+        item_t: _GenericDataType[T],
         max_len: int = -1,
         length: int = -1,
-        len_prefix_t: _DataTypeProtocol[int] = None,
+        len_prefix_t: _GenericDataType[int] = None,
     ) -> None:
         self.__item_t = item_t
         self.__max_len = max_len
@@ -58,7 +58,7 @@ class _AdvancedArray(Generic[T]):
         return values
 
 
-def array_t(data_t: _DataTypeProtocol[T], length: int):
+def array_t(data_t: _GenericDataType[T], length: int):
     return _AdvancedArray[T](
         item_t=data_t, max_len=-1, length=length, len_prefix_t=None
     )

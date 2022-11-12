@@ -1,22 +1,22 @@
 import json
 import re
-from typing import BinaryIO, Callable, Generic, TypeVar, Union
+from typing import BinaryIO, Callable, TypeVar, Union
 from uuid import UUID
 
-from ._protocols import _DataTypeProtocol
+from .basic import _GenericDataType
 from .varnum import varint_t
 
 T = TypeVar("T")
 
 
-class _AdvancedByteArray(Generic[T]):
+class _AdvancedByteArray(_GenericDataType[T]):
     def __init__(
         self,
         encode: Callable[[T], bytes],
         decode: Callable[[bytes], T],
         max_len: int = -1,
         length: int = -1,
-        len_prefix_t: _DataTypeProtocol[int] = None,
+        len_prefix_t: _GenericDataType[int] = None,
     ) -> None:
         self.__max_len = max_len
         self.__length = length
