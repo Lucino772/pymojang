@@ -1,25 +1,8 @@
-from typing import Any, BinaryIO, Generic, Iterable, List, Protocol, TypeVar
+from typing import Any, BinaryIO, Generic, Iterable, TypeVar
+
+from ._protocols import _DataTypeProtocol
 
 T = TypeVar("T")
-
-
-class _DataTypeProtocol(Protocol[T]):
-    def write(self, buffer: BinaryIO, value: T) -> int:
-        ...
-
-    def read(self, buffer: BinaryIO) -> T:
-        ...
-
-
-class array_t(Generic[T]):
-    def __init__(self, data_t: _DataTypeProtocol[T]) -> None:
-        self.__data_t = data_t
-
-    def write(self, buffer: BinaryIO, values: Iterable[T]):
-        return sum([self.__data_t.write(buffer, value) for value in values])
-
-    def read(self, buffer: BinaryIO, len: int) -> List[T]:
-        return [self.__data_t.read(buffer) for _ in range(len)]
 
 
 class optional_t(Generic[T]):

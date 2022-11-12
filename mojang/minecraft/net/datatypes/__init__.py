@@ -1,6 +1,6 @@
+from .array import array_t
 from .basic import (
     bool_t,
-    bytearray_t,
     float32_t,
     float64_t,
     int8_t,
@@ -12,6 +12,6 @@ from .basic import (
     uint32_t,
     uint64_t,
 )
-from .functions import array_t, enum_t, optional_t
-from .text import chat_t, identifier_t, string_t
+from .bytearray import bytearray_t, chat_t, identifier_t, string_t, uuid_t
+from .functions import enum_t, optional_t
 from .varnum import varint_t, varlong_t

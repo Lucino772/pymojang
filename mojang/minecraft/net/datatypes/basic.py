@@ -30,7 +30,3 @@ float32_t = _BasicDataType[float](">f")
 float64_t = _BasicDataType[float](">d")
 
 bool_t = _BasicDataType[bool](">?")
-
-
-def bytearray_t(length: int):
-    return _BasicDataType[bytes](f">{length}s")
