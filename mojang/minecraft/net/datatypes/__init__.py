@@ -12,5 +12,6 @@ from .basic import (
     uint32_t,
     uint64_t,
 )
+from .functions import array_t, enum_t, optional_t
 from .text import chat_t, identifier_t, string_t
 from .varnum import varint_t, varlong_t

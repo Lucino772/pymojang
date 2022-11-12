@@ -10,7 +10,7 @@ class _BasicDataType(Generic[T]):
 
     def write(self, buffer: BinaryIO, value: T):
         data = self.__fmt.pack(value)
-        buffer.write(data)
+        return buffer.write(data)
 
     def read(self, buffer: BinaryIO) -> T:
         data = buffer.read(self.__fmt.size)
