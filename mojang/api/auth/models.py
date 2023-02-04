@@ -271,7 +271,7 @@ class MojangAuthenticationApp:
 
     @overload
     def get_session(
-        self, username: str, password: str, client_token: str = None
+        self, username: str, password: str, client_token: Optional[str] = None
     ) -> MojangAuthenticatedUser:
         """Authenticate with a Mojang Account
 

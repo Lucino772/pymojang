@@ -113,8 +113,8 @@ class Skin(_Resource):
         self,
         source: str,
         variant: str,
-        id: str = None,
-        state: str = None,
+        id: Optional[str] = None,
+        state: Optional[str] = None,
         load: bool = True,
     ) -> None:
         super().__init__(source, load=load)
@@ -158,7 +158,11 @@ class Cape(_Resource):
     """
 
     def __init__(
-        self, source: str, id: str = None, state: str = None, load: bool = True
+        self,
+        source: str,
+        id: Optional[str] = None,
+        state: Optional[str] = None,
+        load: bool = True,
     ) -> None:
         super().__init__(source, load=load)
         self.__id = id
