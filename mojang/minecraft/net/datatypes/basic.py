@@ -1,18 +1,18 @@
 import ctypes
 import json
 import re
+import typing as t
 from struct import Struct
-from typing import BinaryIO, Callable, Generic, Optional, Sequence, TypeVar
 from uuid import UUID
 
-DataType_T = TypeVar("DataType_T")
+T = t.TypeVar("T")
 
 
-class _GenericDataType(Generic[DataType_T]):
-    def write(self, buffer: BinaryIO, value: DataType_T) -> int:
+class _GenericDataType(t.Generic[T]):
+    def write(self, buffer: t.BinaryIO, value: T) -> int:
         raise NotImplementedError
 
-    def read(self, buffer: BinaryIO) -> DataType_T:
+    def read(self, buffer: t.BinaryIO) -> T:
         raise NotImplementedError
 
     def array(
@@ -21,62 +21,62 @@ class _GenericDataType(Generic[DataType_T]):
         length: int = -1,
         len_prefix_t: "_GenericDataType[int]" = None,
     ):
-        return _AdvancedArray[DataType_T](self, max_len, length, len_prefix_t)
+        return _AdvancedArray[T](self, max_len, length, len_prefix_t)
 
-    def enum(self, values: Sequence[DataType_T]):
-        return _EnumDatatype[DataType_T](self, values)
+    def enum(self, values: t.Sequence[T]):
+        return _EnumDatatype[T](self, values)
 
-    def optional(self, present: bool, default: Optional[DataType_T] = None):
-        return _OptionalDataType[DataType_T](self, present, default)
+    def optional(self, present: bool, default: t.Optional[T] = None):
+        return _OptionalDataType[T](self, present, default)
 
 
-class _StructDataType(_GenericDataType[DataType_T]):
+class _StructDataType(_GenericDataType[T]):
     def __init__(self, fmt: str) -> None:
         self.__fmt = Struct(fmt)
 
-    def write(self, buffer: BinaryIO, value: DataType_T):
+    def write(self, buffer: t.BinaryIO, value: T):
         data = self.__fmt.pack(value)
         return buffer.write(data)
 
-    def read(self, buffer: BinaryIO) -> DataType_T:
+    def read(self, buffer: t.BinaryIO) -> T:
         data = buffer.read(self.__fmt.size)
         return self.__fmt.unpack(data)[0]
 
 
-class _OptionalDataType(_GenericDataType[Optional[DataType_T]]):
+class _OptionalDataType(_GenericDataType[t.Optional[T]]):
     def __init__(
         self,
-        data_t: _GenericDataType[DataType_T],
+        data_t: _GenericDataType[T],
         present: bool,
-        default: Optional[DataType_T] = None,
+        default: t.Optional[T] = None,
     ) -> None:
         self.__data_t = data_t
         self.__present = present
         self.__default = default
 
-    def write(self, buffer: BinaryIO, value: Optional[DataType_T]):
+    def write(self, buffer: t.BinaryIO, value: t.Optional[T]):
         if self.__present and value is not None:
             return self.__data_t.write(buffer, value)
 
         return 0
 
-    def read(self, buffer: BinaryIO) -> Optional[DataType_T]:
+    def read(self, buffer: t.BinaryIO) -> t.Optional[T]:
         if self.__present:
             return self.__data_t.read(buffer)
 
         return self.__default
 
 
-class _EnumDatatype(_GenericDataType[DataType_T]):
+class _EnumDatatype(_GenericDataType[T]):
     def __init__(
         self,
-        data_t: _GenericDataType[DataType_T],
-        values: Sequence[DataType_T],
+        data_t: _GenericDataType[T],
+        values: t.Sequence[T],
     ) -> None:
         self.__data_t = data_t
         self.__values = values
 
-    def _check(self, value: DataType_T):
+    def _check(self, value: T):
         if value not in self.__values:
             raise RuntimeError(
                 "Value '{}' not in expected values {}".format(
@@ -86,17 +86,17 @@ class _EnumDatatype(_GenericDataType[DataType_T]):
 
         return value
 
-    def write(self, buffer: BinaryIO, value: DataType_T):
+    def write(self, buffer: t.BinaryIO, value: T):
         return self.__data_t.write(buffer, self._check(value))
 
-    def read(self, buffer: BinaryIO):
+    def read(self, buffer: t.BinaryIO):
         return self._check(self.__data_t.read(buffer))
 
 
-class _AdvancedArray(_GenericDataType[Sequence[DataType_T]]):
+class _AdvancedArray(_GenericDataType[t.Sequence[T]]):
     def __init__(
         self,
-        item_t: _GenericDataType[DataType_T],
+        item_t: _GenericDataType[T],
         max_len: int = -1,
         length: int = -1,
         len_prefix_t: _GenericDataType[int] = None,
@@ -106,7 +106,7 @@ class _AdvancedArray(_GenericDataType[Sequence[DataType_T]]):
         self.__length = length
         self.__len_prefix_t = len_prefix_t
 
-    def write(self, buffer: BinaryIO, values: Sequence[DataType_T]):
+    def write(self, buffer: t.BinaryIO, values: t.Sequence[T]):
         if self.__max_len != -1 and len(values) > self.__max_len:
             raise RuntimeError(
                 "Max len for Array is {}, got {}".format(
@@ -129,7 +129,7 @@ class _AdvancedArray(_GenericDataType[Sequence[DataType_T]]):
         )
         return written
 
-    def read(self, buffer: BinaryIO) -> Sequence[DataType_T]:
+    def read(self, buffer: t.BinaryIO) -> t.Sequence[T]:
         _len = self.__length
         if self.__len_prefix_t is not None:
             _len = self.__len_prefix_t.read(buffer)
@@ -146,11 +146,11 @@ class _AdvancedArray(_GenericDataType[Sequence[DataType_T]]):
         return values
 
 
-class _AdvancedByteArray(_GenericDataType[DataType_T]):
+class _AdvancedByteArray(_GenericDataType[T]):
     def __init__(
         self,
-        encode: Callable[[DataType_T], bytes],
-        decode: Callable[[bytes], DataType_T],
+        encode: t.Callable[[T], bytes],
+        decode: t.Callable[[bytes], T],
         max_len: int = -1,
         length: int = -1,
         len_prefix_t: _GenericDataType[int] = None,
@@ -161,7 +161,7 @@ class _AdvancedByteArray(_GenericDataType[DataType_T]):
         self.__encode = encode
         self.__decode = decode
 
-    def write(self, buffer: BinaryIO, value: DataType_T):
+    def write(self, buffer: t.BinaryIO, value: T):
         _bytes = self.__encode(value)
         if self.__max_len != -1 and len(_bytes) > self.__max_len:
             raise RuntimeError(
@@ -183,7 +183,7 @@ class _AdvancedByteArray(_GenericDataType[DataType_T]):
         written += buffer.write(_bytes)
         return written
 
-    def read(self, buffer: BinaryIO) -> DataType_T:
+    def read(self, buffer: t.BinaryIO) -> T:
         _len = self.__length
         if self.__len_prefix_t is not None:
             _len = self.__len_prefix_t.read(buffer)
@@ -208,7 +208,7 @@ class _VarNumberDataType(_GenericDataType[int]):
         self.__ctype_u = intXX_t
         self.__ctype_i = uintXX_t
 
-    def write(self, buffer: BinaryIO, value: int):
+    def write(self, buffer: t.BinaryIO, value: int):
         value = self.__ctype_u(value).value
         written = 0
         while True:
@@ -225,7 +225,7 @@ class _VarNumberDataType(_GenericDataType[int]):
 
         return written
 
-    def read(self, buffer: BinaryIO):
+    def read(self, buffer: t.BinaryIO):
         val = 0
 
         for i in range(self.__length):
@@ -256,33 +256,29 @@ float64_t = lambda: _StructDataType[float](">d")
 
 bool_t = lambda: _StructDataType[bool](">?")
 
-
-def _bytearray_t(
-    max_len: int = -1,
-    length: int = -1,
-    len_prefix_t: _GenericDataType[int] = None,
-):
-    return _AdvancedByteArray(
+_bytearray_t = (
+    lambda max_len=-1, length=-1, len_prefix_t=None: _AdvancedByteArray[bytes](
         encode=lambda val: val,
         decode=lambda val: val,
         max_len=max_len,
         length=length,
         len_prefix_t=len_prefix_t,
     )
+)
 
+bytearray_t = lambda length: _bytearray_t(-1, length, None)
 
-def _string_t(
-    max_len: int = -1,
-    length: int = -1,
-    len_prefix_t: _GenericDataType[int] = None,
-):
-    return _AdvancedByteArray(
+_string_t = (
+    lambda max_len=-1, length=-1, len_prefix_t=None: _AdvancedByteArray[str](
         encode=lambda val: val.encode("utf-8"),
         decode=lambda val: val.decode("utf-8"),
         max_len=max_len,
         length=length,
         len_prefix_t=len_prefix_t,
     )
+)
+
+string_t = lambda max_len=32767: _string_t(max_len, -1, varint_t())
 
 
 def _identifier_check(value: str):
@@ -293,63 +289,26 @@ def _identifier_check(value: str):
     return value
 
 
-def _identifier_t(
-    max_len: int = -1,
-    length: int = -1,
-    len_prefix_t: _GenericDataType[int] = None,
-):
-    return _AdvancedByteArray(
-        encode=lambda val: _identifier_check(val).encode("utf-8"),
-        decode=lambda val: _identifier_check(val.decode("utf-8")),
-        max_len=max_len,
-        length=length,
-        len_prefix_t=len_prefix_t,
-    )
+identifier_t = lambda: _AdvancedByteArray[str](
+    encode=lambda val: _identifier_check(val).encode("utf-8"),
+    decode=lambda val: _identifier_check(val.decode("utf-8")),
+    max_len=32767,
+    length=-1,
+    len_prefix_t=varint_t(),
+)
 
+chat_t = lambda: _AdvancedByteArray[t.Union[list, dict]](
+    encode=lambda val: json.dumps(val).encode("utf-8"),
+    decode=json.loads,
+    max_len=262144,
+    length=-1,
+    len_prefix_t=varint_t(),
+)
 
-def _chat_t(
-    max_len: int = -1,
-    length: int = -1,
-    len_prefix_t: _GenericDataType[int] = None,
-):
-    return _AdvancedByteArray(
-        encode=lambda val: json.dumps(val).encode("utf-8"),
-        decode=json.loads,
-        max_len=max_len,
-        length=length,
-        len_prefix_t=len_prefix_t,
-    )
-
-
-def _uuid_t(
-    max_len: int = -1,
-    length: int = -1,
-    len_prefix_t: _GenericDataType[int] = None,
-):
-    return _AdvancedByteArray(
-        encode=lambda val: val.bytes,
-        decode=lambda val: UUID(bytes=val),
-        max_len=max_len,
-        length=length,
-        len_prefix_t=len_prefix_t,
-    )
-
-
-def bytearray_t(length: int):
-    return _bytearray_t(max_len=-1, length=length, len_prefix_t=None)
-
-
-def string_t(max_len: int = 32767):
-    return _string_t(max_len=max_len, length=-1, len_prefix_t=varint_t())
-
-
-def identifier_t():
-    return _identifier_t(max_len=32767, length=-1, len_prefix_t=varint_t())
-
-
-def chat_t():
-    return _chat_t(max_len=262144, length=-1, len_prefix_t=varint_t())
-
-
-def uuid_t():
-    return _uuid_t(max_len=-1, length=16, len_prefix_t=None)
+uuid_t = lambda: _AdvancedByteArray[UUID](
+    encode=lambda val: val.bytes,
+    decode=lambda val: UUID(bytes=val),
+    max_len=-1,
+    length=16,
+    len_prefix_t=None,
+)
