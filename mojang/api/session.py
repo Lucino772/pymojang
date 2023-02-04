@@ -1,4 +1,5 @@
 import datetime as dt
+import typing as t
 
 import jwt
 import requests
@@ -247,7 +248,9 @@ def hide_user_cape(access_token: str):
 
 
 def owns_minecraft(
-    access_token: str, verify_sig: bool = False, public_key: str = None
+    access_token: str,
+    verify_sig: bool = False,
+    public_key: t.Optional[str] = None,
 ) -> bool:
     """Returns True if the authenticated user owns minecraft
 
