@@ -8,7 +8,7 @@ from .._structures import Players, SLPResponse
 
 def ping_fe01(
     sock: socket.socket,
-    hostname: str = None,
+    hostname: Optional[str] = None,
     port: int = -1,
 ):
     if hostname is not None and len(hostname) > 0 and port > 0:
