@@ -1,3 +1,22 @@
+PyMojang v2.0.1 (2023-02-04)
+============================
+
+Bugfixes
+--------
+
+- Fixed issue with return status code in get_uuid & get_username (`#59 <https://github.com/Lucino772/pymojang/issues/59>`_)
+
+
+Improved Documentation
+----------------------
+
+- Configure towncrier for changelog generation (`#48 <https://github.com/Lucino772/pymojang/issues/48>`_)
+- Fixed issue when getting the package's version in the docs (`#49 <https://github.com/Lucino772/pymojang/issues/49>`_)
+- Added new documentation workflow & deployment on GitHub pages (`#50 <https://github.com/Lucino772/pymojang/issues/50>`_)
+- Theme Customisation (`#51 <https://github.com/Lucino772/pymojang/issues/51>`_)
+- Added missing documentation for *get_blocked_servers* (`#53 <https://github.com/Lucino772/pymojang/issues/53>`_)
+
+
 PyMojang v2.0.0 (2022-10-27)
 ============================
 
