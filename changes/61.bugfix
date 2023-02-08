@@ -1,1 +1,0 @@
-Fixed issue with status code returned by the APIs used in get_uuid & get_username

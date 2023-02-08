@@ -1,3 +1,12 @@
+PyMojang v2.0.2 (2023-02-08)
+============================
+
+Bugfixes
+--------
+
+- Fixed issue with status code returned by the APIs used in get_uuid & get_username (`#61 <https://github.com/Lucino772/pymojang/issues/61>`_)
+
+
 PyMojang v2.0.1 (2023-02-04)
 ============================
 
