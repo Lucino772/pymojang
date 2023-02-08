@@ -69,12 +69,10 @@ def get_uuid(username: str) -> Optional[str]:
     response = requests.get(urls.api_get_uuid(username))
     code, data = helpers.err_check(
         response,
-        (405, MethodNotAllowed),
-        (500, ServerError),
-        use_defaults=False,
+        use_defaults=True,
     )
 
-    if code == 404:
+    if code == 204:
         return None
 
     return data["id"]
@@ -134,12 +132,10 @@ def get_username(uuid: str) -> Optional[str]:
     code, data = helpers.err_check(
         response,
         (400, ValueError),
-        (405, MethodNotAllowed),
-        (500, ServerError),
-        use_defaults=False,
+        use_defaults=True,
     )
 
-    if code == 404:
+    if code == 204:
         return None
 
     return data["name"]
