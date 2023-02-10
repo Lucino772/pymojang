@@ -1,8 +1,14 @@
 from __future__ import annotations
 
 import typing as t
+from dataclasses import dataclass
 
 _T = t.TypeVar("_T")
+
+
+@dataclass
+class Packet:
+    packet_id: t.ClassVar[int]
 
 
 class Serializer(t.Generic[_T]):
@@ -26,10 +32,26 @@ class _PacketSerializerSpec(t.NamedTuple, t.Generic[_T]):
 def packet(packet_cls: t.Type[_T]):
     def _get_serializer(cls, version: int, netty: bool):
         for spec in filter(lambda s: s.netty == netty, cls._serializers):
-            if (spec.version is not None and spec.version == version) or (
-                spec.min_version is not None
-                and spec.max_version is not None
-                and spec.min_version <= version <= spec.max_version
+            if (
+                (spec.version is not None and spec.version == version)
+                or (
+                    spec.min_version is not None
+                    and spec.max_version is not None
+                    and spec.min_version <= version <= spec.max_version
+                )
+                or (
+                    spec.min_version is not None
+                    and spec.min_version <= version
+                )
+                or (
+                    spec.max_version is not None
+                    and version <= spec.max_version
+                )
+                or (
+                    spec.version is None
+                    and spec.max_version is None
+                    and spec.min_version is None
+                )
             ):
                 return spec.serializer
 
