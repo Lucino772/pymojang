@@ -1,117 +1,66 @@
-from __future__ import annotations
-
+import io
 import typing as t
-from dataclasses import dataclass
-
-_T = t.TypeVar("_T")
+from dataclasses import dataclass, fields
 
 
 @dataclass
 class Packet:
-    packet_id: t.ClassVar[int]
-
-
-class Serializer(t.Generic[_T]):
     @classmethod
-    def serialize(cls, buffer: t.BinaryIO, packet: _T) -> int:
-        raise NotImplementedError
+    def _iter_fields(cls):
+        for field in fields(cls):
+            if "type" in field.metadata:
+                yield field
 
-    @classmethod
-    def deserialize(cls, buffer: t.BinaryIO) -> _T:
-        raise NotImplementedError
+    def serialize(self, buffer: t.BinaryIO) -> int:
+        _ctx: t.Dict[str, t.Dict[str, t.Any]] = {}
 
+        # TODO: Explain why reversed
+        for field in reversed(list(self._iter_fields())):
+            _type = field.metadata["type"]
+            _value = field.metadata.get("value", None)
 
-class _PacketSerializerSpec(t.NamedTuple, t.Generic[_T]):
-    serializer: t.Type[Serializer[_T]]
-    version: t.Optional[int]
-    min_version: t.Optional[int]
-    max_version: t.Optional[int]
-    netty: bool
+            if callable(_value):
+                value = _value(_ctx)
+            else:
+                value = getattr(self, field.name)
 
+            with io.BytesIO() as buf:
+                _len = _type.write(buf, value)
+                _bytes = buf.getvalue()
 
-def packet(packet_cls: t.Type[_T]):
-    def _get_serializer(cls, version: int, netty: bool):
-        for spec in filter(lambda s: s.netty == netty, cls._serializers):
-            if (
-                (spec.version is not None and spec.version == version)
-                or (
-                    spec.min_version is not None
-                    and spec.max_version is not None
-                    and spec.min_version <= version <= spec.max_version
-                )
-                or (
-                    spec.min_version is not None
-                    and spec.min_version <= version
-                )
-                or (
-                    spec.max_version is not None
-                    and version <= spec.max_version
-                )
-                or (
-                    spec.version is None
-                    and spec.max_version is None
-                    and spec.min_version is None
-                )
-            ):
-                return spec.serializer
+            _ctx[field.name] = {"value": value, "bytes": _bytes, "len": _len}
 
-        return None
-
-    def add_serializer(
-        cls,
-        serializer_cls: t.Type[Serializer[_T]],
-        version: t.Optional[int] = None,
-        max_version: t.Optional[int] = None,
-        min_version: t.Optional[int] = None,
-        netty: bool = False,
-    ):
-        cls._serializers.append(
-            _PacketSerializerSpec(
-                serializer_cls, version, min_version, max_version, netty
-            )
+        return sum(
+            [
+                buffer.write(_ctx[field.name]["bytes"])
+                for field in self._iter_fields()
+            ]
         )
 
-    def register(
-        cls,
-        version: t.Optional[int] = None,
-        max_version: t.Optional[int] = None,
-        min_version: t.Optional[int] = None,
-        netty: bool = True,
-    ):
-        def _wrapper(serializer_cls: t.Type[Serializer[_T]]):
-            cls.add_serializer(
-                serializer_cls, version, min_version, max_version, netty
-            )
-            return serializer_cls
+    @classmethod
+    def deserialize(cls, buffer: t.BinaryIO) -> "Packet":
+        _ctx: t.Dict[str, t.Dict[str, t.Any]] = {}
+        init_args = {}
+        other_args = {}
 
-        return _wrapper
+        for field in cls._iter_fields():
+            _type = field.metadata["type"]
+            _len = field.metadata.get("len", None)
 
-    def serialize(
-        cls, buffer: t.BinaryIO, packet: _T, version: int, netty: bool = True
-    ) -> int:
-        serializer = cls._get_serializer(version, netty)
-        if serializer is None:
-            raise RuntimeError(
-                f"No serializer for version: {version} - netty: {netty}"
-            )
+            props = {}
+            if callable(_len):
+                props["len"] = _len(_ctx)
 
-        return serializer.serialize(buffer, packet)
+            value = _type.read(buffer, **props)
 
-    def deserialize(
-        cls, buffer: t.BinaryIO, version: int, netty: bool = True
-    ) -> _T:
-        serializer = cls._get_serializer(version, netty)
-        if serializer is None:
-            raise RuntimeError(
-                f"No serializer for version: {version} - netty: {netty}"
-            )
+            _ctx[field.name] = {"value": value, "bytes": None, "len": None}
 
-        return serializer.deserialize(buffer)
+            if field.init:
+                init_args[field.name] = value
+            else:
+                other_args[field.name] = value
 
-    setattr(packet_cls, "_serializers", [])
-    setattr(packet_cls, "_get_serializer", classmethod(_get_serializer))
-    setattr(packet_cls, "add_serializer", classmethod(add_serializer))
-    setattr(packet_cls, "register", classmethod(register))
-    setattr(packet_cls, "serialize", classmethod(serialize))
-    setattr(packet_cls, "deserialize", classmethod(deserialize))
-    return packet_cls
+        instance = cls(**init_args)
+        for key, val in other_args.items():
+            setattr(instance, key, val)
+        return instance
