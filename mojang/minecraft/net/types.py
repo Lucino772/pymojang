@@ -7,6 +7,7 @@ import re
 import struct
 import typing as t
 import uuid
+from dataclasses import fields
 
 T = t.TypeVar("T")
 
@@ -427,3 +428,72 @@ class NBT(_Type[Tag]):
             return Tag(tag_id, name, list_items, item_tag_id)
 
         return Tag(tag_id, name, self.read_tag_payload(buffer, tag_id))
+
+
+# Nested
+class Nested(_Type[T]):
+    def __init__(self, cls: t.Type[T]) -> None:
+        super().__init__()
+        self.__cls = cls
+
+    def _iter_fields(self):
+        for field in fields(self.__cls):
+            if "type" in field.metadata:
+                yield field
+
+    def write(self, buffer: t.BinaryIO, value: T, **kwds) -> int:
+        _ctx: t.Dict[str, t.Dict[str, t.Any]] = {}
+
+        # TODO: Explain why reversed
+        for field in reversed(list(self._iter_fields())):
+            _type = field.metadata["type"]
+            _value = field.metadata.get("value", None)
+
+            if callable(_value):
+                field_value = _value(_ctx)
+            else:
+                field_value = getattr(value, field.name)
+
+            with io.BytesIO() as buf:
+                _len = _type.write(buf, field_value)
+                _bytes = buf.getvalue()
+
+            _ctx[field.name] = {
+                "value": field_value,
+                "bytes": _bytes,
+                "len": _len,
+            }
+
+        return sum(
+            [
+                buffer.write(_ctx[field.name]["bytes"])
+                for field in self._iter_fields()
+            ]
+        )
+
+    def read(self, buffer: t.BinaryIO, **kwds) -> T:
+        _ctx: t.Dict[str, t.Dict[str, t.Any]] = {}
+        init_args = {}
+        other_args = {}
+
+        for field in self._iter_fields():
+            _type = field.metadata["type"]
+            _len = field.metadata.get("len", None)
+
+            props = {}
+            if callable(_len):
+                props["len"] = _len(_ctx)
+
+            value = _type.read(buffer, **props)
+
+            _ctx[field.name] = {"value": value, "bytes": None, "len": None}
+
+            if field.init:
+                init_args[field.name] = value
+            else:
+                other_args[field.name] = value
+
+        instance = self.__cls(**init_args)
+        for key, val in other_args.items():
+            setattr(instance, key, val)
+        return instance
