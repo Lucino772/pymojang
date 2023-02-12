@@ -448,18 +448,13 @@ class Nested(_Type[T]):
         for field in reversed(list(self._iter_fields())):
             _type = field.metadata["type"]
             _value = field.metadata.get("value", None)
-            _present = field.metadata.get("present", None)
 
-            is_present = True
-            if callable(_present):
-                is_present = _present(_ctx)
+            if callable(_value):
+                field_value = _value(_ctx)
+            else:
+                field_value = getattr(value, field.name)
 
-            if is_present:
-                if callable(_value):
-                    field_value = _value(_ctx)
-                else:
-                    field_value = getattr(value, field.name)
-
+            if field_value is not None:
                 with io.BytesIO() as buf:
                     _len = _type.write(buf, field_value)
                     _bytes = buf.getvalue()
