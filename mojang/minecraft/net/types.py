@@ -448,21 +448,33 @@ class Nested(_Type[T]):
         for field in reversed(list(self._iter_fields())):
             _type = field.metadata["type"]
             _value = field.metadata.get("value", None)
+            _present = field.metadata.get("present", None)
 
-            if callable(_value):
-                field_value = _value(_ctx)
+            is_present = True
+            if callable(_present):
+                is_present = _present(_ctx)
+
+            if is_present:
+                if callable(_value):
+                    field_value = _value(_ctx)
+                else:
+                    field_value = getattr(value, field.name)
+
+                with io.BytesIO() as buf:
+                    _len = _type.write(buf, field_value)
+                    _bytes = buf.getvalue()
+
+                _ctx[field.name] = {
+                    "value": field_value,
+                    "bytes": _bytes,
+                    "len": _len,
+                }
             else:
-                field_value = getattr(value, field.name)
-
-            with io.BytesIO() as buf:
-                _len = _type.write(buf, field_value)
-                _bytes = buf.getvalue()
-
-            _ctx[field.name] = {
-                "value": field_value,
-                "bytes": _bytes,
-                "len": _len,
-            }
+                _ctx[field.name] = {
+                    "value": None,
+                    "bytes": b"",
+                    "len": 0,
+                }
 
         return sum(
             [
@@ -479,20 +491,33 @@ class Nested(_Type[T]):
         for field in self._iter_fields():
             _type = field.metadata["type"]
             _len = field.metadata.get("len", None)
+            _present = field.metadata.get("present", None)
 
-            props = {}
-            if callable(_len):
-                props["len"] = _len(_ctx)
+            is_present = True
+            if callable(_present):
+                is_present = _present(_ctx)
 
-            start_pos = buffer.tell()
-            value = _type.read(buffer, **props)
-            bytes_read = buffer.tell() - start_pos
+            value = None
+            if is_present:
+                props = {}
+                if callable(_len):
+                    props["len"] = _len(_ctx)
 
-            _ctx[field.name] = {
-                "value": value,
-                "bytes": None,
-                "len": bytes_read,
-            }
+                start_pos = buffer.tell()
+                value = _type.read(buffer, **props)
+                bytes_read = buffer.tell() - start_pos
+
+                _ctx[field.name] = {
+                    "value": value,
+                    "bytes": None,
+                    "len": bytes_read,
+                }
+            else:
+                _ctx[field.name] = {
+                    "value": None,
+                    "bytes": None,
+                    "len": 0,
+                }
 
             if field.init:
                 init_args[field.name] = value

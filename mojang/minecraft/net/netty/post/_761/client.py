@@ -12,6 +12,7 @@ from mojang.minecraft.net.types import (
     Identifier,
     Long,
     Nested,
+    Optional,
     Prefixed,
     String,
     VarInt,
@@ -56,8 +57,12 @@ class LoginSuccess(Packet):
         name: str = field(metadata={"type": Prefixed(String(), VarInt())})
         value: str = field(metadata={"type": Prefixed(String(), VarInt())})
         is_signed: bool = field(metadata={"type": Bool()})
-        # FIXME: Field signature must be optional
-        signature: str = field(metadata={"type": Prefixed(String(), VarInt())})
+        signature: str = field(
+            metadata={
+                "type": Optional(Prefixed(String(), VarInt())),
+                "present": lambda ctx: ctx["is_signed"]["value"],
+            }
+        )
 
     packet_id = 2
 
@@ -92,5 +97,6 @@ class LoginPluginRequest(Packet):
 
     message_id: int = field(metadata={"type": VarInt()})
     channel: str = field(metadata={"type": Identifier()})
-    # FIXME: The length of this array must be inferred from the packet length.
-    data: bytes = field(metadata={"type": Bytes()})
+    data: bytes = field(
+        metadata={"type": Bytes(), "len": lambda ctx: ctx["__len"]}
+    )

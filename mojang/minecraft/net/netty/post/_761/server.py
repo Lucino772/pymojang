@@ -7,6 +7,7 @@ from mojang.minecraft.net.types import (
     Bool,
     Bytes,
     Enum,
+    Optional,
     Prefixed,
     String,
     UShort,
@@ -61,7 +62,11 @@ class LoginPluginResponse(Packet):
     packet_id = 2
 
     message_id: int = field(metadata={"type": VarInt()})
-    successfull: bool = field(metadata={"type": Bool()})
-    # FIXME: The length of this array must be inferred from the packet length.
-    # FIXME: This array must be optional
-    data: bytes = field(metadata={"type": Bytes()})
+    successful: bool = field(metadata={"type": Bool()})
+    data: bytes = field(
+        metadata={
+            "type": Optional(Bytes()),
+            "present": lambda ctx: ctx["successful"]["value"],
+            "len": lambda ctx: ctx["__len"],
+        }
+    )
