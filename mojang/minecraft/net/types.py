@@ -7,7 +7,7 @@ import re
 import struct
 import typing as t
 import uuid
-from dataclasses import fields
+from dataclasses import dataclass, field, fields
 
 T = t.TypeVar("T")
 
@@ -437,35 +437,35 @@ class Nested(_Type[T]):
         self.__cls = cls
 
     def _iter_fields(self):
-        for field in fields(self.__cls):
-            if "type" in field.metadata:
-                yield field
+        for _field in fields(self.__cls):
+            if "type" in _field.metadata:
+                yield _field
 
     def write(self, buffer: t.BinaryIO, value: T, **kwds) -> int:
         _ctx: t.Dict[str, t.Dict[str, t.Any]] = {}
 
         # TODO: Explain why reversed
-        for field in reversed(list(self._iter_fields())):
-            _type = field.metadata["type"]
-            _value = field.metadata.get("value", None)
+        for _field in reversed(list(self._iter_fields())):
+            _type = _field.metadata["type"]
+            _value = _field.metadata.get("value", None)
 
             if callable(_value):
                 field_value = _value(_ctx)
             else:
-                field_value = getattr(value, field.name)
+                field_value = getattr(value, _field.name)
 
             if field_value is not None:
                 with io.BytesIO() as buf:
                     _len = _type.write(buf, field_value)
                     _bytes = buf.getvalue()
 
-                _ctx[field.name] = {
+                _ctx[_field.name] = {
                     "value": field_value,
                     "bytes": _bytes,
                     "len": _len,
                 }
             else:
-                _ctx[field.name] = {
+                _ctx[_field.name] = {
                     "value": None,
                     "bytes": b"",
                     "len": 0,
@@ -483,10 +483,10 @@ class Nested(_Type[T]):
         init_args = {}
         other_args = {}
 
-        for field in self._iter_fields():
-            _type = field.metadata["type"]
-            _len = field.metadata.get("len", None)
-            _present = field.metadata.get("present", None)
+        for _field in self._iter_fields():
+            _type = _field.metadata["type"]
+            _len = _field.metadata.get("len", None)
+            _present = _field.metadata.get("present", None)
 
             is_present = True
             if callable(_present):
@@ -502,24 +502,266 @@ class Nested(_Type[T]):
                 value = _type.read(buffer, **props)
                 bytes_read = buffer.tell() - start_pos
 
-                _ctx[field.name] = {
+                _ctx[_field.name] = {
                     "value": value,
                     "bytes": None,
                     "len": bytes_read,
                 }
             else:
-                _ctx[field.name] = {
+                _ctx[_field.name] = {
                     "value": None,
                     "bytes": None,
                     "len": 0,
                 }
 
-            if field.init:
-                init_args[field.name] = value
+            if _field.init:
+                init_args[_field.name] = value
             else:
-                other_args[field.name] = value
+                other_args[_field.name] = value
 
         instance = self.__cls(**init_args)
         for key, val in other_args.items():
             setattr(instance, key, val)
         return instance
+
+
+# Others
+class Position(_Type[t.Tuple[int, int, int]]):
+    def write(
+        self, buffer: t.BinaryIO, value: t.Tuple[int, int, int], **kwds
+    ) -> int:
+        byte_val = (
+            ((value[0] & 0x3FFFFFF) << 38)
+            | ((value[1] & 0x3FFFFFF) << 12)
+            | (value[2] & 0xFFF)
+        )
+        return Byte().write(buffer, byte_val)
+
+    def read(self, buffer: t.BinaryIO, **kwds) -> t.Tuple[int, int, int]:
+        byte_val = Byte().read(buffer)
+        x, z, y = (
+            byte_val >> 38,
+            (byte_val >> 12) & 0x3FFFFFF,
+            byte_val & 0xFFF,
+        )
+
+        if x >= 1 << 25:
+            x -= 1 << 26
+        if y >= 1 << 11:
+            y -= 1 << 12
+        if z >= 1 << 25:
+            z -= 1 << 26
+
+        return x, z, y
+
+
+@dataclass
+class Slot:
+    present: bool = field(metadata={"type": Bool()})
+    item_id: int = field(
+        metadata={
+            "type": Optional(VarInt()),
+            "present": lambda ctx: ctx["present"]["value"],
+        }
+    )
+    item_cnt: int = field(
+        metadata={
+            "type": Optional(Byte()),
+            "present": lambda ctx: ctx["present"]["value"],
+        }
+    )
+    nbt: Tag = field(
+        metadata={
+            "type": Optional(NBT()),
+            "present": lambda ctx: ctx["present"]["value"],
+        }
+    )
+
+
+@dataclass
+class Rotation:
+    x: float = field(metadata={"type": Float()})
+    y: float = field(metadata={"type": Float()})
+    z: float = field(metadata={"type": Float()})
+
+
+class Particle(_Type[t.Tuple[int, t.Any]]):
+    @dataclass
+    class DustParticle:
+        red: float = field(metadata={"type": Float()})
+        blue: float = field(metadata={"type": Float()})
+        green: float = field(metadata={"type": Float()})
+        scale: float = field(metadata={"type": Float()})
+
+    @dataclass
+    class DustTransitionParticle:
+        from_red: float = field(metadata={"type": Float()})
+        from_blue: float = field(metadata={"type": Float()})
+        from_green: float = field(metadata={"type": Float()})
+        scale: float = field(metadata={"type": Float()})
+        to_red: float = field(metadata={"type": Float()})
+        to_blue: float = field(metadata={"type": Float()})
+        to_green: float = field(metadata={"type": Float()})
+
+    @dataclass
+    class VibrationParticle:
+        position_type: str = field(
+            metadata={"type": Prefixed(String(), VarInt())}
+        )
+        block_position: t.Tuple[int, int, int] = field(
+            metadata={
+                "type": Position(),
+                "present": lambda ctx: ctx["position_type"]["value"]
+                == "minecraft:block",
+            }
+        )
+        entity_id: int = field(
+            metadata={
+                "type": VarInt(),
+                "present": lambda ctx: ctx["position_type"]["value"]
+                == "minecraft:entity",
+            }
+        )
+        entity_eye_height: float = field(
+            metadata={
+                "type": Float(),
+                "present": lambda ctx: ctx["position_type"]["value"]
+                == "minecraft:entity",
+            }
+        )
+        ticks: int = field(metadata={"type": VarInt()})
+
+    _types: t.Mapping[int, _Type] = {
+        2: VarInt(),
+        3: VarInt(),
+        14: Nested(DustParticle),
+        15: Nested(DustTransitionParticle),
+        24: VarInt(),
+        35: Nested(Slot),
+        36: Nested(VibrationParticle),
+    }
+
+    def write(
+        self, buffer: t.BinaryIO, value: t.Tuple[int, t.Any], **kwds
+    ) -> int:
+        nbytes = VarInt().write(buffer, value[0])
+        if value[0] in self._types.keys():
+            _type = self._types[value[0]]
+            nbytes += _type.write(buffer, value[1])
+
+        return nbytes
+
+    def read(self, buffer: t.BinaryIO, **kwds) -> t.Tuple[int, t.Any]:
+        part_id = VarInt().read(buffer)
+        if part_id in self._types.keys():
+            _type = self._types[part_id]
+            value = _type.read(buffer)
+        else:
+            value = None
+
+        return part_id, value
+
+
+@dataclass
+class VillagerData:
+    type: int = field(metadata={"type": VarInt()})
+    profession: int = field(metadata={"type": VarInt()})
+    level: int = field(metadata={"type": VarInt()})
+
+
+@dataclass
+class GlobalPosition:
+    dimension: str = field(metadata={"type": Identifier()})
+    position: t.Tuple[int, int, int] = field(metadata={"type": Position()})
+
+
+@dataclass
+class EntityMetadataEntry:
+    index: int
+    type: int
+    value: t.Any
+
+
+class EntityMetadata(_Type[t.Sequence[EntityMetadataEntry]]):
+    _types: t.Mapping[int, _Type] = {
+        0: Byte(),
+        1: VarInt(),
+        2: VarLong(),
+        3: Float(),
+        4: Prefixed(String(), VarInt()),
+        5: Prefixed(Chat(), VarInt()),
+        6: Optional(Prefixed(Chat(), VarInt())),
+        7: Nested(Slot),
+        8: Bool(),
+        9: Nested(Rotation),
+        10: Position(),
+        11: Optional(Position()),
+        12: VarInt(),
+        13: Optional(UUID()),
+        14: Optional(VarInt()),
+        15: NBT(),
+        16: Particle(),
+        17: Nested(VillagerData),
+        18: Optional(VarInt()),
+        19: Enum(VarInt(), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]),
+        20: VarInt(),
+        21: VarInt(),
+        22: Nested(GlobalPosition),
+        23: VarInt(),
+    }
+
+    def _write_entry(
+        self, buffer: t.BinaryIO, entry: EntityMetadataEntry
+    ) -> int:
+        nbytes = Byte().write(buffer, entry.index)
+        if entry.index != 0xFF:
+            nbytes += VarInt().write(buffer, entry.type)
+            _type = self._types[entry.type]
+            if isinstance(_type, Optional):
+                is_present = entry.value is not None
+                nbytes += Bool().write(buffer, is_present)
+                nbytes += _type.write(buffer, entry.value, present=is_present)
+            else:
+                nbytes += _type.write(buffer, entry.value)
+
+        return nbytes
+
+    def _read_entry(self, buffer: t.BinaryIO) -> EntityMetadataEntry:
+        entry_index = Byte().read(buffer)
+        if entry_index != 0xFF:
+            entry_type = VarInt().read(buffer)
+            _type = self._types[entry_type]
+            if isinstance(_type, Optional):
+                is_present = Bool().read(buffer)
+                value = _type.read(buffer, present=is_present)
+            else:
+                value = _type.read(buffer)
+        else:
+            entry_type = -1
+            value = None
+
+        return EntityMetadataEntry(entry_index, entry_type, value)
+
+    def write(
+        self,
+        buffer: t.BinaryIO,
+        value: t.Sequence[EntityMetadataEntry],
+        **kwds,
+    ) -> int:
+        nbytes = 0
+        for entry in value:
+            if entry.index == 0xFF:
+                raise RuntimeError("Entry index cannot be 0xFF")
+
+            nbytes += self._write_entry(buffer, entry)
+
+        return nbytes
+
+    def read(self, buffer: t.BinaryIO, **kwds) -> t.List[EntityMetadataEntry]:
+        entries = []
+        entry = self._read_entry(buffer)
+        while entry.index != 0xFF:
+            entries.append(entry)
+            entry = self._read_entry(buffer)
+
+        return entries
