@@ -16,8 +16,12 @@ class Packet:
 @dataclass
 class _PacketStruct:
     packet_id: int = field(metadata={"type": VarInt()})
-    # FIXME: Length is inferred by packet length
-    data: bytes = field(metadata={"type": Bytes()})
+    data: bytes = field(
+        metadata={
+            "type": Bytes(),
+            "len": lambda ctx: ctx["__len"] - ctx["packet_id"]["len"],
+        }
+    )
 
 
 def _write_packet_struct(buffer: t.BinaryIO, value: Packet) -> int:

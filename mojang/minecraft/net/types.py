@@ -471,8 +471,8 @@ class Nested(_Type[T]):
             ]
         )
 
-    def read(self, buffer: t.BinaryIO, **kwds) -> T:
-        _ctx: t.Dict[str, t.Dict[str, t.Any]] = {}
+    def read(self, buffer: t.BinaryIO, len: int = -1, **kwds) -> T:
+        _ctx: t.Dict[str, t.Union[t.Any, t.Dict[str, t.Any]]] = {"__len": len}
         init_args = {}
         other_args = {}
 
@@ -484,9 +484,15 @@ class Nested(_Type[T]):
             if callable(_len):
                 props["len"] = _len(_ctx)
 
+            start_pos = buffer.tell()
             value = _type.read(buffer, **props)
+            bytes_read = buffer.tell() - start_pos
 
-            _ctx[field.name] = {"value": value, "bytes": None, "len": None}
+            _ctx[field.name] = {
+                "value": value,
+                "bytes": None,
+                "len": bytes_read,
+            }
 
             if field.init:
                 init_args[field.name] = value
