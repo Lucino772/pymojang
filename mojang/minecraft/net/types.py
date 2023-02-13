@@ -67,16 +67,21 @@ class _ByteArray(_Type[T]):
 class _VarNumType(_Type[int]):
     def __init__(self, length: int, intXX_t, uintXX_t) -> None:
         self.__length = length
-        self.__ctype_u = intXX_t
-        self.__ctype_i = uintXX_t
+        self.__ctype_i = intXX_t
+        self.__ctype_u = uintXX_t
 
     def write(self, buffer: t.BinaryIO, value: int, **kwds) -> int:
         value = self.__ctype_u(value).value
         written = 0
-        while True and written <= self.__length:
-            byte = value & 0x7F
-            value >>= 7
 
+        while True:
+            if written >= self.__length:
+                raise RuntimeError(
+                    f"Value is too big, got more than {self.__length} bytes"
+                )
+
+            byte = value & 0x7F  # 01111111
+            value >>= 7
             if value > 0:
                 byte |= 0x80
 
@@ -88,17 +93,23 @@ class _VarNumType(_Type[int]):
         return written
 
     def read(self, buffer: t.BinaryIO, **kwds) -> int:
-        val = 0
+        value = 0
+        nbytes = 0
 
-        for i in range(self.__length):
+        while True:
+            if nbytes >= self.__length:
+                raise RuntimeError(
+                    f"Value is too big, got more than {self.__length} bytes"
+                )
+
             byte = UByte().read(buffer)
-
-            val |= (byte & 0x7F) << (7 * i)
+            value |= (byte & 0x7F) << (7 * nbytes)
+            nbytes += 1
 
             if byte & 0x80 == 0:
                 break
 
-        return self.__ctype_i(val).value
+        return self.__ctype_i(value).value
 
 
 # Utils

@@ -161,7 +161,11 @@ class TestMinecraftNetTypes(unittest.TestCase):
     def test_varnums(self):
         self._test_numeric_value(VarInt(), True, -2147483648, 2147483647)
         self._test_numeric_value(
-            VarLong(), True, -9223372036854775808, 9223372036854775807
+            VarLong(),
+            True,
+            -9223372036854775808,
+            9223372036854775807,
+            value=100,
         )
 
     def test_numbers(self):
