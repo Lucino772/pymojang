@@ -702,7 +702,7 @@ class EntityMetadata(_Type[t.Sequence[EntityMetadataEntry]]):
         11: Optional(Position()),
         12: VarInt(),
         13: Optional(UUID()),
-        14: Optional(VarInt()),
+        14: VarInt(),
         15: NBT(),
         16: Particle(),
         17: Nested(VillagerData),
@@ -717,7 +717,7 @@ class EntityMetadata(_Type[t.Sequence[EntityMetadataEntry]]):
     def _write_entry(
         self, buffer: t.BinaryIO, entry: EntityMetadataEntry
     ) -> int:
-        nbytes = Byte().write(buffer, entry.index)
+        nbytes = UByte().write(buffer, entry.index)
         if entry.index != 0xFF:
             nbytes += VarInt().write(buffer, entry.type)
             _type = self._types[entry.type]
@@ -731,7 +731,7 @@ class EntityMetadata(_Type[t.Sequence[EntityMetadataEntry]]):
         return nbytes
 
     def _read_entry(self, buffer: t.BinaryIO) -> EntityMetadataEntry:
-        entry_index = Byte().read(buffer)
+        entry_index = UByte().read(buffer)
         if entry_index != 0xFF:
             entry_type = VarInt().read(buffer)
             _type = self._types[entry_type]
@@ -759,12 +759,15 @@ class EntityMetadata(_Type[t.Sequence[EntityMetadataEntry]]):
 
             nbytes += self._write_entry(buffer, entry)
 
+        # Write entry for end of metadata
+        nbytes += self._write_entry(buffer, EntityMetadataEntry(0xFF, 0, None))
         return nbytes
 
     def read(self, buffer: t.BinaryIO, **kwds) -> t.List[EntityMetadataEntry]:
         entries = []
         entry = self._read_entry(buffer)
         while entry.index != 0xFF:
+            print(entry)
             entries.append(entry)
             entry = self._read_entry(buffer)
 
