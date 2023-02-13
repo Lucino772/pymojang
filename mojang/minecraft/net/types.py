@@ -301,7 +301,8 @@ TagIntArray = _with_tag_id(Prefixed(Array(Int()), Int()), 11)
 TagLongArray = _with_tag_id(Prefixed(Array(Long()), Int()), 11)
 
 
-class Tag(t.NamedTuple, t.Generic[T]):
+@dataclass(frozen=True)
+class Tag(t.Generic[T]):
     id: int
     name: t.Union[str, None]
     value: T
