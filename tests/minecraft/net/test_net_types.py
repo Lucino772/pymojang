@@ -168,6 +168,10 @@ class TestMinecraftNetTypes(unittest.TestCase):
             value=100,
         )
 
+        # Check that any negative numbers uses the maximum number of bytes
+        self.assertEqual(self._simple_test(VarInt(), -100)[0], 5)
+        self.assertEqual(self._simple_test(VarLong(), -100)[0], 10)
+
     def test_numbers(self):
         self._test_numeric_value(Byte(), True, -128, 127)
         self._test_numeric_value(UByte(), False, 0, 255)
