@@ -73,7 +73,7 @@ class _VarNumType(_Type[int]):
     def write(self, buffer: t.BinaryIO, value: int, **kwds) -> int:
         value = self.__ctype_u(value).value
         written = 0
-        while True:
+        while True and written <= self.__length:
             byte = value & 0x7F
             value >>= 7
 
@@ -212,6 +212,10 @@ class Identifier(String):
         results = re.fullmatch("(([a-z0-9.-_]*):)?([a-z0-9.-_/]*)", value)
         if results is None:
             raise RuntimeError("Identifier is not valid: {}".format(value))
+
+        namespace = results.group(2)
+        if namespace is None or namespace == "":
+            return f"minecraft:{value}"
 
         return value
 
@@ -535,10 +539,10 @@ class Position(_Type[t.Tuple[int, int, int]]):
             | ((value[1] & 0x3FFFFFF) << 12)
             | (value[2] & 0xFFF)
         )
-        return Byte().write(buffer, byte_val)
+        return ULong().write(buffer, byte_val)
 
     def read(self, buffer: t.BinaryIO, **kwds) -> t.Tuple[int, int, int]:
-        byte_val = Byte().read(buffer)
+        byte_val = ULong().read(buffer)
         x, z, y = (
             byte_val >> 38,
             (byte_val >> 12) & 0x3FFFFFF,
@@ -671,7 +675,7 @@ class VillagerData:
 
 @dataclass
 class GlobalPosition:
-    dimension: str = field(metadata={"type": Identifier()})
+    dimension: str = field(metadata={"type": Prefixed(Identifier(), VarInt())})
     position: t.Tuple[int, int, int] = field(metadata={"type": Position()})
 
 
