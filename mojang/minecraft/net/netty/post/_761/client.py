@@ -15,6 +15,7 @@ from mojang.minecraft.net.types import (
     Enum,
     Float,
     Identifier,
+    Int,
     Long,
     Nested,
     Optional,
@@ -26,6 +27,7 @@ from mojang.minecraft.net.types import (
     Tag,
     UByte,
     VarInt,
+    VarLong,
 )
 
 _String = Prefixed(String(), VarInt())
@@ -448,3 +450,99 @@ class DisconnectPlay(Packet):
     packet_id = 23
 
     reason: t.Union[dict, list] = field(metadata={"type": _Chat})
+
+
+@dataclass
+class DisguisedChatMessage(Packet):
+    packet_id = 24
+
+    message: t.Union[dict, list] = field(metadata={"type": _Chat})
+    chat_type: int = field(metadata={"type": VarInt()})
+    chat_type_name: t.Union[dict, list] = field(metadata={"type": _Chat})
+    has_target_name: bool = field(metadata={"type": Bool()})
+    target_name: str = field(
+        metadata={
+            "type": Optional(_Chat),
+            "present": lambda ctx: ctx["has_target_name"]["value"],
+        }
+    )
+
+
+@dataclass
+class EntityEvent(Packet):
+    packet_id = 25
+
+    entity_id: int = field(metadata={"type": Int()})
+    entity_status: int = field(metadata={"type": Byte()})
+
+
+@dataclass
+class Explosion(Packet):
+    packet_id = 26
+
+    @dataclass
+    class Record:
+        x: int = field(metadata={"type": Byte()})
+        y: int = field(metadata={"type": Byte()})
+        z: int = field(metadata={"type": Byte()})
+
+    x: float = field(metadata={"type": Double()})
+    y: float = field(metadata={"type": Double()})
+    z: float = field(metadata={"type": Double()})
+    strength: float = field(metadata={"type": Float()})
+    record_count: int = field(metadata={"type": VarInt()})
+    records: t.List[Record] = field(
+        metadata={
+            "type": Array(Nested(Record)),
+            "len": lambda ctx: ctx["record_count"]["value"],
+        }
+    )
+    motion_x: float = field(metadata={"type": Float()})
+    motion_y: float = field(metadata={"type": Float()})
+    motion_z: float = field(metadata={"type": Float()})
+
+
+@dataclass
+class UnloadChunk(Packet):
+    packet_id = 27
+
+    chunk_x: int = field(metadata={"type": Int()})
+    chunk_z: int = field(metadata={"type": Int()})
+
+
+@dataclass
+class GameEvent(Packet):
+    packet_id = 28
+
+    event: int = field(metadata={"type": UByte()})
+    value: float = field(metadata={"type": Float()})
+
+
+@dataclass
+class OpenHorseScreen(Packet):
+    packet_id = 29
+
+    window_id: int = field(metadata={"type": UByte()})
+    slot_cnt: int = field(metadata={"type": VarInt()})
+    entity_id: int = field(metadata={"type": Int()})
+
+
+@dataclass
+class InitializeWorldBorder(Packet):
+    packet_id = 30
+
+    x: float = field(metadata={"type": Double()})
+    z: float = field(metadata={"type": Double()})
+    old_diameter: float = field(metadata={"type": Double()})
+    new_diameter: float = field(metadata={"type": Double()})
+    speed: int = field(metadata={"type": VarLong()})
+    portal_teleport: int = field(metadata={"type": VarInt()})
+    warn_blocks: int = field(metadata={"type": VarInt()})
+    warn_time: int = field(metadata={"type": VarInt()})
+
+
+@dataclass
+class KeepAlive(Packet):
+    packet_id = 31
+
+    id: int = field(metadata={"type": Long()})
