@@ -34,6 +34,7 @@ _String = Prefixed(String(), VarInt())
 _Chat = Prefixed(Chat(), VarInt())
 _Identifier = Prefixed(Identifier(), VarInt())
 _Slot = Nested(Slot)
+_BitSets = Prefixed(Array(Long()), VarInt())
 
 
 # Status
@@ -546,3 +547,225 @@ class KeepAlive(Packet):
     packet_id = 31
 
     id: int = field(metadata={"type": Long()})
+
+
+@dataclass
+class ChunkDataUpdateLight(Packet):
+    packet_id = 32
+
+    @dataclass
+    class BlockEntity:
+        packed_xz: int = field(metadata={"type": Byte()})
+        y: int = field(metadata={"type": Short()})
+        type: int = field(metadata={"type": VarInt()})
+        data: Tag = field(metadata={"type": NBT()})
+
+    @dataclass
+    class LightItem:
+        length: int = field(metadata={"type": VarInt()})
+        array: bytes = field(
+            metadata={
+                "type": Bytes(),
+                "len": lambda ctx: ctx["length"]["value"],
+            }
+        )
+
+    chunk_x: int = field(metadata={"type": Int()})
+    chunk_z: int = field(metadata={"type": Int()})
+    heightmaps: Tag = field(metadata={"type": NBT()})
+    size: int = field(metadata={"type": VarInt()})
+    data: bytes = field(
+        metadata={"type": Bytes(), "len": lambda ctx: ctx["size"]["value"]}
+    )
+    block_entity_cnt: int = field(metadata={"type": VarInt()})
+    block_entities: t.List[BlockEntity] = field(
+        metadata={
+            "type": Array(Nested(BlockEntity)),
+            "len": lambda ctx: ctx["block_entity_cnt"]["value"],
+        }
+    )
+    trust_edges: bool = field(metadata={"type": Bool()})
+    sky_light_mask: t.List[int] = field(metadata={"type": _BitSets})
+    block_light_mask: t.List[int] = field(metadata={"type": _BitSets})
+    empty_sky_light_mask: t.List[int] = field(metadata={"type": _BitSets})
+    empty_block_light_mask: t.List[int] = field(metadata={"type": _BitSets})
+    sky_light_array_cnt: int = field(metadata={"type": VarInt()})
+    sky_light_arrays: t.List[LightItem] = field(
+        metadata={
+            "type": Array(Nested(LightItem)),
+            "len": lambda ctx: ctx["sky_light_array_cnt"]["value"],
+        }
+    )
+    block_light_array_cnt: int = field(metadata={"type": VarInt()})
+    block_light_arrays: t.List[LightItem] = field(
+        metadata={
+            "type": Array(Nested(LightItem)),
+            "len": lambda ctx: ctx["block_light_array_cnt"]["value"],
+        }
+    )
+
+
+@dataclass
+class WorldEvent(Packet):
+    packet_id = 33
+
+    event: int = field(metadata={"type": Int()})
+    location: t.Tuple[int, int, int] = field(metadata={"type": Position()})
+    data: int = field(metadata={"type": Int()})
+    disable_rel_volume: bool = field(metadata={"type": Bool()})
+
+
+@dataclass
+class Particle(Packet):
+    packet_id = 34
+
+    particle_id: int = field(metadata={"type": VarInt()})
+    long_distance: int = field(metadata={"type": Bool()})
+    x: float = field(metadata={"type": Double()})
+    y: float = field(metadata={"type": Double()})
+    z: float = field(metadata={"type": Double()})
+    offset_x: float = field(metadata={"type": Float()})
+    offset_y: float = field(metadata={"type": Float()})
+    offset_z: float = field(metadata={"type": Float()})
+    max_speed: float = field(metadata={"type": Float()})
+    particle_cnt: int = field(metadata={"type": Int()})
+    # TODO: Add data property
+
+
+@dataclass
+class UpdateLight(Packet):
+    packet_id = 35
+
+    @dataclass
+    class LightItem:
+        length: int = field(metadata={"type": VarInt()})
+        array: bytes = field(
+            metadata={
+                "type": Bytes(),
+                "len": lambda ctx: ctx["length"]["value"],
+            }
+        )
+
+    chunk_x: int = field(metadata={"type": VarInt()})
+    chunk_z: int = field(metadata={"type": VarInt()})
+    trust_edges: bool = field(metadata={"type": Bool()})
+    sky_light_mask: t.List[int] = field(metadata={"type": _BitSets})
+    block_light_mask: t.List[int] = field(metadata={"type": _BitSets})
+    empty_sky_light_mask: t.List[int] = field(metadata={"type": _BitSets})
+    empty_block_light_mask: t.List[int] = field(metadata={"type": _BitSets})
+    sky_light_array_cnt: int = field(metadata={"type": VarInt()})
+    sky_light_arrays: t.List[LightItem] = field(
+        metadata={
+            "type": Array(Nested(LightItem)),
+            "len": lambda ctx: ctx["sky_light_array_cnt"]["value"],
+        }
+    )
+    block_light_array_cnt: int = field(metadata={"type": VarInt()})
+    block_light_arrays: t.List[LightItem] = field(
+        metadata={
+            "type": Array(Nested(LightItem)),
+            "len": lambda ctx: ctx["block_light_array_cnt"]["value"],
+        }
+    )
+
+
+@dataclass
+class Login(Packet):
+    packet_id = 36
+
+    entity_id: int = field(metadata={"type": Int()})
+    is_hardcore: bool = field(metadata={"type": Bool()})
+    gamemode: int = field(metadata={"type": UByte()})
+    prev_gamemode: int = field(metadata={"type": Byte()})
+    dim_count: int = field(metadata={"type": VarInt()})
+    dim_names: t.List[str] = field(
+        metadata={
+            "type": Array(_Identifier),
+            "len": lambda ctx: ctx["dim_count"]["value"],
+        }
+    )
+    reg_codec: Tag = field(metadata={"type": NBT()})
+    dim_type: str = field(metadata={"type": _Identifier})
+    dim_name: str = field(metadata={"type": _Identifier})
+    hashed_seed: int = field(metadata={"type": Long()})
+    max_players: int = field(metadata={"type": VarInt()})
+    view_distance: int = field(metadata={"type": VarInt()})
+    sim_distance: int = field(metadata={"type": VarInt()})
+    reduced_debug_info: bool = field(metadata={"type": Bool()})
+    enable_respawn_screen: bool = field(metadata={"type": Bool()})
+    is_debug: bool = field(metadata={"type": Bool()})
+    is_flat: bool = field(metadata={"type": Bool()})
+    has_death_location: bool = field(metadata={"type": Bool()})
+    death_dim_name: str = field(
+        metadata={
+            "type": Optional(_Identifier),
+            "present": lambda ctx: ctx["has_death_location"]["value"],
+        }
+    )
+    death_location: str = field(
+        metadata={
+            "type": Optional(Position()),
+            "present": lambda ctx: ctx["has_death_location"]["value"],
+        }
+    )
+
+
+@dataclass
+class MapData(Packet):
+    packet_id = 37
+
+    @dataclass
+    class Icon:
+        type: int = field(metadata={"type": VarInt()})
+        x: int = field(metadata={"type": Byte()})
+        z: int = field(metadata={"type": Byte()})
+        direction: int = field(metadata={"type": Byte()})
+        has_display_name: bool = field(metadata={"type": Bool()})
+        display_name: str = field(
+            metadata={
+                "type": Optional(_Chat),
+                "present": lambda ctx: ctx["has_display_name"]["value"],
+            }
+        )
+
+    map_id: int = field(metadata={"type": VarInt()})
+    scale: int = field(metadata={"type": Byte()})
+    locked: bool = field(metadata={"type": Bool()})
+    icon_cnt: int = field(metadata={"type": VarInt()})
+    icons: t.List[Icon] = field(
+        metadata={
+            "type": Array(Nested(Icon)),
+            "len": lambda ctx: ctx["icon_cnt"]["value"],
+        }
+    )
+    columns: int = field(metadata={"type": UByte()})
+    rows: int = field(
+        metadata={
+            "type": Optional(UByte()),
+            "present": lambda ctx: ctx["columns"]["value"] > 0,
+        }
+    )
+    x: int = field(
+        metadata={
+            "type": Optional(Byte()),
+            "present": lambda ctx: ctx["columns"]["value"] > 0,
+        }
+    )
+    z: int = field(
+        metadata={
+            "type": Optional(Byte()),
+            "present": lambda ctx: ctx["columns"]["value"] > 0,
+        }
+    )
+    length: int = field(
+        metadata={
+            "type": Optional(VarInt()),
+            "present": lambda ctx: ctx["columns"]["value"] > 0,
+        }
+    )
+    data: t.List[int] = field(
+        metadata={
+            "type": Array(UByte()),
+            "len": lambda ctx: ctx["length"]["value"],
+        }
+    )
