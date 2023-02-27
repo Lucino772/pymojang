@@ -769,3 +769,317 @@ class MapData(Packet):
             "len": lambda ctx: ctx["length"]["value"],
         }
     )
+
+
+@dataclass
+class MerchantOffers(Packet):
+    packet_id = 38
+
+    @dataclass
+    class Trade:
+        input_item1: Slot = field(metadata={"type": _Slot})
+        output_item: Slot = field(metadata={"type": _Slot})
+        input_item2: Slot = field(metadata={"type": _Slot})
+        trade_disabled: bool = field(metadata={"type": Bool()})
+        trade_uses: int = field(metadata={"type": Int()})
+        max_trade_uses: int = field(metadata={"type": Int()})
+        xp: int = field(metadata={"type": Int()})
+        special_price: int = field(metadata={"type": Int()})
+        price_multiplier: float = field(metadata={"type": Float()})
+        demand: int = field(metadata={"type": Int()})
+
+    window_id: int = field(metadata={"type": VarInt()})
+    size: int = field(metadata={"type": VarInt()})
+    trades: t.List[Trade] = field(
+        metadata={
+            "type": Array(Nested(Trade)),
+            "length": lambda ctx: ctx["size"]["value"],
+        }
+    )
+    villager_level: int = field(metadata={"type": VarInt()})
+    experience: int = field(metadata={"type": VarInt()})
+    is_regular_villager: bool = field(metadata={"type": Bool()})
+    can_restock: bool = field(metadata={"type": Bool()})
+
+
+@dataclass
+class UpdateEntityPosition(Packet):
+    packet_id = 39
+
+    entity_id: int = field(metadata={"type": VarInt()})
+    delta_x: int = field(metadata={"type": Short()})
+    delta_y: int = field(metadata={"type": Short()})
+    delta_z: int = field(metadata={"type": Short()})
+    on_ground: bool = field(metadata={"type": Bool()})
+
+
+@dataclass
+class UpdateEntityPositionAndRotation(Packet):
+    packet_id = 0x28
+
+    entity_id: int = field(metadata={"type": VarInt()})
+    delta_x: int = field(metadata={"type": Short()})
+    delta_y: int = field(metadata={"type": Short()})
+    delta_z: int = field(metadata={"type": Short()})
+    yaw: int = field(metadata={"type": UByte()})
+    pitch: int = field(metadata={"type": UByte()})
+    on_ground: bool = field(metadata={"type": Bool()})
+
+
+@dataclass
+class UpdateEntityRotation(Packet):
+    packet_id = 0x29
+
+    entity_id: int = field(metadata={"type": VarInt()})
+    yaw: int = field(metadata={"type": UByte()})
+    pitch: int = field(metadata={"type": UByte()})
+    on_ground: bool = field(metadata={"type": Bool()})
+
+
+@dataclass
+class MoveVehicle(Packet):
+    packet_id = 0x2A
+
+    x: float = field(metadata={"type": Double()})
+    y: float = field(metadata={"type": Double()})
+    z: float = field(metadata={"type": Double()})
+    yaw: int = field(metadata={"type": UByte()})
+    pitch: int = field(metadata={"type": UByte()})
+
+
+@dataclass
+class OpenBook(Packet):
+    packet_id = 0x2B
+
+    hand: int = field(metadata={"type": Enum(VarInt(), [0, 1])})
+
+
+@dataclass
+class OpenScreen(Packet):
+    packet_id = 0x2C
+
+    window_id: int = field(metadata={"type": VarInt()})
+    window_type: int = field(metadata={"type": VarInt()})
+    window_title: t.Union[list, dict] = field(metadata={"type": _Chat})
+
+
+@dataclass
+class OpenSignEditor(Packet):
+    packet_id = 0x2D
+
+    location: t.Tuple[int, int, int] = field(metadata={"type": Position()})
+
+
+@dataclass
+class Ping(Packet):
+    packet_id = 0x2E
+
+    id: int = field(metadata={"type": Int()})
+
+
+@dataclass
+class PlaceChostRecipe(Packet):
+    packet_id = 0x2F
+
+    window_id: int = field(metadata={"type": Byte()})
+    recipe: str = field(metadata={"type": _Identifier})
+
+
+@dataclass
+class PlayerAbilities(Packet):
+    packet_id = 0x30
+
+    flags: int = field(metadata={"type": Byte()})
+    flying_speed: float = field(metadata={"type": Float()})
+    fov_modifier: float = field(metadata={"type": Float()})
+
+
+@dataclass
+class PlayerChatMessage(Packet):
+    packet_id = 0x31
+
+    # header
+    sender: uuid.UUID = field(metadata={"type": UUID()})
+    index: int = field(metadata={"type": VarInt()})
+    signature_present: bool = field(metadata={"type": Bool()})
+    signature_bytes: bytes = field(
+        metadata={
+            "type": Optional(Bytes()),
+            "present": lambda ctx: ctx["signature_present"]["value"],
+        }
+    )
+
+    # body
+    message: str = field(metadata={"type": _String})
+    timestamp: int = field(metadata={"type": Long()})
+    salt: int = field(metadata={"type": Long()})
+
+    # prev. message
+    total_prev_msgs: int = field(metadata={"type": VarInt()})
+    prev_msgs_sigs: t.List[bytes] = field(
+        metadata={
+            "type": Array(Prefixed(Bytes(), VarInt())),
+            "length": lambda ctx: ctx["total_prev_msgs"]["value"],
+        }
+    )
+
+    # other
+    unsigned_content_present: bool = field(metadata={"type": Bool()})
+    unsigned_content: t.Union[list, dict] = field(
+        metadata={
+            "type": Optional(_Chat),
+            "present": lambda ctx: ctx["unsigned_content_present"]["value"],
+        }
+    )
+    filter_type: int = field(metadata={"type": VarInt()})
+    filter_type_bits: t.List[int] = field(metadata={"type": _BitSets})
+
+    # net. target
+    chat_type: int = field(metadata={"type": VarInt()})
+    net_name: t.Union[list, dict] = field(metadata={"type": _Chat})
+    net_target_name_present: bool = field(metadata={"type": Bool()})
+    net_target_name: t.Union[list, dict] = field(
+        metadata={
+            "type": Optional(_Chat),
+            "present": lambda ctx: ctx["net_target_name_present"]["value"],
+        }
+    )
+
+
+@dataclass
+class EndCombat(Packet):
+    packet_id = 0x32
+
+    duration: int = field(metadata={"type": VarInt()})
+    entity_id: int = field(metadata={"type": Int()})
+
+
+@dataclass
+class EnterCombat(Packet):
+    packet_id = 0x33
+
+
+@dataclass
+class CombatDeath(Packet):
+    packet_id = 0x34
+
+    player_id: int = field(metadata={"type": VarInt()})
+    entity_id: int = field(metadata={"type": Int()})
+    message: t.Union[list, dict] = field(metadata={"type": _Chat})
+
+
+@dataclass
+class PlayerInfoRemove(Packet):
+    packet_id = 0x35
+
+    nb_players: int = field(metadata={"type": VarInt()})
+    players: t.List[uuid.UUID] = field(
+        metadata={
+            "type": Array(UUID()),
+            "length": lambda ctx: ctx["nb_players"]["value"],
+        }
+    )
+
+
+@dataclass
+class PlayerInfoUpdate(Packet):
+    packet_id = 0x36
+
+    @dataclass
+    class _Action:
+        _uuid: uuid.UUID = field(metadata={"type": UUID()})
+
+    @dataclass
+    class Action_AddPlayer(_Action):
+        @dataclass
+        class Property:
+            name: str = field(metadata={"type": _String})
+            value: str = field(metadata={"type": _String})
+            signed: bool = field(metadata={"type": Bool()})
+            signature: str = field(
+                metadata={
+                    "type": Optional(_String),
+                    "present": lambda ctx: ctx["signed"]["value"],
+                }
+            )
+
+        name: str = field(metadata={"type": _String})
+        properties: t.List[Property] = field(
+            metadata={"type": Prefixed(Array(Nested(Property)), VarInt())}
+        )
+
+    @dataclass
+    class Action_InitChat(_Action):
+        has_sig_data: bool = field(metadata={"type": Bool()})
+        chat_sess_id: uuid.UUID = field(
+            metadata={
+                "type": Optional(UUID()),
+                "present": lambda ctx: ctx["has_sig_data"]["value"],
+            }
+        )
+        public_key_exp_time: int = field(
+            metadata={
+                "type": Optional(Long()),
+                "present": lambda ctx: ctx["has_sig_data"]["value"],
+            }
+        )
+        encoded_public_key: bytes = field(
+            metadata={
+                "type": Optional(Prefixed(Bytes(), VarInt())),
+                "present": lambda ctx: ctx["has_sig_data"]["value"],
+            }
+        )
+        public_key_sig: bytes = field(
+            metadata={
+                "type": Optional(Prefixed(Bytes(), VarInt())),
+                "present": lambda ctx: ctx["has_sig_data"]["value"],
+            }
+        )
+
+    @dataclass
+    class Action_UpdateGamemode(_Action):
+        gamemode: int = field(metadata={"type": VarInt()})
+
+    @dataclass
+    class Action_UpdateListed(_Action):
+        listed: bool = field(metadata={"type": Bool()})
+
+    @dataclass
+    class Action_UpdateLatency(_Action):
+        ping: int = field(metadata={"type": VarInt()})
+
+    @dataclass
+    class Action_UpdateDisplayName:
+        has_display_name: bool = field(metadata={"type": Bool()})
+        display_name: t.Union[list, dict] = field(
+            metadata={
+                "type": Optional(_Chat),
+                "present": lambda ctx: ctx["has_display_name"]["value"],
+            }
+        )
+
+    actions: int = field(metadata={"type": Byte()})
+    # TODO: Actions List
+
+
+@dataclass
+class LookAt(Packet):
+    packet_id = 0x37
+
+    feet_eyes: int = field(metadata={"type": Enum(VarInt(), [0, 1])})
+    target_x: int = field(metadata={"type": Double()})
+    target_y: int = field(metadata={"type": Double()})
+    target_z: int = field(metadata={"type": Double()})
+    is_entity: bool = field(metadata={"type": Bool()})
+    entity_id: int = field(
+        metadata={
+            "type": Optional(VarInt()),
+            "present": lambda ctx: ctx["is_entity"]["value"],
+        }
+    )
+    entity_feet_eyes: int = field(
+        metadata={
+            "type": Optional(Enum(VarInt(), [0, 1])),
+            "present": lambda ctx: ctx["is_entity"]["value"],
+        }
+    )
