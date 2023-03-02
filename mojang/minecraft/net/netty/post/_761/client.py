@@ -1083,3 +1083,122 @@ class LookAt(Packet):
             "present": lambda ctx: ctx["is_entity"]["value"],
         }
     )
+
+
+@dataclass
+class SynchronizePlayerPosition(Packet):
+    packet_id = 0x38
+
+    x: float = field(metadata={"type": Double()})
+    y: float = field(metadata={"type": Double()})
+    z: float = field(metadata={"type": Double()})
+    yaw: float = field(metadata={"type": Float()})
+    pitch: float = field(metadata={"type": Float()})
+    flags: int = field(metadata={"type": Byte()})
+    teleport_id: int = field(metadata={"type": VarInt()})
+    dismount_vehicle: bool = field(metadata={"type": Bool()})
+
+
+@dataclass
+class UpdateRecipeBook(Packet):
+    packet_id = 0x39
+
+    action: int = field(metadata={"type": VarInt()})
+    crafting_recipe_book_open: bool = field(metadata={"type": Bool()})
+    crafting_recipe_book_filter_active: bool = field(metadata={"type": Bool()})
+    smelting_recipe_book_open: bool = field(metadata={"type": Bool()})
+    smelting_recipe_book_filter_active: bool = field(metadata={"type": Bool()})
+    blast_furnace_recipe_book_open: bool = field(metadata={"type": Bool()})
+    blast_furnace_recipe_book_filter_active: bool = field(
+        metadata={"type": Bool()}
+    )
+    smoker_recipe_book_open: bool = field(metadata={"type": Bool()})
+    smoker_recipe_book_filter_active: bool = field(metadata={"type": Bool()})
+    recipe_ids1: t.List[str] = field(
+        metadata={"type": Prefixed(Array(_Identifier), VarInt())}
+    )
+    recipe_ids2: t.List[str] = field(
+        metadata={
+            "type": Optional(Prefixed(Array(_Identifier), VarInt())),
+            "present": lambda ctx: ctx["action"]["value"] == 0,
+        }
+    )
+
+
+@dataclass
+class RemoveEntities(Packet):
+    packet_id = 0x3A
+
+    entity_ids: t.List[int] = field(
+        metadata={"type": Prefixed(Array(VarInt()), VarInt())}
+    )
+
+
+@dataclass
+class RemoveEntityEffect(Packet):
+    packet_id = 0x3B
+
+    entity_id: int = field(metadata={"type": VarInt()})
+    effect_id: int = field(metadata={"type": VarInt()})
+
+
+@dataclass
+class ResourcePack(Packet):
+    packet_id = 0x3C
+
+    url: str = field(metadata={"type": _String})
+    hash: str = field(metadata={"type": _String})
+    forced: bool = field(metadata={"type": Bool()})
+    has_prompt_message: bool = field(metadata={"type": Bool()})
+    prompt_message: t.Union[list, dict] = field(
+        metadata={
+            "type": Optional(_Chat),
+            "present": lambda ctx: ctx["has_prompt_message"]["value"],
+        }
+    )
+
+
+@dataclass
+class Respawn(Packet):
+    packet_id = 0x3D
+
+    dim_type: str = field(metadata={"type": _Identifier})
+    dim_name: str = field(metadata={"type": _Identifier})
+    hashed_seed: int = field(metadata={"type": Long()})
+    gamemode: int = field(metadata={"type": UByte()})
+    prev_gamemode: int = field(metadata={"type": Byte()})
+    is_debug: bool = field(metadata={"type": Bool()})
+    is_flat: bool = field(metadata={"type": Bool()})
+    copy_metadata: bool = field(metadata={"type": Bool()})
+    has_death_location: bool = field(metadata={"type": Bool()})
+    death_dim_name: str = field(
+        metadata={
+            "type": Optional(_Identifier),
+            "present": lambda ctx: ctx["has_death_location"]["value"],
+        }
+    )
+    death_location: t.Tuple[int, int, int] = field(
+        metadata={
+            "type": Optional(Position()),
+            "present": lambda ctx: ctx["has_death_location"]["value"],
+        }
+    )
+
+
+@dataclass
+class SetHeadRotation(Packet):
+    packet_id = 0x3E
+
+    entity_id: int = field(metadata={"type": VarInt()})
+    head_yaw: int = field(metadata={"type": UByte()})
+
+
+@dataclass
+class UpdateSectionBlocks(Packet):
+    packet_id = 0x3F
+
+    chunk_section_pos: int = field(metadata={"type": Long()})
+    suppress_ligh_updates: bool = field(metadata={"type": Bool()})
+    blocks: t.List[int] = field(
+        metadata={"type": Prefixed(Array(Long()), VarInt())}
+    )
