@@ -1,3 +1,12 @@
+PyMojang v2.0.3 (2023-03-16)
+============================
+
+Bugfixes
+--------
+
+- fixing issue with NotFound errors in get_username & get_uuid (`#66 <https://github.com/Lucino772/pymojang/issues/66>`_)
+
+
 PyMojang v2.0.2 (2023-02-08)
 ============================
 
