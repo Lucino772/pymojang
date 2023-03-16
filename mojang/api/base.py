@@ -5,7 +5,7 @@ from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
 import requests
 
-from ..exceptions import InvalidName, MethodNotAllowed, ServerError
+from ..exceptions import InvalidName, NotFound
 from . import helpers, urls
 from .models import Cape, Skin
 from .structures import ServiceStatus, UnauthenticatedProfile
@@ -67,10 +67,13 @@ def get_uuid(username: str) -> Optional[str]:
         raise InvalidName()
 
     response = requests.get(urls.api_get_uuid(username))
-    code, data = helpers.err_check(
-        response,
-        use_defaults=True,
-    )
+    try:
+        code, data = helpers.err_check(
+            response,
+            use_defaults=True,
+        )
+    except NotFound:
+        return None
 
     if code == 204:
         return None
@@ -129,11 +132,14 @@ def get_username(uuid: str) -> Optional[str]:
     'Notch'
     """
     response = requests.get(urls.api_get_username(uuid))
-    code, data = helpers.err_check(
-        response,
-        (400, ValueError),
-        use_defaults=True,
-    )
+    try:
+        code, data = helpers.err_check(
+            response,
+            (400, ValueError),
+            use_defaults=True,
+        )
+    except NotFound:
+        return None
 
     if code == 204:
         return None
