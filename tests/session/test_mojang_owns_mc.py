@@ -1,13 +1,14 @@
 import unittest
-from unittest import mock
 
+import jwt
+import responses
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes, serialization
-from cryptography.hazmat.primitives.asymmetric import padding, rsa
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
 
 from mojang.api import session
+from mojang.api.urls import api_session_ownership
 from mojang.exceptions import Unauthorized
-from tests.session.mock_server import MockSessionServer
 
 private_key = rsa.generate_private_key(
     public_exponent=65537, key_size=4096, backend=default_backend()
@@ -33,26 +34,60 @@ public_pem = (
     .strip()
 )
 
-VALID_ACCESS_TOKEN = "MY_ACCESS_TOKEN"
-INVALID_ACCESS_TOKEN = "NOT_MY_ACCESS_TOKEN"
-
-mock_server = MockSessionServer(
-    VALID_ACCESS_TOKEN,
-    game_private_key=private_pem,
-    game_public_key=public_pem,
-)
-
 
 class TestMojangOwnsMinecraft(unittest.TestCase):
-    @mock.patch("requests.get", side_effect=mock_server.owns_minecraft)
-    def test_valid_token(self, mock_get: mock.MagicMock):
-        ok = session.owns_minecraft(
-            VALID_ACCESS_TOKEN, verify_sig=True, public_key=public_pem
+    @responses.activate
+    def test200(self):
+        product_minecraft_sig = jwt.encode(
+            {"signerId": "2535416586892404", "name": "product_minecraft"},
+            private_key,
+            algorithm="RS256",
         )
-        self.assertEqual(ok, True)
+        game_minecraft_sig = jwt.encode(
+            {"signerId": "2535416586892404", "name": "game_minecraft"},
+            private_key,
+            algorithm="RS256",
+        )
+        signature = jwt.encode(
+            {
+                "entitlements": [
+                    {"name": "product_minecraft"},
+                    {"name": "game_minecraft"},
+                ],
+                "signerId": "2535416586892404",
+            },
+            private_key,
+            algorithm="RS256",
+        )
+        responses.add(
+            method=responses.GET,
+            url=api_session_ownership,
+            json={
+                "items": [
+                    {
+                        "name": "product_minecraft",
+                        "signature": product_minecraft_sig,
+                    },
+                    {
+                        "name": "game_minecraft",
+                        "signature": game_minecraft_sig,
+                    },
+                ],
+                "signature": signature,
+                "keyId": "1",
+            },
+            status=200,
+        )
 
-    @mock.patch("requests.get", side_effect=mock_server.owns_minecraft)
-    def test_invalid_token(self, mock_get: mock.MagicMock):
-        self.assertRaises(
-            Unauthorized, session.owns_minecraft, INVALID_ACCESS_TOKEN
+        owned = session.owns_minecraft(
+            "TOKEN", verify_sig=True, public_key=public_pem
         )
+        self.assertTrue(owned)
+
+    @responses.activate
+    def test401(self):
+        responses.add(
+            method=responses.GET, url=api_session_ownership, status=401
+        )
+
+        self.assertRaises(Unauthorized, session.owns_minecraft, "TOKEN")
