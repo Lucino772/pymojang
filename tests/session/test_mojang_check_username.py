@@ -1,42 +1,57 @@
 import unittest
-from unittest import mock
+
+import responses
 
 from mojang.api import session
+from mojang.api.urls import api_session_check_username
 from mojang.exceptions import Unauthorized
-from tests.session.mock_server import MockSessionServer
-
-VALID_ACCESS_TOKEN = "MY_ACCESS_TOKEN"
-INVALID_ACCESS_TOKEN = "NOT_MY_ACCESS_TOKEN"
-
-mock_server = MockSessionServer(
-    VALID_ACCESS_TOKEN, unavailable_names=["Notch"]
-)
 
 
 class TestMojangCheckUsername(unittest.TestCase):
-    @mock.patch("requests.get", side_effect=mock_server.check_username)
-    def test_available_name(self, mock_get: mock.MagicMock):
-        self.assertEqual(
-            session.check_username(VALID_ACCESS_TOKEN, "lucino"), True
+    @responses.activate
+    def test_available(self):
+        name = "lucino"
+        responses.add(
+            method=responses.GET,
+            url=api_session_check_username(name),
+            json={"status": "AVAILABLE"},
+            status=200,
         )
 
-    @mock.patch("requests.get", side_effect=mock_server.check_username)
-    def test_unavailable_name(self, mock_get: mock.MagicMock):
-        self.assertEqual(
-            session.check_username(VALID_ACCESS_TOKEN, "Notch"), False
+        available = session.check_username("TOKEN", name)
+        self.assertTrue(available)
+
+    @responses.activate
+    def test_unavailable(self):
+        name = "lucino"
+        responses.add(
+            method=responses.GET,
+            url=api_session_check_username(name),
+            json={"status": "DUPLICATE"},
+            status=200,
         )
 
-    @mock.patch("requests.get", side_effect=mock_server.check_username)
-    def test_invalid_token(self, mock_get: mock.MagicMock):
-        self.assertRaises(
-            Unauthorized,
-            session.check_username,
-            INVALID_ACCESS_TOKEN,
-            "lucino",
+        available = session.check_username("TOKEN", name)
+        self.assertFalse(available)
+
+    @responses.activate
+    def test401(self):
+        name = "lucino"
+        responses.add(
+            method=responses.GET,
+            url=api_session_check_username(name),
+            status=401,
         )
 
-    @mock.patch("requests.get", side_effect=mock_server.check_username_429)
-    def test_too_many_requests(self, mock_get: mock.MagicMock):
-        self.assertRaises(
-            RuntimeError, session.check_username, VALID_ACCESS_TOKEN, "lucino"
+        self.assertRaises(Unauthorized, session.check_username, "TOKEN", name)
+
+    @responses.activate
+    def test429(self):
+        name = "lucino"
+        responses.add(
+            method=responses.GET,
+            url=api_session_check_username(name),
+            status=429,
         )
+
+        self.assertRaises(RuntimeError, session.check_username, "TOKEN", name)

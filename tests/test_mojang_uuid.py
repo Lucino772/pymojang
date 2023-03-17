@@ -1,22 +1,80 @@
 import unittest
 
+import responses
+
 import mojang
-from mojang.exceptions import InvalidName
+from mojang.api.urls import api_get_uuid
+from mojang.exceptions import (
+    InvalidName,
+    MethodNotAllowed,
+    NotFound,
+    ServerError,
+)
 
 
 class TestMojangStatus(unittest.TestCase):
-    def setUp(self) -> None:
-        self.notch = mojang.get_uuid("Notch")
-        self.jeb_ = mojang.get_uuid("jeb_")
-        self.unkown = mojang.get_uuid("UNEXISTENTPLAYER")
+    @responses.activate
+    def test200(self):
+        username = "Notch"
+        responses.add(
+            method=responses.GET,
+            url=api_get_uuid(username),
+            json={"id": "069a79f444e94726a5befca90e38aaf5", "name": username},
+            status=200,
+        )
 
-    def test_existent_uuid(self):
-        self.assertEqual(self.notch, "069a79f444e94726a5befca90e38aaf5")
-        self.assertEqual(self.jeb_, "853c80ef3c3749fdaa49938b674adae6")
+        uuid = mojang.get_uuid(username)
+        self.assertEqual(uuid, "069a79f444e94726a5befca90e38aaf5")
 
-    def test_unexistent_uuid(self):
-        self.assertEqual(self.unkown, None)
+    @responses.activate
+    def test204(self):
+        username = "UNEXISTENTPLAYER"
+        responses.add(
+            method=responses.GET, url=api_get_uuid(username), status=204
+        )
 
-    def test_invalid_uuid(self):
-        self.assertRaises(InvalidName, mojang.get_uuid, "")
-        self.assertRaises(InvalidName, mojang.get_uuid, "xxxxxxxxxxxxxxxxx")
+        uuid = mojang.get_uuid(username)
+        self.assertIsNone(uuid)
+
+    @responses.activate
+    def test400(self):
+        username1 = "xxxxxxxxxxxxxxxxx"
+        responses.add(
+            method=responses.GET, url=api_get_uuid(username1), status=400
+        )
+
+        username2 = ""
+        responses.add(
+            method=responses.GET, url=api_get_uuid(username2), status=400
+        )
+
+        self.assertRaises(InvalidName, mojang.get_uuid, username1)
+        self.assertRaises(InvalidName, mojang.get_uuid, username2)
+
+    @responses.activate
+    def test404(self):
+        username = "UNEXISTENTPLAYER"
+        responses.add(
+            method=responses.GET, url=api_get_uuid(username), status=404
+        )
+
+        uuid = mojang.get_uuid(username)
+        self.assertIsNone(uuid)
+
+    @responses.activate
+    def test405(self):
+        username = "UNEXISTENTPLAYER"
+        responses.add(
+            method=responses.GET, url=api_get_uuid(username), status=405
+        )
+
+        self.assertRaises(MethodNotAllowed, mojang.get_uuid, username)
+
+    @responses.activate
+    def test500(self):
+        username = "UNEXISTENTPLAYER"
+        responses.add(
+            method=responses.GET, url=api_get_uuid(username), status=500
+        )
+
+        self.assertRaises(ServerError, mojang.get_uuid, username)

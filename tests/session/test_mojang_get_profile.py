@@ -1,21 +1,49 @@
 import unittest
-from unittest import mock
+
+import responses
 
 from mojang.api import session
 from mojang.api.models import Cape, Skin
+from mojang.api.urls import api_session_profile
 from mojang.exceptions import Unauthorized
-from tests.session.mock_server import MockSessionServer
-
-VALID_ACCESS_TOKEN = "MY_ACCESS_TOKEN"
-INVALID_ACCESS_TOKEN = "NOT_MY_ACCESS_TOKEN"
-
-mock_server = MockSessionServer(VALID_ACCESS_TOKEN)
 
 
 class TestMojangGetProfile(unittest.TestCase):
-    @mock.patch("requests.get", side_effect=mock_server.get_profile)
-    def test_valid_token(self, mock_get: mock.MagicMock):
-        profile = session.get_profile(VALID_ACCESS_TOKEN)
+    def _patch_skin_url(self, url: str):
+        responses.add(method=responses.GET, url=url, body=b"", status=200)
+
+    @responses.activate
+    def test200(self):
+        self._patch_skin_url(
+            "http://textures.minecraft.net/texture/1a4af718455d4aab528e7a61f86fa25e6a369d1768dcb13f7df319a713eb810b"
+        )
+        responses.add(
+            method=responses.GET,
+            url=api_session_profile,
+            json={
+                "id": "4ba22ce11f064d7f9f715634aa0d7973",
+                "name": "Lucino772",
+                "skins": [
+                    {
+                        "id": "6a6e65e5-76dd-4c3c-a625-162924514568",
+                        "state": "ACTIVE",
+                        "url": "http://textures.minecraft.net/texture/1a4af718455d4aab528e7a61f86fa25e6a369d1768dcb13f7df319a713eb810b",
+                        "variant": "CLASSIC",
+                        "alias": "STEVE",
+                    }
+                ],
+                "capes": [
+                    {
+                        "id": "6a6e65e5-76dd-4c3c-a625-162924514568",
+                        "state": "ACTIVE",
+                        "url": "http://textures.minecraft.net/texture/1a4af718455d4aab528e7a61f86fa25e6a369d1768dcb13f7df319a713eb810b",
+                    }
+                ],
+            },
+            status=200,
+        )
+
+        profile = session.get_profile("TOKEN")
         self.assertEqual(profile.uuid, "4ba22ce11f064d7f9f715634aa0d7973")
         self.assertEqual(profile.name, "Lucino772")
         self.assertEqual(
@@ -40,8 +68,10 @@ class TestMojangGetProfile(unittest.TestCase):
             ],
         )
 
-    @mock.patch("requests.get", side_effect=mock_server.get_profile)
-    def test_invalid_token(self, mock_get: mock.MagicMock):
-        self.assertRaises(
-            Unauthorized, session.get_profile, INVALID_ACCESS_TOKEN
+    @responses.activate
+    def test401(self):
+        responses.add(
+            method=responses.GET, url=api_session_profile, status=401
         )
+
+        self.assertRaises(Unauthorized, session.get_profile, "TOKEN")

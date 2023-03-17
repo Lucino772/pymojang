@@ -1,32 +1,47 @@
 import unittest
-from unittest import mock
+
+import responses
 
 from mojang.api import session
+from mojang.api.urls import api_session_change_skin
 from mojang.exceptions import Unauthorized
-from tests.session.mock_server import MockSessionServer
-
-VALID_ACCESS_TOKEN = "MY_ACCESS_TOKEN"
-INVALID_ACCESS_TOKEN = "NOT_MY_ACCESS_TOKEN"
-
-mock_server = MockSessionServer(
-    VALID_ACCESS_TOKEN, unavailable_names=["Notch"]
-)
 
 
 class TestMojangChangeSkin(unittest.TestCase):
-    @mock.patch("requests.post", side_effect=mock_server.change_user_skin)
-    def test_valid_token(self, mock_post: mock.MagicMock):
-        ok = session.change_user_skin(
-            VALID_ACCESS_TOKEN,
-            "http://textures.minecraft.net/texture/292009a4925b58f02c77dadc3ecef07ea4c7472f64e0fdc32ce5522489362680",
-        )
-        self.assertEqual(ok, True)
+    def _path_skin_url(self, url: str):
+        responses.add(method=responses.GET, url=url, status=200, body=b"")
 
-    @mock.patch("requests.post", side_effect=mock_server.change_user_skin)
-    def test_invalid_token(self, mock_post: mock.MagicMock):
+    @responses.activate
+    def test204(self):
+        skin_url = "http://textures.minecraft.net/texture/292009a4925b58f02c77dadc3ecef07ea4c7472f64e0fdc32ce5522489362680"
+        self._path_skin_url(skin_url)
+        responses.add(
+            method=responses.POST, url=api_session_change_skin, status=204
+        )
+
+        changed = session.change_user_skin("TOKEN", skin_url)
+        self.assertTrue(changed)
+
+    @responses.activate
+    def test400(self):
+        skin_url = "http://textures.minecraft.net/texture/292009a4925b58f02c77dadc3ecef07ea4c7472f64e0fdc32ce5522489362680"
+        self._path_skin_url(skin_url)
+        responses.add(
+            method=responses.POST, url=api_session_change_skin, status=400
+        )
+
         self.assertRaises(
-            Unauthorized,
-            session.change_user_skin,
-            INVALID_ACCESS_TOKEN,
-            "http://textures.minecraft.net/texture/292009a4925b58f02c77dadc3ecef07ea4c7472f64e0fdc32ce5522489362680",
+            ValueError, session.change_user_skin, "TOKEN", skin_url
+        )
+
+    @responses.activate
+    def test401(self):
+        skin_url = "http://textures.minecraft.net/texture/292009a4925b58f02c77dadc3ecef07ea4c7472f64e0fdc32ce5522489362680"
+        self._path_skin_url(skin_url)
+        responses.add(
+            method=responses.POST, url=api_session_change_skin, status=401
+        )
+
+        self.assertRaises(
+            Unauthorized, session.change_user_skin, "TOKEN", skin_url
         )

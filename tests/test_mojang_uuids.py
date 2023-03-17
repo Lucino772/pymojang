@@ -1,47 +1,87 @@
 import unittest
 
+import responses
+
 import mojang
-from mojang.exceptions import InvalidName
+from mojang.api.urls import api_get_uuids
+from mojang.exceptions import (
+    InvalidName,
+    MethodNotAllowed,
+    NotFound,
+    ServerError,
+)
 
 
 class TestMojangStatus(unittest.TestCase):
-    def setUp(self) -> None:
-        self.order1 = mojang.get_uuids(["Notch", "jeb_"])
-        self.order2 = mojang.get_uuids(["jeb_", "Notch"])
-
-        self.unkown1 = mojang.get_uuids(["jeb_", "UNEXISTENTPLAYER"])
-        self.unkown2 = mojang.get_uuids(["UNEXISTENTPL1", "UNEXISTENTPL2"])
-
-    def test_existent_uuids(self):
+    @responses.activate
+    def test200(self):
+        responses.add(
+            method=responses.POST,
+            url=api_get_uuids,
+            json=[
+                {"id": "45f50155c09f4fdcb5cee30af2ebd1f0", "name": "_jeb"},
+                {"id": "069a79f444e94726a5befca90e38aaf5", "name": "Notch"},
+            ],
+            status=200,
+        )
+        usernames1 = ["Notch", "_jeb"]
+        uuids1 = mojang.get_uuids(usernames1)
         self.assertDictEqual(
-            self.order1,
+            uuids1,
             {
                 "notch": "069a79f444e94726a5befca90e38aaf5",
-                "jeb_": "853c80ef3c3749fdaa49938b674adae6",
+                "_jeb": "45f50155c09f4fdcb5cee30af2ebd1f0",
             },
         )
+
+        usernames2 = ["_jeb", "Notch"]
+        uuids2 = mojang.get_uuids(usernames2)
         self.assertDictEqual(
-            self.order2,
+            uuids2,
             {
-                "jeb_": "853c80ef3c3749fdaa49938b674adae6",
+                "_jeb": "45f50155c09f4fdcb5cee30af2ebd1f0",
                 "notch": "069a79f444e94726a5befca90e38aaf5",
             },
         )
 
-    def test_unexistent_uuids(self):
+    @responses.activate
+    def test204(self):
+        responses.add(
+            method=responses.POST,
+            url=api_get_uuids,
+            json=[{"id": "45f50155c09f4fdcb5cee30af2ebd1f0", "name": "_jeb"}],
+            status=200,
+        )
+
+        uuids = mojang.get_uuids(["_jeb", "UNEXISTENTPLAYER"])
         self.assertDictEqual(
-            self.unkown1,
+            uuids,
             {
-                "jeb_": "853c80ef3c3749fdaa49938b674adae6",
+                "_jeb": "45f50155c09f4fdcb5cee30af2ebd1f0",
                 "unexistentplayer": None,
             },
         )
-        self.assertDictEqual(
-            self.unkown2, {"unexistentpl1": None, "unexistentpl2": None}
+
+    @responses.activate
+    def test400(self):
+        responses.add(method=responses.POST, url=api_get_uuids, status=400)
+        self.assertRaises(
+            InvalidName, mojang.get_uuids, ["", "xxxxxxxxxxxxxxxxx"]
         )
 
-    def test_invalid_uuids(self):
-        self.assertRaises(InvalidName, mojang.get_uuids, ["", "jeb_"])
+    @responses.activate
+    def test404(self):
+        responses.add(method=responses.POST, url=api_get_uuids, status=404)
+        self.assertRaises(NotFound, mojang.get_uuids, ["Notch", "_jeb"])
+
+    @responses.activate
+    def test405(self):
+        responses.add(method=responses.POST, url=api_get_uuids, status=405)
         self.assertRaises(
-            InvalidName, mojang.get_uuids, ["jeb_", "xxxxxxxxxxxxxxxxx"]
+            MethodNotAllowed, mojang.get_uuids, ["Notch", "_jeb"]
         )
+
+    @responses.activate
+    def test500(self):
+        responses.add(method=responses.POST, url=api_get_uuids, status=500)
+        self.assertRaises(ServerError, mojang.get_uuids, ["Notch", "_jeb"])
