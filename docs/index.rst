@@ -17,7 +17,7 @@ Welcome to PyMojang's documentation!
    changelog
 
 
-PyMojang is a full wrapper of the `Mojang API <https://wiki.vg/Mojang_API>`_ and `Mojang Authentication API <https://wiki.vg/Authentication>`_. It also support the `Microsoft Authentication Scheme <https://wiki.vg/Microsoft_Authentication_Scheme>`_.
+PyMojang is a full wrapper of the `Mojang API <https://wiki.vg/Mojang_API>`_ and the `Microsoft Authentication Scheme <https://wiki.vg/Microsoft_Authentication_Scheme>`_.
 
 You can retrieve basic user information such as their **uuid, skin, cape,...**
 
