@@ -38,17 +38,6 @@ api_session_cape_visibility = (
     "https://api.minecraftservices.com/minecraft/profile/capes/active"
 )
 
-# URLs for authentication with yggdrasil
-api_yggdrasil_authenticate = "https://authserver.mojang.com/authenticate"
-api_yggdrasil_refresh = "https://authserver.mojang.com/refresh"
-api_yggdrasil_validate = "https://authserver.mojang.com/validate"
-api_yggdrasil_invalidate = "https://authserver.mojang.com/invalidate"
-api_yggdrasil_signout = "https://authserver.mojang.com/signout"
-
-# URLs for security of Mojang accounts
-api_security_verify_ip = "https://api.mojang.com/user/security/location"
-api_security_challenges = "https://api.mojang.com/user/security/challenges"
-
 # URLs for authentication with Microsoft
 api_ms_xbl_authenticate = "https://user.auth.xboxlive.com/user/authenticate"
 api_ms_xbl_authorize = "https://xsts.auth.xboxlive.com/xsts/authorize"

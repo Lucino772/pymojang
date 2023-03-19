@@ -11,32 +11,7 @@ The basic method allows you to easily retrieve information about users and Mojan
     >>> CLIENT_SECRET = ... # This is your Azure client secret
     >>> app = mojang.app(CLIENT_ID, CLIENT_SECRET)
 
-After creating your app you have 2 options: you have migrated your Mojang account to Microsoft or still use a Mojang account.
-
-Mojang Account
-~~~~~~~~~~~~~~
-
-In this case :py:meth:`~mojang.api.auth.models.MojangAuthenticationApp.get_session` will return a :py:class:`~~mojang.api.auth.models.MojangAuthenticatedUser`.
-
-.. code-block:: pycon
-
-    >>> app.get_session('YOUR_USERNAME', 'YOUR_PASSWORD')
-    MojangAuthenticatedUser(
-        name='PLAYER_NAME',
-        uuid='PLAYER_UUID',
-        is_legacy=False,
-        is_demo=False,
-        names=(NameInfo(name='PLAYER_NAME', changed_to_at=None),),
-        skin=Skin(source='http://...', variant='classic'),
-        cape=None,
-        created_at=datetime.datetime(2006, 4, 29, 10, 10, 10),
-        name_change_allowed=True
-    )
-
-Microsoft Account
-~~~~~~~~~~~~~~~~~
-
-In this case :py:meth:`~mojang.api.auth.models.MojangAuthenticationApp.get_session` will return a :py:class:`~~mojang.api.auth.models.MicrosoftAuthenticatedUser`.
+After creating your app you can use the :py:meth:`~mojang.api.auth.models.MojangAuthenticationApp.get_session` method, which will return a :py:class:`~~mojang.api.auth.models.MicrosoftAuthenticatedUser`.
 
 .. code-block:: pycon
 
