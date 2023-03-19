@@ -1,13 +1,7 @@
 import datetime as dt
 import typing
 
-from .models import Cape, Skin
-
-## Security
-ChallengeInfo = typing.NamedTuple(
-    "ChallengeInfo",
-    [("id", int), ("challenge", str)],
-)
+from mojang.api.models import Cape, Skin
 
 ## Base
 ServiceStatus = typing.NamedTuple(

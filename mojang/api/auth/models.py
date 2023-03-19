@@ -1,16 +1,13 @@
 import datetime
-import enum
 from abc import ABCMeta, abstractmethod
 from typing import List, Optional, Tuple, Union, overload
 
 import msal
 
+from mojang.api import session
+from mojang.api.auth import microsoft
+from mojang.api.models import Cape, Skin
 from mojang.exceptions import MicrosoftInvalidGrant, MicrosoftUserNotOwner
-
-from .. import session
-from ..auth import microsoft, security, yggdrasil
-from ..models import Cape, Skin
-from ..structures import ChallengeInfo
 
 _DEFAULT_SCOPES = ["XboxLive.signin"]
 
@@ -171,35 +168,6 @@ class AuthenticatedUser(metaclass=ABCMeta):
         session.hide_user_cape(self._access_token)
 
 
-class MojangAuthenticatedUser(AuthenticatedUser):
-    """Class for user with a Mojang account"""
-
-    def refresh(self):
-        """Refresh current session"""
-        self._access_token, self._refresh_token = yggdrasil.refresh(
-            self._access_token, self._refresh_token
-        )
-
-    def close(self):
-        """Close current session"""
-        yggdrasil.invalidate(self._access_token, self._refresh_token)
-        self._access_token, self._refresh_token = None
-
-    @property
-    def secure(self) -> bool:
-        """Check wether user IP is secured. For more details checkout :py:meth:`~mojang.account.auth.security.check_ip`"""
-        return security.check_ip(self._access_token)
-
-    @property
-    def challenges(self) -> List[ChallengeInfo]:
-        """Returns the list of challenges to verify user IP. For more details checkout :py:meth:`~mojang.account.auth.security.get_challenges`"""
-        return security.get_challenges(self._access_token)
-
-    def verify(self, answers: list) -> bool:
-        """Verify user IP. For more details checkout :py:meth:`~mojang.account.auth.security.verify_ip`"""
-        return security.verify_ip(self._access_token, answers)
-
-
 class MicrosoftAuthenticatedUser(AuthenticatedUser):
     """Class for user with a Microsoft account"""
 
@@ -269,77 +237,8 @@ class MojangAuthenticationApp:
 
         return access_token, str(response["refresh_token"])
 
-    @overload
-    def get_session(
-        self, username: str, password: str, client_token: Optional[str] = None
-    ) -> MojangAuthenticatedUser:
-        """Authenticate with a Mojang Account
-
-        :param str username: The username of email if account is not legacy
-        :param str password: The user password
-        :param client_token: The client token to use
-        :type client_token: str or None
-
-        :Examples:
-
-        .. code-block:: python
-
-            import mojang
-
-            CLIENT_ID = ... # Your Azure App client id
-            CLIENT_SECRET = ... # Your Azure App client secret
-
-            app = mojang.app(CLIENT_ID, CLIENT_SECRET)
-            user = app.get_session("USERNAME", "PASSWORD")
-        """
-        ...
-
-    @overload
     def get_session(self, code: str) -> MicrosoftAuthenticatedUser:
-        """Authenticate with a Microsoft Account
-
-        :param str auth_code: The auth code from the redirect
-
-        :raises MicrosoftInvalidGrant: if auth code is invalid
-
-        :Examples:
-
-        .. code-block:: python
-
-            import mojang
-
-            CLIENT_ID = ... # Your Azure App client id
-            CLIENT_SECRET = ... # Your Azure App client secret
-
-            app = mojang.app(CLIENT_ID, CLIENT_SECRET)
-
-            # To authenticate users, you first need them to visit the url
-            # returned by the function `app.authorization_url`
-            print(app.authorization_url)
-
-            # Once they will have granted access to their account to your app,
-            # they will be redirect to the uri you choose with a `code` parameter
-            # http://example.com?code=...
-            # You can use this code to authenticate the user
-            code = ...
-            user = app.get_session(code)
-        """
-        ...
-
-    def get_session(
-        self, *args, **kwargs
-    ) -> Union[MojangAuthenticatedUser, MicrosoftAuthenticatedUser, None]:
-        if len(args) == 2:
-            access_token, refresh_token = yggdrasil.authenticate(
-                args[0], args[1], kwargs.get("client_token", None)
-            )
-            return MojangAuthenticatedUser(access_token, refresh_token)
-        elif len(args) == 1:
-            access_token, refresh_token = self._acquire_microsoft_token(
-                args[0]
-            )
-            return MicrosoftAuthenticatedUser(
-                access_token, refresh_token, self.__client
-            )
-
-        return None
+        access_token, refresh_token = self._acquire_microsoft_token(code)
+        return MicrosoftAuthenticatedUser(
+            access_token, refresh_token, self.__client
+        )
