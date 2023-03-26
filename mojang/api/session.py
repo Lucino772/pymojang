@@ -118,9 +118,10 @@ def get_user_name_change(access_token: str) -> NameChange:
         response, (400, ValueError), (401, Unauthorized)
     )
 
-    data["created_at"] = dt.datetime.strptime(
-        data.pop("createdAt"), "%Y-%m-%dT%H:%M:%SZ"
+    data["created_at"] = dt.datetime.fromisoformat(
+        data.pop("createdAt").replace("Z", "+00:00")
     )
+
     data["allowed"] = data.pop("nameChangeAllowed")
 
     return NameChange(allowed=data["allowed"], created_at=data["created_at"])

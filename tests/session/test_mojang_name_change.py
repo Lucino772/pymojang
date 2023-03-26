@@ -11,11 +11,12 @@ from mojang.exceptions import Unauthorized
 class TestMojangNameChange(unittest.TestCase):
     @responses.activate
     def test200(self):
+        date = dt.datetime.utcnow()
         responses.add(
             method=responses.GET,
             url=api_session_name_change,
             json={
-                "createdAt": "2021-01-01T00:00:00Z",
+                "createdAt": date.isoformat(sep="T").replace("+00:00", "Z"),
                 "nameChangeAllowed": True,
             },
             status=200,
@@ -25,7 +26,7 @@ class TestMojangNameChange(unittest.TestCase):
         self.assertTrue(ret.allowed)
         self.assertEqual(
             ret.created_at,
-            dt.datetime.strptime("2021-01-01T00:00:00Z", "%Y-%m-%dT%H:%M:%SZ"),
+            date,
         )
 
     @responses.activate
