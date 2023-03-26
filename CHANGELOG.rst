@@ -1,3 +1,18 @@
+PyMojang v2.0.4 (2023-03-27)
+===========================
+
+Bugfixes
+--------
+
+- Fixed issue with date format in get_user_name_change (`#72 <https://github.com/Lucino772/pymojang/issues/72>`_)
+
+
+Deprecations and Removals
+-------------------------
+
+- Removed old authentication scheme: yggdrasil (`#69 <https://github.com/Lucino772/pymojang/issues/69>`_)
+
+
 PyMojang v2.0.3 (2023-03-16)
 ============================
 
