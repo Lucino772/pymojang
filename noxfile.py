@@ -1,3 +1,5 @@
+import os
+
 import nox
 
 
@@ -40,3 +42,21 @@ def example(session: nox.Session):
     with session.chdir("examples/microsoft_flask"):
         session.install("-r", "requirements.txt")
         session.run("python", "app.py")
+
+
+@nox.session
+def build(session: nox.Session):
+    session.install("build")
+    session.run("python", "-m", "build")
+
+
+@nox.session
+def upload(session: nox.Session):
+    session.install("twine")
+    upload_cmd = []
+    if os.path.exists(".env.deploy"):
+        session.install("python-dotenv[cli]")
+        upload_cmd = ["dotenv", "-f", ".env.deploy", "run", "--"]
+
+    upload_cmd.extend(["twine", "upload", "dist/*"])
+    session.run(*upload_cmd)
