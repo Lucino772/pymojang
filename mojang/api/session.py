@@ -170,10 +170,10 @@ def change_user_skin(access_token: str, path: str, variant="classic"):
     >>> session.change_user_skin('ACCESS_TOKEN', 'http://...')
     """
     skin = Skin(source=path, variant=variant)
-    files = [
-        ("variant", skin.variant),
-        ("file", ("image.png", skin.data, "image/png")),
-    ]
+    files = {
+        "variant": (None, skin.variant),
+        "file": ("image.png", skin.data, "image/png"),
+    }
     headers = helpers.get_headers(bearer=access_token)
     headers["content-type"] = None
     response = requests.post(
