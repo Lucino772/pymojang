@@ -1,3 +1,12 @@
+PyMojang v2.0.5 (2023-04-04)
+============================
+
+Bugfixes
+--------
+
+- Fixed issue when passing form-data in change_user_skin (`#75 <https://github.com/Lucino772/pymojang/issues/75>`_)
+
+
 PyMojang v2.0.4 (2023-03-27)
 ===========================
 
