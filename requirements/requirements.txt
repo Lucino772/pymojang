@@ -1,4 +1,4 @@
 requests==2.31.0
 validators==0.20.0
 pyjwt[crypto]==2.4.0
-msal==1.17.0
+msal==1.22.0
