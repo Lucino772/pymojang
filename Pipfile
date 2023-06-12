@@ -4,16 +4,16 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pre-commit = "*"
-importlib-metadata = "*"
-nox = "*"
-towncrier = "*"
+pre-commit = "==2.18.1"
+importlib-metadata = "==6.6.0"
+nox = "==2023.4.22"
+towncrier = "==23.6.0"
 
 [packages]
-requests = "*"
-validators = "*"
-pyjwt = {extras = ["crypto"], version = "*"}
-msal = "*"
+requests = "==2.31.0"
+validators = "==0.20.0"
+pyjwt = {extras = ["crypto"], version = "==2.4.0"}
+msal = "==1.22.0"
 
 [requires]
 python_version = "3.8"
