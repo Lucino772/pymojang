@@ -3,4 +3,4 @@
 
 pre-commit==2.18.1
 importlib-metadata==6.6.0
-nox==2022.1.7
+nox==2023.4.22
