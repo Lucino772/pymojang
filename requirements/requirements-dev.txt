@@ -1,8 +1,6 @@
 -r ./requirements-docs.txt
 -r ./requirements-tests.txt
 
-versioneer==0.22
-flake8==4.0.1
 pre-commit==2.18.1
 importlib-metadata==6.6.0
 nox==2022.1.7

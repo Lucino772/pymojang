@@ -7,7 +7,6 @@ and [Mojang Authentication API](https://wiki.vg/Authentication)
 
 Checkout the [`documentation`](https://pymojang.readthedocs.io/en/latest/)
 """
-from . import _version
 from .api import (
     app,
     get_blocked_servers,
@@ -18,4 +17,7 @@ from .api import (
     get_uuids,
 )
 
-__version__ = _version.get_versions()["version"]
+try:
+    from ._version import __version__
+except ImportError:
+    __version__ = None

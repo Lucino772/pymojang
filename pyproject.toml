@@ -1,10 +1,44 @@
 [build-system]
 requires = [
-    "setuptools>=42",
-    "wheel",
-    "versioneer-518"
+    "setuptools",
+    "setuptools-scm"
 ]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "pymojang"
+authors = [
+    {name = "Lucino772", email = "lucapalmi772@gmail.com"},
+]
+keywords = ["minecraft", "mojang", "python3"]
+description = "It's a full wrapper arround the Mojang API and Mojang Authentication API"
+readme = "README.md"
+license = {text = "MIT"}
+dynamic = ["version"]
+dependencies = [
+  "requests",
+  "validators",
+  "pyjwt[crypto]",
+  "msal",
+]
+
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9"
+]
+
+[project.urls]
+Homepage = "https://github.com/Lucino772/pymojang"
+Documentation = "https://lucino772.github.io/pymojang/"
+
+[tool.setuptools]
+packages = ["mojang"]
+
+[tool.setuptools_scm]
+write_to = "mojang/_version.py"
 
 [tool.black]
 line-length = 79
@@ -23,4 +57,8 @@ name = "PyMojang"
 directory = "changes"
 package = "mojang"
 filename = "CHANGELOG.rst"
+title_format = "{name} v{version} ({project_date})"
 issue_format = "`#{issue} <https://github.com/Lucino772/pymojang/issues/{issue}>`_"
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules --cov=./ --cov-report=xml ./tests"
