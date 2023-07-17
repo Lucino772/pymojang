@@ -2,5 +2,5 @@
 -r ./requirements-tests.txt
 
 pre-commit==3.3.3
-importlib-metadata==6.7.0
+importlib-metadata==6.8.0
 nox==2023.4.22
