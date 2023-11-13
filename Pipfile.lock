@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "318744fb1a672d634f4639fd1a47087f52bc7c019119a1df7451ad6aaa1dc6cd"
+            "sha256": "8fb743959ccd06a75f3960a38068a16d715c9eeb86ca034c8e692f960d02df57"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -336,11 +336,11 @@
         },
         "importlib-resources": {
             "hashes": [
-                "sha256:9d48dcccc213325e810fd723e7fbb45ccb39f6cf5c31f00cf2b965f5f10f3cb9",
-                "sha256:aa50258bbfa56d4e33fbd8aa3ef48ded10d1735f11532b8df95388cc6bdb7e83"
+                "sha256:3893a00122eafde6894c59914446a512f728a0c1a45f9bb9b63721b6bacf0b4a",
+                "sha256:e8bf90d8213b486f428c9c39714b920041cb02c184686a3dee24905aaa8105d6"
             ],
             "markers": "python_version < '3.10'",
-            "version": "==6.1.0"
+            "version": "==6.1.1"
         },
         "incremental": {
             "hashes": [
@@ -539,12 +539,12 @@
         },
         "towncrier": {
             "hashes": [
-                "sha256:8754e96264b55beca526a8ee77a3cc7b2170cfb2411f53eb6ac42e183ac96a17",
-                "sha256:bc633438cb218e3c1fb502e8cd5d78fe7429276fa791ae36f6c8017fdbabb905"
+                "sha256:13937c247e3f8ae20ac44d895cf5f96a60ad46cfdcc1671759530d7837d9ee5d",
+                "sha256:2e519ca619426d189e3c98c99558fe8be50c9ced13ea1fc20a4a353a95d2ded7"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==23.10.0"
+            "version": "==23.11.0"
         },
         "virtualenv": {
             "hashes": [
