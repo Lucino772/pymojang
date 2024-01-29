@@ -7,6 +7,7 @@ and [Mojang Authentication API](https://wiki.vg/Authentication)
 
 Checkout the [`documentation`](https://pymojang.readthedocs.io/en/latest/)
 """
+
 from .api import (
     app,
     get_blocked_servers,
