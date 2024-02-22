@@ -1,3 +1,12 @@
+PyMojang v2.0.6 (2023-02-2024)
+==============================
+
+Misc
+----
+
+- `#80 <https://github.com/Lucino772/pymojang/issues/80>`_, `#89 <https://github.com/Lucino772/pymojang/issues/89>`_, `#94 <https://github.com/Lucino772/pymojang/issues/94>`_, `#98 <https://github.com/Lucino772/pymojang/issues/98>`_, `#110 <https://github.com/Lucino772/pymojang/issues/110>`_, `#116 <https://github.com/Lucino772/pymojang/issues/116>`_, `#120 <https://github.com/Lucino772/pymojang/issues/120>`_, `#126 <https://github.com/Lucino772/pymojang/issues/126>`_, `#134 <https://github.com/Lucino772/pymojang/issues/134>`_, `#138 <https://github.com/Lucino772/pymojang/issues/138>`_, `#150 <https://github.com/Lucino772/pymojang/issues/150>`_, `#162 <https://github.com/Lucino772/pymojang/issues/162>`_
+
+
 PyMojang v2.0.5 (2023-04-04)
 ============================
 
