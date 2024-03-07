@@ -22,7 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: actions/configure-pages@v4
-    - uses: wntrblm/nox@2023.04.22
+    - uses: wntrblm/nox@2024.03.02
       with:
         python-versions: "3.8"
     - name: Build Docs
