@@ -11,7 +11,7 @@ towncrier = "==23.11.0"
 
 [packages]
 requests = "==2.31.0"
-validators = "==0.22.0"
+validators = "==0.24.0"
 pyjwt = {extras = ["crypto"], version = "==2.8.0"}
 msal = "==1.28.0"
 
