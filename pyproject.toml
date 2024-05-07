@@ -1,27 +1,18 @@
 [build-system]
-requires = [
-    "setuptools",
-    "setuptools-scm"
-]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "pymojang"
+dynamic = ["version"]
+description = "It's a full wrapper arround the Mojang API and Mojang Authentication API"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+keywords = ["minecraft", "mojang", "python3"]
 authors = [
     {name = "Lucino772", email = "lucapalmi772@gmail.com"},
 ]
-keywords = ["minecraft", "mojang", "python3"]
-description = "It's a full wrapper arround the Mojang API and Mojang Authentication API"
-readme = "README.md"
-license = {text = "MIT"}
-dynamic = ["version"]
-dependencies = [
-  "requests",
-  "validators",
-  "pyjwt[crypto]",
-  "msal",
-]
-
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -29,28 +20,16 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9"
 ]
+dependencies = [
+  "requests==2.31.0",
+  "validators==0.28.1",
+  "pyjwt[crypto]==2.8.0",
+  "msal==1.28.0",
+]
 
 [project.urls]
 Homepage = "https://github.com/Lucino772/pymojang"
 Documentation = "https://lucino772.github.io/pymojang/"
-
-[tool.setuptools]
-packages = ["mojang"]
-
-[tool.setuptools_scm]
-write_to = "mojang/_version.py"
-
-[tool.black]
-line-length = 79
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.git
-  | \.mypy_cache
-  | \.venv
-  | docs
-)/
-'''
 
 [tool.towncrier]
 name = "PyMojang"
@@ -62,3 +41,61 @@ issue_format = "`#{issue} <https://github.com/Lucino772/pymojang/issues/{issue}>
 
 [tool.pytest.ini_options]
 addopts = "--doctest-modules --cov=./ --cov-report=xml ./tests"
+
+[tool.ruff]
+line-length = 88
+indent-width = 4
+extend-exclude = [ "docs/**.py" ]
+
+[tool.ruff.isort]
+known-first-party = ["mojang"]
+
+[tool.hatch]
+
+[tool.hatch.version]
+path = "src/mojang/__about__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mojang"]
+
+[tool.hatch.env]
+requires = [
+  "hatch-pip-compile"
+]
+
+[tool.hatch.envs.default]
+type = "pip-compile"
+pip-compile-resolver = "uv"
+pip-compile-installer = "uv"
+dependencies = [
+  "towncrier==23.11.0",
+  "pytest",
+  "pytest-cov",
+  "responses"
+]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests}"
+
+[tool.hatch.envs.docs]
+type = "pip-compile"
+pip-compile-resolver = "uv"
+pip-compile-installer = "uv"
+dependencies = [
+  "sphinx==7.1.2",
+  "sphinxext-opengraph==0.9.1",
+  "sphinx-copybutton==0.5.2",
+  "sphinx_issues==4.1.0",
+  "sphinx-autobuild==2021.3.14",
+  "importlib-metadata==7.1.0",
+  "furo==2024.5.6"
+]
+
+[tool.hatch.envs.docs.scripts]
+build = "sphinx-build -b dirhtml docs/ docs/_build/html/"
+serve = "sphinx-autobuild -b dirhtml docs/ docs/_build/html/ --open-browser"
+
+[tool.hatch.envs.hatch-static-analysis]
+type = "pip-compile"
+pip-compile-resolver = "uv"
+pip-compile-installer = "uv"
