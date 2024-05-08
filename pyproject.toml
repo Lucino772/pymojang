@@ -70,16 +70,12 @@ requires = [
 
 [tool.hatch.envs.default]
 type = "pip-compile"
-pip-compile-resolver = "uv"
-pip-compile-installer = "uv"
 dependencies = [
   "towncrier==23.11.0",
 ]
 
 [tool.hatch.envs.test]
 type = "pip-compile"
-pip-compile-resolver = "uv"
-pip-compile-installer = "uv"
 dependencies = [
   "pytest",
   "pytest-cov",
@@ -94,8 +90,6 @@ python = ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
 [tool.hatch.envs.docs]
 type = "pip-compile"
-pip-compile-resolver = "uv"
-pip-compile-installer = "uv"
 dependencies = [
   "sphinx==7.1.2",
   "sphinxext-opengraph==0.9.1",
@@ -112,5 +106,3 @@ serve = "sphinx-autobuild -b dirhtml docs/ docs/_build/html/ --open-browser"
 
 [tool.hatch.envs.hatch-static-analysis]
 type = "pip-compile"
-pip-compile-resolver = "uv"
-pip-compile-installer = "uv"
