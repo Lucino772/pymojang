@@ -22,10 +22,10 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
 ]
 dependencies = [
-  "requests==2.31.0",
-  "validators==0.28.1",
-  "pyjwt[crypto]==2.8.0",
-  "msal==1.28.0",
+  "requests~=2.31.0",
+  "validators~=0.28.1",
+  "pyjwt[crypto]~=2.8.0",
+  "msal~=1.28.0",
 ]
 
 [project.urls]
