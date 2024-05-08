@@ -18,7 +18,9 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9"
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
 ]
 dependencies = [
   "requests==2.31.0",
@@ -72,13 +74,23 @@ pip-compile-resolver = "uv"
 pip-compile-installer = "uv"
 dependencies = [
   "towncrier==23.11.0",
+]
+
+[tool.hatch.envs.test]
+type = "pip-compile"
+pip-compile-resolver = "uv"
+pip-compile-installer = "uv"
+dependencies = [
   "pytest",
   "pytest-cov",
   "responses"
 ]
 
-[tool.hatch.envs.default.scripts]
-test = "pytest {args:tests}"
+[tool.hatch.envs.test.scripts]
+run = "pytest {args:tests}"
+
+[[tool.hatch.envs.test.matrix]]
+python = ["3.8", "3.9", "3.10", "3.11"]
 
 [tool.hatch.envs.docs]
 type = "pip-compile"
