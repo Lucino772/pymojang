@@ -42,9 +42,7 @@ class TestAuthApp(unittest.TestCase):
 
     # Mocked MSAL App
     class _MockedMsalClientApplicationOk:
-        def acquire_token_by_authorization_code(
-            self, code, scopes, redirect_uri
-        ):
+        def acquire_token_by_authorization_code(self, code, scopes, redirect_uri):
             return {
                 "error": False,
                 "access_token": "ACCESS_TOKEN",
@@ -52,16 +50,12 @@ class TestAuthApp(unittest.TestCase):
             }
 
     class _MockedMsalClientApplicationInvalidGrant:
-        def acquire_token_by_authorization_code(
-            self, code, scopes, redirect_uri
-        ):
+        def acquire_token_by_authorization_code(self, code, scopes, redirect_uri):
             return {"error": True}
 
     # Mocked Responses
     def _mock_fetch_profile200(self):
-        responses.add(
-            method=responses.GET, url=self._skin_url, body=b"", status=200
-        )
+        responses.add(method=responses.GET, url=self._skin_url, body=b"", status=200)
         responses.add(
             method=responses.GET,
             url=api_session_profile,

@@ -40,12 +40,8 @@ class TestMicrosoftAuth(unittest.TestCase):
 
     @responses.activate
     def test_auth_xbl400(self):
-        responses.add(
-            method=responses.POST, url=api_ms_xbl_authenticate, status=400
-        )
-        self.assertRaises(
-            XboxLiveAuthenticationError, authenticate_xbl, "RPS_TOKEN"
-        )
+        responses.add(method=responses.POST, url=api_ms_xbl_authenticate, status=400)
+        self.assertRaises(XboxLiveAuthenticationError, authenticate_xbl, "RPS_TOKEN")
 
     @responses.activate
     def test_auth_xsts200(self):
@@ -67,12 +63,8 @@ class TestMicrosoftAuth(unittest.TestCase):
 
     @responses.activate
     def test_auth_xsts400(self):
-        responses.add(
-            method=responses.POST, url=api_ms_xbl_authorize, status=400
-        )
-        self.assertRaises(
-            XboxLiveAuthenticationError, authenticate_xsts, "XBL_TOKEN"
-        )
+        responses.add(method=responses.POST, url=api_ms_xbl_authorize, status=400)
+        self.assertRaises(XboxLiveAuthenticationError, authenticate_xsts, "XBL_TOKEN")
 
     @responses.activate
     def test_auth_mc200(self):
@@ -89,9 +81,7 @@ class TestMicrosoftAuth(unittest.TestCase):
             },
             status=200,
         )
-        self.assertEqual(
-            authenticate_minecraft("USERHASH", "XSTS_TOKEN"), token
-        )
+        self.assertEqual(authenticate_minecraft("USERHASH", "XSTS_TOKEN"), token)
 
     @responses.activate
     def test_auth_mc400(self):

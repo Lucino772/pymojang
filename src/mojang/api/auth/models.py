@@ -185,9 +185,7 @@ class MicrosoftAuthenticatedUser(AuthenticatedUser):
         response = self.__oauth_client.acquire_token_by_refresh_token(
             self._refresh_token, ["XboxLive.signin"]
         )
-        xbl_token, userhash = microsoft.authenticate_xbl(
-            response["access_token"]
-        )
+        xbl_token, userhash = microsoft.authenticate_xbl(response["access_token"])
         xsts_token, userhash = microsoft.authenticate_xsts(xbl_token)
         mc_token = microsoft.authenticate_minecraft(userhash, xsts_token)
 
@@ -203,9 +201,7 @@ class MicrosoftAuthenticatedUser(AuthenticatedUser):
 
 # Authentication
 class MojangAuthenticationApp:
-    def __init__(
-        self, client: msal.ClientApplication, redirect_uri: str
-    ) -> None:
+    def __init__(self, client: msal.ClientApplication, redirect_uri: str) -> None:
         self.__client = client
         self.__redirect_uri = redirect_uri
 
@@ -226,9 +222,7 @@ class MojangAuthenticationApp:
         if response.get("error", False):
             raise MicrosoftInvalidGrant(*response.values())
 
-        xbl_token, userhash = microsoft.authenticate_xbl(
-            response["access_token"]
-        )
+        xbl_token, userhash = microsoft.authenticate_xbl(response["access_token"])
         xsts_token, userhash = microsoft.authenticate_xsts(xbl_token)
         access_token = microsoft.authenticate_minecraft(userhash, xsts_token)
 
@@ -239,6 +233,4 @@ class MojangAuthenticationApp:
 
     def get_session(self, code: str) -> MicrosoftAuthenticatedUser:
         access_token, refresh_token = self._acquire_microsoft_token(code)
-        return MicrosoftAuthenticatedUser(
-            access_token, refresh_token, self.__client
-        )
+        return MicrosoftAuthenticatedUser(access_token, refresh_token, self.__client)

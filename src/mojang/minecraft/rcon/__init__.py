@@ -18,8 +18,8 @@ def session(
     :Example:
 
     >>> from mojang.minecraft import rcon
-    >>> with rcon.session(('localhost', 25575), 'my_super_password') as send:
-    ...     send('help') # This execute the /help command
+    >>> with rcon.session(("localhost", 25575), "my_super_password") as send:
+    ...     send("help")  # This execute the /help command
 
     """
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

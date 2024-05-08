@@ -63,9 +63,7 @@ def _parse_stats(data: bytes) -> ServerStats:
     )
 
 
-def _handshake(
-    sock: socket.socket, addr: Tuple[str, int], session_id: int
-) -> int:
+def _handshake(sock: socket.socket, addr: Tuple[str, int], session_id: int) -> int:
     pcks = Packets(sock)
     pcks.send(9, session_id)
 
@@ -107,7 +105,7 @@ def get_stats(
     :Example:
 
     >>> from mojang.minecraft import query
-    >>> query.get_stats(('localhost', 25585))
+    >>> query.get_stats(("localhost", 25585))
     ServerStats(
         motd='A Minecraft Server',
         game_type='SMP',

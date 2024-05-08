@@ -39,9 +39,7 @@ class _Resource:
     @classmethod
     def _filename_from_url(cls, url: str):
         url_path = urlparse(url).path
-        match = re.match(
-            r"^([\w,\s-]+)\.([A-Za-z]{3})$", os.path.basename(url_path)
-        )
+        match = re.match(r"^([\w,\s-]+)\.([A-Za-z]{3})$", os.path.basename(url_path))
         if match:
             return match.groups()
 
@@ -135,9 +133,7 @@ class Skin(_Resource):
         return self.__state
 
     def __hash__(self) -> int:
-        return hash(
-            (self.source, self.id, self.state, self.variant, self.data)
-        )
+        return hash((self.source, self.id, self.state, self.variant, self.data))
 
     def __eq__(self, o: object) -> bool:
         if isinstance(o, Skin):

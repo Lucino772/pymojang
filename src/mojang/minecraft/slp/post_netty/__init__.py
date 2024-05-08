@@ -56,9 +56,7 @@ def ping(
     print(response)
 
     return SLPResponse(
-        protocol_version=response.get("version", {}).get(
-            "protocol", "unknown"
-        ),
+        protocol_version=response.get("version", {}).get("protocol", "unknown"),
         version=response.get("version", {}).get("name", "unknown"),
         motd=response.get("description", None),
         players=players,

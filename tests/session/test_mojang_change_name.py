@@ -33,9 +33,7 @@ class TestMojangChangeName(unittest.TestCase):
             method=responses.PUT, url=api_session_change_name(name), status=403
         )
 
-        self.assertRaises(
-            UnavailableName, session.change_user_name, "TOKEN", name
-        )
+        self.assertRaises(UnavailableName, session.change_user_name, "TOKEN", name)
 
     @responses.activate
     def test401(self):
@@ -44,6 +42,4 @@ class TestMojangChangeName(unittest.TestCase):
             method=responses.PUT, url=api_session_change_name(name), status=401
         )
 
-        self.assertRaises(
-            Unauthorized, session.change_user_name, "TOKEN", name
-        )
+        self.assertRaises(Unauthorized, session.change_user_name, "TOKEN", name)

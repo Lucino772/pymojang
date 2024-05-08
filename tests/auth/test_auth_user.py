@@ -27,9 +27,7 @@ class TestAuthUser(unittest.TestCase):
             }
 
     def _mock_fetch_profile200(self):
-        responses.add(
-            method=responses.GET, url=self._skin_url, body=b"", status=200
-        )
+        responses.add(method=responses.GET, url=self._skin_url, body=b"", status=200)
         responses.add(
             method=responses.GET,
             url=api_session_profile,

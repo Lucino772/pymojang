@@ -38,22 +38,14 @@ class TestMojangChangeSkin(unittest.TestCase):
     def test400(self):
         skin_url = "http://textures.minecraft.net/texture/292009a4925b58f02c77dadc3ecef07ea4c7472f64e0fdc32ce5522489362680"
         self._path_skin_url(skin_url)
-        responses.add(
-            method=responses.POST, url=api_session_change_skin, status=400
-        )
+        responses.add(method=responses.POST, url=api_session_change_skin, status=400)
 
-        self.assertRaises(
-            ValueError, session.change_user_skin, "TOKEN", skin_url
-        )
+        self.assertRaises(ValueError, session.change_user_skin, "TOKEN", skin_url)
 
     @responses.activate
     def test401(self):
         skin_url = "http://textures.minecraft.net/texture/292009a4925b58f02c77dadc3ecef07ea4c7472f64e0fdc32ce5522489362680"
         self._path_skin_url(skin_url)
-        responses.add(
-            method=responses.POST, url=api_session_change_skin, status=401
-        )
+        responses.add(method=responses.POST, url=api_session_change_skin, status=401)
 
-        self.assertRaises(
-            Unauthorized, session.change_user_skin, "TOKEN", skin_url
-        )
+        self.assertRaises(Unauthorized, session.change_user_skin, "TOKEN", skin_url)
