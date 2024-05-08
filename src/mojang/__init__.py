@@ -18,4 +18,7 @@ from .api import (
     get_uuids,
 )
 
-from .__about__ import __version__
+try:
+    from ._version import __version__
+except ImportError:
+    __version__ = None

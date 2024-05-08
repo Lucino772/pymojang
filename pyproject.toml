@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
@@ -53,7 +53,10 @@ known-first-party = ["mojang"]
 [tool.hatch]
 
 [tool.hatch.version]
-path = "src/mojang/__about__.py"
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/mojang/_version.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/mojang"]
