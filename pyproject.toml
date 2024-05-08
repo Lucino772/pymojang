@@ -7,7 +7,7 @@ name = "pymojang"
 dynamic = ["version"]
 description = "It's a full wrapper arround the Mojang API and Mojang Authentication API"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.7"
 license = {text = "MIT"}
 keywords = ["minecraft", "mojang", "python3"]
 authors = [
