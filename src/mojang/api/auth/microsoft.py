@@ -32,9 +32,7 @@ def authenticate_xbl(auth_token: str) -> tuple[str, str]:
     }
 
     response = requests.post(
-        urls.api_ms_xbl_authenticate,
-        headers=headers,
-        json=payload,
+        urls.api_ms_xbl_authenticate, headers=headers, json=payload, timeout=10
     )
     _, data = helpers.err_check(response, (400, XboxLiveAuthenticationError))
     return data["Token"], data["DisplayClaims"]["xui"][0]["uhs"]
@@ -56,7 +54,9 @@ def authenticate_xsts(xbl_token: str) -> tuple[str, str]:
         "TokenType": "JWT",
     }
 
-    response = requests.post(urls.api_ms_xbl_authorize, headers=headers, json=payload)
+    response = requests.post(
+        urls.api_ms_xbl_authorize, headers=headers, json=payload, timeout=10
+    )
     _, data = helpers.err_check(response, (400, XboxLiveAuthenticationError))
     return data["Token"], data["DisplayClaims"]["xui"][0]["uhs"]
 
@@ -83,7 +83,9 @@ def authenticate_minecraft(userhash: str, xsts_token: str) -> str:
     headers = helpers.get_headers(json_content=True)
     payload = {"identityToken": f"XBL3.0 x={userhash};{xsts_token}"}
 
-    response = requests.post(urls.api_ms_xbl_login, headers=headers, json=payload)
+    response = requests.post(
+        urls.api_ms_xbl_login, headers=headers, json=payload, timeout=10
+    )
     _, data = helpers.err_check(
         response, (400, XboxLiveInvalidUserHash), (401, Unauthorized)
     )

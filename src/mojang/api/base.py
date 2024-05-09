@@ -47,7 +47,7 @@ def get_status() -> list[ServiceStatus]:
 
 def get_blocked_servers() -> list[str]:
     """Get a list of blocked servers hashes"""
-    response = requests.get(urls.api_get_blocked_servers)
+    response = requests.get(urls.api_get_blocked_servers, timeout=10)
     _, data = helpers.err_check(response)
 
     return data.split("\n")
@@ -67,7 +67,7 @@ def get_uuid(username: str) -> str | None:
     if len(username) == 0 or len(username) > 16:
         raise InvalidName()
 
-    response = requests.get(urls.api_get_uuid(username))
+    response = requests.get(urls.api_get_uuid(username), timeout=10)
     try:
         code, data = helpers.err_check(
             response,
@@ -110,7 +110,9 @@ def get_uuids(usernames: Iterable[str]) -> dict[str, str | None]:
         raise InvalidName()
 
     for i in range(0, len(usernames), 10):
-        response = requests.post(urls.api_get_uuids, json=usernames[i : i + 10])
+        response = requests.post(
+            urls.api_get_uuids, json=usernames[i : i + 10], timeout=10
+        )
         _, data = helpers.err_check(response)
 
         for item in data:
@@ -130,7 +132,7 @@ def get_username(uuid: str) -> str | None:
     >>> mojang.get_username("069a79f444e94726a5befca90e38aaf5")
     'Notch'
     """
-    response = requests.get(urls.api_get_username(uuid))
+    response = requests.get(urls.api_get_username(uuid), timeout=10)
     try:
         code, data = helpers.err_check(
             response,
@@ -164,7 +166,7 @@ def get_profile(uuid: str) -> UnauthenticatedProfile | None:
         cape=None
     )
     """
-    response = requests.get(urls.api_user_profile(uuid))
+    response = requests.get(urls.api_user_profile(uuid), timeout=10)
     code, data = helpers.err_check(response, (400, ValueError))
 
     if code == 204:

@@ -32,7 +32,9 @@ def check_product_voucher(access_token: str, voucher: str) -> bool:
     True
     """
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.get(urls.api_session_product_voucher(voucher), headers=headers)
+    response = requests.get(
+        urls.api_session_product_voucher(voucher), headers=headers, timeout=10
+    )
     code, data = helpers.err_check(response, (401, Unauthorized), use_defaults=False)
 
     if code == 404 and "errorMessage" not in data:
@@ -58,7 +60,9 @@ def redeem_product_voucher(access_token: str, voucher: str) -> bool:
     True
     """
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.put(urls.api_session_product_voucher(voucher), headers=headers)
+    response = requests.put(
+        urls.api_session_product_voucher(voucher), headers=headers, timeout=10
+    )
     code, data = helpers.err_check(response, (401, Unauthorized), use_defaults=False)
 
     if code == 404 and "errorMessage" not in data:
@@ -82,7 +86,9 @@ def check_username(access_token: str, username: str) -> bool:
     :raises RuntimeError: if you sent to many requests
     """
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.get(urls.api_session_check_username(username), headers=headers)
+    response = requests.get(
+        urls.api_session_check_username(username), headers=headers, timeout=10
+    )
     code, data = helpers.err_check(
         response, (401, Unauthorized), (429, RuntimeError("Limited Endpoint"))
     )
@@ -104,7 +110,7 @@ def get_user_name_change(access_token: str) -> NameChange:
     NameChange(allowed=True, created_at=datetime.datetime(2006, 4, 29, 10, 10, 10))
     """
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.get(urls.api_session_name_change, headers=headers)
+    response = requests.get(urls.api_session_name_change, headers=headers, timeout=10)
     _, data = helpers.err_check(response, (400, ValueError), (401, Unauthorized))
 
     data["created_at"] = dt.datetime.fromisoformat(
@@ -132,7 +138,9 @@ def change_user_name(access_token: str, name: str):
     >>> session.change_user_name("ACCESS_NAME", "NEW_NAME")
     """
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.put(urls.api_session_change_name(name), headers=headers)
+    response = requests.put(
+        urls.api_session_change_name(name), headers=headers, timeout=10
+    )
     code, _ = helpers.err_check(
         response,
         (400, InvalidName),
@@ -163,7 +171,9 @@ def change_user_skin(access_token: str, path: str, variant="classic"):
     }
     headers = helpers.get_headers(bearer=access_token)
     headers["content-type"] = None
-    response = requests.post(urls.api_session_change_skin, headers=headers, files=files)
+    response = requests.post(
+        urls.api_session_change_skin, headers=headers, files=files, timeout=10
+    )
     code, _ = helpers.err_check(response, (400, ValueError), (401, Unauthorized))
     return code == 204
 
@@ -181,7 +191,7 @@ def reset_user_skin(access_token: str):
     >>> session.reset_user_skin("ACCESS_TOKEN", "USER_UUID")
     """
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.delete(urls.api_session_reset_skin, headers=headers)
+    response = requests.delete(urls.api_session_reset_skin, headers=headers, timeout=10)
     code, _ = helpers.err_check(response, (400, ValueError), (401, Unauthorized))
     return code == 200
 
@@ -201,7 +211,7 @@ def show_user_cape(access_token: str, cape_id: str):
     payload = {"capeId": cape_id}
     headers = helpers.get_headers(bearer=access_token)
     response = requests.put(
-        urls.api_session_cape_visibility, headers=headers, json=payload
+        urls.api_session_cape_visibility, headers=headers, json=payload, timeout=10
     )
     code, _ = helpers.err_check(response, (400, NotCapeOwner), (401, Unauthorized))
     return code == 200
@@ -220,7 +230,9 @@ def hide_user_cape(access_token: str):
     >>> session.hide_user_cape("ACCESS_TOKEN")
     """
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.delete(urls.api_session_cape_visibility, headers=headers)
+    response = requests.delete(
+        urls.api_session_cape_visibility, headers=headers, timeout=10
+    )
     code, _ = helpers.err_check(response, (401, Unauthorized))
     return code == 200
 
@@ -245,7 +257,7 @@ def owns_minecraft(
     True
     """
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.get(urls.api_session_ownership, headers=headers)
+    response = requests.get(urls.api_session_ownership, headers=headers, timeout=10)
     _, data = helpers.err_check(response, (401, Unauthorized))
 
     if verify_sig is True:
@@ -266,7 +278,7 @@ def get_profile(access_token: str) -> AuthenticatedUserProfile:
     """
 
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.get(urls.api_session_profile, headers=headers)
+    response = requests.get(urls.api_session_profile, headers=headers, timeout=10)
     _, data = helpers.err_check(response, (401, Unauthorized))
 
     skins = []
