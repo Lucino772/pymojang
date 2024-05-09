@@ -1,5 +1,6 @@
 import unittest
 
+import pytest
 import responses
 
 from mojang.api import session
@@ -17,7 +18,7 @@ class TestMojangHideCape(unittest.TestCase):
         )
 
         hidden = session.hide_user_cape("TOKEN")
-        self.assertTrue(hidden)
+        assert hidden
 
     @responses.activate
     def test401(self):
@@ -27,4 +28,4 @@ class TestMojangHideCape(unittest.TestCase):
             status=401,
         )
 
-        self.assertRaises(Unauthorized, session.hide_user_cape, "TOKEN")
+        pytest.raises(Unauthorized, session.hide_user_cape, "TOKEN")

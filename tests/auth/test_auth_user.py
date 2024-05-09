@@ -20,7 +20,7 @@ class TestAuthUser(unittest.TestCase):
     _refresh_token = "REFRESH_TOKEN"
 
     class _MockedMsalClientApplication:
-        def acquire_token_by_refresh_token(self, refresh_token, scopes):
+        def acquire_token_by_refresh_token(self, refresh_token, scopes):  # noqa: ARG002
             return {
                 "access_token": "ACCESS_TOKEN",
                 "refresh_token": TestAuthUser._refresh_token,
@@ -114,16 +114,16 @@ class TestAuthUser(unittest.TestCase):
             TestAuthUser._MockedMsalClientApplication(),
         )
 
-        self.assertEqual(user.name, self._name)
-        self.assertEqual(user.uuid, self._uuid)
-        self.assertFalse(user.is_legacy)
-        self.assertFalse(user.is_demo)
-        self.assertIsNotNone(user.skins)
-        self.assertIsNotNone(user.skin)
-        self.assertIsNotNone(user.capes)
-        self.assertIsNotNone(user.cape)
-        self.assertTrue(user.name_change_allowed)
-        self.assertIsNotNone(user.created_at)
+        assert user.name == self._name
+        assert user.uuid == self._uuid
+        assert not user.is_legacy
+        assert not user.is_demo
+        assert user.skins is not None
+        assert user.skin is not None
+        assert user.capes is not None
+        assert user.cape is not None
+        assert user.name_change_allowed
+        assert user.created_at is not None
 
     @responses.activate
     def test_refresh_close(self):
@@ -138,11 +138,11 @@ class TestAuthUser(unittest.TestCase):
             TestAuthUser._MockedMsalClientApplication(),
         )
 
-        self.assertEqual(user._access_token, "ACCESS_TOKEN")
-        self.assertEqual(user._refresh_token, "REFRESH_TOKEN")
+        assert user._access_token == "ACCESS_TOKEN"  # noqa: SLF001
+        assert user._refresh_token == "REFRESH_TOKEN"  # noqa: SLF001
         user.refresh()
-        self.assertEqual(user._access_token, self._mc_token)
-        self.assertEqual(user._refresh_token, self._refresh_token)
+        assert user._access_token == self._mc_token  # noqa: SLF001
+        assert user._refresh_token == self._refresh_token  # noqa: SLF001
         user.close()
-        self.assertIsNone(user._access_token)
-        self.assertIsNone(user._refresh_token)
+        assert user._access_token is None  # noqa: SLF001
+        assert user._refresh_token is None  # noqa: SLF001

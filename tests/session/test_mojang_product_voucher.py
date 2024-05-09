@@ -1,5 +1,6 @@
 import unittest
 
+import pytest
 import responses
 
 from mojang.api import session
@@ -26,7 +27,7 @@ class TestMojangCheckProductVoucher(unittest.TestCase):
         )
 
         available = session.check_product_voucher("TOKEN", voucher)
-        self.assertTrue(available)
+        assert available
 
     @responses.activate
     def test401(self):
@@ -37,7 +38,7 @@ class TestMojangCheckProductVoucher(unittest.TestCase):
             status=401,
         )
 
-        self.assertRaises(Unauthorized, session.check_product_voucher, "TOKEN", voucher)
+        pytest.raises(Unauthorized, session.check_product_voucher, "TOKEN", voucher)
 
     @responses.activate
     def test404_invalid(self):
@@ -53,7 +54,7 @@ class TestMojangCheckProductVoucher(unittest.TestCase):
             },
         )
 
-        self.assertRaises(ValueError, session.check_product_voucher, "TOKEN", voucher)
+        pytest.raises(ValueError, session.check_product_voucher, "TOKEN", voucher)  # noqa: PT011
 
     @responses.activate
     def test404_unavailable(self):
@@ -66,13 +67,13 @@ class TestMojangCheckProductVoucher(unittest.TestCase):
                 "path": "/productvoucher/:voucher",
                 "errorType": "NOT_FOUND",
                 "error": "NOT_FOUND",
-                "errorMessage": "The server has not found anything matching the request URI",
-                "developerMessage": "The server has not found anything matching the request URI",
+                "errorMessage": "The server found nothing matching the request URI",
+                "developerMessage": "The server found nothing matching the request URI",
             },
         )
 
         available = session.check_product_voucher("TOKEN", voucher)
-        self.assertFalse(available)
+        assert not available
 
 
 class TestMojangRedeemProductVoucher(unittest.TestCase):
@@ -94,7 +95,7 @@ class TestMojangRedeemProductVoucher(unittest.TestCase):
         )
 
         available = session.redeem_product_voucher("TOKEN", voucher)
-        self.assertTrue(available)
+        assert available
 
     @responses.activate
     def test401(self):
@@ -105,9 +106,7 @@ class TestMojangRedeemProductVoucher(unittest.TestCase):
             status=401,
         )
 
-        self.assertRaises(
-            Unauthorized, session.redeem_product_voucher, "TOKEN", voucher
-        )
+        pytest.raises(Unauthorized, session.redeem_product_voucher, "TOKEN", voucher)
 
     @responses.activate
     def test404_invalid(self):
@@ -123,7 +122,7 @@ class TestMojangRedeemProductVoucher(unittest.TestCase):
             },
         )
 
-        self.assertRaises(ValueError, session.redeem_product_voucher, "TOKEN", voucher)
+        pytest.raises(ValueError, session.redeem_product_voucher, "TOKEN", voucher)  # noqa: PT011
 
     @responses.activate
     def test404_unavailable(self):
@@ -136,10 +135,10 @@ class TestMojangRedeemProductVoucher(unittest.TestCase):
                 "path": "/productvoucher/:voucher",
                 "errorType": "NOT_FOUND",
                 "error": "NOT_FOUND",
-                "errorMessage": "The server has not found anything matching the request URI",
-                "developerMessage": "The server has not found anything matching the request URI",
+                "errorMessage": "The server found nothing matching the request URI",
+                "developerMessage": "The server found nothing matching the request URI",
             },
         )
 
         available = session.redeem_product_voucher("TOKEN", voucher)
-        self.assertFalse(available)
+        assert not available

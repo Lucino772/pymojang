@@ -1,5 +1,6 @@
 import unittest
 
+import pytest
 import responses
 from responses.matchers import multipart_matcher
 
@@ -32,7 +33,7 @@ class TestMojangChangeSkin(unittest.TestCase):
         )
 
         changed = session.change_user_skin("TOKEN", skin_url)
-        self.assertTrue(changed)
+        assert changed
 
     @responses.activate
     def test400(self):
@@ -40,7 +41,7 @@ class TestMojangChangeSkin(unittest.TestCase):
         self._path_skin_url(skin_url)
         responses.add(method=responses.POST, url=api_session_change_skin, status=400)
 
-        self.assertRaises(ValueError, session.change_user_skin, "TOKEN", skin_url)
+        pytest.raises(ValueError, session.change_user_skin, "TOKEN", skin_url)  # noqa: PT011
 
     @responses.activate
     def test401(self):
@@ -48,4 +49,4 @@ class TestMojangChangeSkin(unittest.TestCase):
         self._path_skin_url(skin_url)
         responses.add(method=responses.POST, url=api_session_change_skin, status=401)
 
-        self.assertRaises(Unauthorized, session.change_user_skin, "TOKEN", skin_url)
+        pytest.raises(Unauthorized, session.change_user_skin, "TOKEN", skin_url)

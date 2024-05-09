@@ -1,5 +1,6 @@
 import unittest
 
+import pytest
 import responses
 
 import mojang
@@ -30,22 +31,22 @@ class TestMojangBlockedServers(unittest.TestCase):
             status=200,
         )
         hashes = mojang.get_blocked_servers()
-        self.assertListEqual(SERVER_HASHES, hashes)
+        assert hashes == SERVER_HASHES
 
     @responses.activate
     def test404(self):
         responses.add(method=responses.GET, url=api_get_blocked_servers, status=404)
 
-        self.assertRaises(NotFound, mojang.get_blocked_servers)
+        pytest.raises(NotFound, mojang.get_blocked_servers)
 
     @responses.activate
     def test405(self):
         responses.add(method=responses.GET, url=api_get_blocked_servers, status=405)
 
-        self.assertRaises(MethodNotAllowed, mojang.get_blocked_servers)
+        pytest.raises(MethodNotAllowed, mojang.get_blocked_servers)
 
     @responses.activate
     def test500(self):
         responses.add(method=responses.GET, url=api_get_blocked_servers, status=500)
 
-        self.assertRaises(ServerError, mojang.get_blocked_servers)
+        pytest.raises(ServerError, mojang.get_blocked_servers)

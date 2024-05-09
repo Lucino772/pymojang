@@ -1,5 +1,6 @@
 import unittest
 
+import pytest
 import responses
 
 from mojang.api.auth.microsoft import (
@@ -35,13 +36,13 @@ class TestMicrosoftAuth(unittest.TestCase):
             status=200,
         )
         ret = authenticate_xbl("RPS_TOKEN")
-        self.assertEqual(ret[0], token)
-        self.assertEqual(ret[1], userhash)
+        assert ret[0] == token
+        assert ret[1] == userhash
 
     @responses.activate
     def test_auth_xbl400(self):
         responses.add(method=responses.POST, url=api_ms_xbl_authenticate, status=400)
-        self.assertRaises(XboxLiveAuthenticationError, authenticate_xbl, "RPS_TOKEN")
+        pytest.raises(XboxLiveAuthenticationError, authenticate_xbl, "RPS_TOKEN")
 
     @responses.activate
     def test_auth_xsts200(self):
@@ -58,13 +59,13 @@ class TestMicrosoftAuth(unittest.TestCase):
             status=200,
         )
         ret = authenticate_xsts("XBL_TOKEN")
-        self.assertEqual(ret[0], token)
-        self.assertEqual(ret[1], userhash)
+        assert ret[0] == token
+        assert ret[1] == userhash
 
     @responses.activate
     def test_auth_xsts400(self):
         responses.add(method=responses.POST, url=api_ms_xbl_authorize, status=400)
-        self.assertRaises(XboxLiveAuthenticationError, authenticate_xsts, "XBL_TOKEN")
+        pytest.raises(XboxLiveAuthenticationError, authenticate_xsts, "XBL_TOKEN")
 
     @responses.activate
     def test_auth_mc200(self):
@@ -81,12 +82,12 @@ class TestMicrosoftAuth(unittest.TestCase):
             },
             status=200,
         )
-        self.assertEqual(authenticate_minecraft("USERHASH", "XSTS_TOKEN"), token)
+        assert authenticate_minecraft("USERHASH", "XSTS_TOKEN") == token
 
     @responses.activate
     def test_auth_mc400(self):
         responses.add(method=responses.POST, url=api_ms_xbl_login, status=400)
-        self.assertRaises(
+        pytest.raises(
             XboxLiveInvalidUserHash,
             authenticate_minecraft,
             "USERHASH",
@@ -96,6 +97,4 @@ class TestMicrosoftAuth(unittest.TestCase):
     @responses.activate
     def test_auth_mc401(self):
         responses.add(method=responses.POST, url=api_ms_xbl_login, status=401)
-        self.assertRaises(
-            Unauthorized, authenticate_minecraft, "USERHASH", "XSTS_TOKEN"
-        )
+        pytest.raises(Unauthorized, authenticate_minecraft, "USERHASH", "XSTS_TOKEN")
