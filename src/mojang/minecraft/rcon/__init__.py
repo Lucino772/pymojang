@@ -33,7 +33,7 @@ def session(
     r_packet_id, r_type = pcks.recv()[:2]
 
     # Check packet id and packet type
-    if r_packet_id != packet_id or r_type != 2:
+    if r_packet_id != packet_id or r_type != 2:  # noqa: PLR2004
         raise Exception("Authentication failed")
 
     def send(command: str):

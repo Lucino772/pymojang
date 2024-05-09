@@ -64,7 +64,7 @@ def get_uuid(username: str) -> str | None:
     >>> mojang.get_uuid("Notch")
     '069a79f444e94726a5befca90e38aaf5'
     """
-    if len(username) == 0 or len(username) > 16:
+    if len(username) == 0 or len(username) > 16:  # noqa: PLR2004
         raise InvalidName()
 
     response = requests.get(urls.api_get_uuid(username), timeout=10)
@@ -76,7 +76,7 @@ def get_uuid(username: str) -> str | None:
     except NotFound:
         return None
 
-    if code == 204:
+    if code == 204:  # noqa: PLR2004
         return None
 
     return data["id"]
@@ -106,7 +106,7 @@ def get_uuids(usernames: Iterable[str]) -> dict[str, str | None]:
     ret = dict.fromkeys(usernames, None)
 
     # Check for invalid names
-    if any([not (0 < len(u) <= 16) for u in usernames]):
+    if any([not (0 < len(u) <= 16) for u in usernames]):  # noqa: PLR2004
         raise InvalidName()
 
     for i in range(0, len(usernames), 10):
@@ -142,7 +142,7 @@ def get_username(uuid: str) -> str | None:
     except NotFound:
         return None
 
-    if code == 204:
+    if code == 204:  # noqa: PLR2004
         return None
 
     return data["name"]
@@ -169,7 +169,7 @@ def get_profile(uuid: str) -> UnauthenticatedProfile | None:
     response = requests.get(urls.api_user_profile(uuid), timeout=10)
     code, data = helpers.err_check(response, (400, ValueError))
 
-    if code == 204:
+    if code == 204:  # noqa: PLR2004
         return None
 
     # Load skin and cape

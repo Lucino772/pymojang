@@ -37,10 +37,10 @@ def check_product_voucher(access_token: str, voucher: str) -> bool:
     )
     code, data = helpers.err_check(response, (401, Unauthorized), use_defaults=False)
 
-    if code == 404 and "errorMessage" not in data:
+    if code == 404 and "errorMessage" not in data:  # noqa: PLR2004
         raise ValueError("Invalid voucher")
 
-    return code == 200
+    return code == 200  # noqa: PLR2004
 
 
 def redeem_product_voucher(access_token: str, voucher: str) -> bool:
@@ -65,10 +65,10 @@ def redeem_product_voucher(access_token: str, voucher: str) -> bool:
     )
     code, data = helpers.err_check(response, (401, Unauthorized), use_defaults=False)
 
-    if code == 404 and "errorMessage" not in data:
+    if code == 404 and "errorMessage" not in data:  # noqa: PLR2004
         raise ValueError("Invalid voucher")
 
-    return code == 200
+    return code == 200  # noqa: PLR2004
 
 
 def check_username(access_token: str, username: str) -> bool:
@@ -147,7 +147,7 @@ def change_user_name(access_token: str, name: str):
         (403, UnavailableName),
         (401, Unauthorized),
     )
-    return code == 200
+    return code == 200  # noqa: PLR2004
 
 
 def change_user_skin(access_token: str, path: str, variant="classic"):
@@ -175,7 +175,7 @@ def change_user_skin(access_token: str, path: str, variant="classic"):
         urls.api_session_change_skin, headers=headers, files=files, timeout=10
     )
     code, _ = helpers.err_check(response, (400, ValueError), (401, Unauthorized))
-    return code == 204
+    return code == 204  # noqa: PLR2004
 
 
 def reset_user_skin(access_token: str):
@@ -193,7 +193,7 @@ def reset_user_skin(access_token: str):
     headers = helpers.get_headers(bearer=access_token)
     response = requests.delete(urls.api_session_reset_skin, headers=headers, timeout=10)
     code, _ = helpers.err_check(response, (400, ValueError), (401, Unauthorized))
-    return code == 200
+    return code == 200  # noqa: PLR2004
 
 
 def show_user_cape(access_token: str, cape_id: str):
@@ -214,7 +214,7 @@ def show_user_cape(access_token: str, cape_id: str):
         urls.api_session_cape_visibility, headers=headers, json=payload, timeout=10
     )
     code, _ = helpers.err_check(response, (400, NotCapeOwner), (401, Unauthorized))
-    return code == 200
+    return code == 200  # noqa: PLR2004
 
 
 def hide_user_cape(access_token: str):
@@ -234,7 +234,7 @@ def hide_user_cape(access_token: str):
         urls.api_session_cape_visibility, headers=headers, timeout=10
     )
     code, _ = helpers.err_check(response, (401, Unauthorized))
-    return code == 200
+    return code == 200  # noqa: PLR2004
 
 
 def owns_minecraft(

@@ -70,7 +70,7 @@ def _handshake(sock: socket.socket, addr: tuple[str, int], session_id: int) -> i
     pcks.send(9, session_id)
 
     r_type, r_session_id, data = pcks.recv()
-    if r_type != 9 or r_session_id != session_id:
+    if r_type != 9 or r_session_id != session_id:  # noqa: PLR2004
         raise Exception("An error occured while handshaking")
 
     return int(data.rstrip(b"\0"))
@@ -84,7 +84,7 @@ def _get_stats(
 
     total_data = b""
     packet_id = 0
-    while packet_id != 0x80:
+    while packet_id != 0x80:  # noqa: PLR2004
         r_type, r_session_id, data = pcks.recv()
         packet_id = struct.unpack(">9xBx", data[:11])[0]
 
