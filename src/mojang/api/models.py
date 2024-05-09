@@ -2,11 +2,14 @@ from __future__ import annotations
 
 import os
 import re
+from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
 import requests
 import validators
-from requests.structures import CaseInsensitiveDict
+
+if TYPE_CHECKING:
+    from requests.structures import CaseInsensitiveDict
 
 
 class _Resource:

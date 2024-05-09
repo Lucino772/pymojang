@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import inspect
 import json
-
-import requests
+from typing import TYPE_CHECKING
 
 from mojang.exceptions import MethodNotAllowed, NotFound, ServerError
+
+if TYPE_CHECKING:
+    import requests
 
 
 def get_headers(json_content: bool | None = False, bearer: str | None = None):

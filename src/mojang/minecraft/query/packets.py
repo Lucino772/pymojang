@@ -1,7 +1,10 @@
 from __future__ import annotations
 
-import socket
 import struct
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import socket
 
 
 class Packets:

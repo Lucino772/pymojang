@@ -3,10 +3,13 @@ from __future__ import annotations
 import enum
 import socket
 from functools import partial
+from typing import TYPE_CHECKING
 
-from mojang.minecraft.slp._structures import SLPResponse
 from mojang.minecraft.slp.post_netty import ping as mping
 from mojang.minecraft.slp.pre_netty import ping_fe, ping_fe01
+
+if TYPE_CHECKING:
+    from mojang.minecraft.slp._structures import SLPResponse
 
 
 class PingVersion(enum.IntFlag):

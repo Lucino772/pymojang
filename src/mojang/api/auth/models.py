@@ -1,14 +1,18 @@
 from __future__ import annotations
 
-import datetime
 from abc import ABCMeta, abstractmethod
-
-import msal
+from typing import TYPE_CHECKING
 
 from mojang.api import session
 from mojang.api.auth import microsoft
-from mojang.api.models import Cape, Skin
 from mojang.exceptions import MicrosoftInvalidGrant, MicrosoftUserNotOwner
+
+if TYPE_CHECKING:
+    import datetime
+
+    import msal
+
+    from mojang.api.models import Cape, Skin
 
 _DEFAULT_SCOPES = ["XboxLive.signin"]
 

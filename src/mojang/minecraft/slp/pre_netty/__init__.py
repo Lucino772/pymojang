@@ -1,10 +1,13 @@
 from __future__ import annotations
 
-import socket
 import struct
 import time
+from typing import TYPE_CHECKING
 
 from mojang.minecraft.slp._structures import Players, SLPResponse
+
+if TYPE_CHECKING:
+    import socket
 
 
 def ping_fe01(

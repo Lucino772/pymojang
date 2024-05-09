@@ -1,9 +1,11 @@
 from __future__ import annotations
 
-import datetime as dt
-from typing import NamedTuple
+from typing import TYPE_CHECKING, NamedTuple
 
-from mojang.api.models import Cape, Skin
+if TYPE_CHECKING:
+    import datetime as dt
+
+    from mojang.api.models import Cape, Skin
 
 
 ## Base
