@@ -43,6 +43,22 @@ issue_format = "`#{issue} <https://github.com/Lucino772/pymojang/issues/{issue}>
 [tool.pytest.ini_options]
 addopts = "--doctest-modules --cov=./ --cov-report=xml ./tests"
 
+[tool.coverage.run]
+source_pkgs = ["mojang", "tests"]
+branch = true
+parallel = true
+
+[tool.coverage.paths]
+mojang = ["src/mojang", "*/pymojang/src/mojang"]
+tests = ["tests", "*/pymojang/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
 [tool.ruff]
 line-length = 88
 indent-width = 4
