@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import datetime as dt
-import typing as t
 
 import jwt
 import requests
@@ -229,7 +228,7 @@ def hide_user_cape(access_token: str):
 def owns_minecraft(
     access_token: str,
     verify_sig: bool = False,
-    public_key: t.str | None = None,
+    public_key: str | None = None,
 ) -> bool:
     """Returns True if the authenticated user owns minecraft
 

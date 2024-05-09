@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 import datetime as dt
-import typing
+from typing import Iterable, NamedTuple
 
 import requests
 
 ROOT_URL = "https://launchermeta.mojang.com/mc/game/version_manifest.json"
 
 
-class VersionMeta(typing.NamedTuple):
+class VersionMeta(NamedTuple):
     id: str
     type: str
     url: str
@@ -19,7 +19,7 @@ class VersionMeta(typing.NamedTuple):
 _cached_meta = None
 
 
-def _load_meta() -> tuple[typing.Iterable["VersionMeta"], str, str]:
+def _load_meta() -> tuple[Iterable[VersionMeta], str, str]:
     global _cached_meta
 
     def _parse_meta_item(meta: dict):

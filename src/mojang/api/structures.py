@@ -1,23 +1,25 @@
+from __future__ import annotations
+
 import datetime as dt
-import typing
+from typing import NamedTuple
 
 from mojang.api.models import Cape, Skin
 
 
 ## Base
-class ServiceStatus(typing.NamedTuple):
+class ServiceStatus(NamedTuple):
     name: str
     status: str
 
 
 ## Session
-class NameChange(typing.NamedTuple):
+class NameChange(NamedTuple):
     allowed: bool
     created_at: dt.datetime
 
 
 ## Profile
-class UnauthenticatedProfile(typing.NamedTuple):
+class UnauthenticatedProfile(NamedTuple):
     name: str
     uuid: str
     is_legacy: bool
@@ -26,7 +28,7 @@ class UnauthenticatedProfile(typing.NamedTuple):
     cape: Cape | None
 
 
-class AuthenticatedUserProfile(typing.NamedTuple):
+class AuthenticatedUserProfile(NamedTuple):
     name: str
     uuid: str
     is_legacy: bool
