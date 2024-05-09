@@ -1,5 +1,5 @@
 import struct
-from typing import IO, Optional
+from typing import IO
 
 
 class VarInt:

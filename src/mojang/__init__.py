@@ -8,7 +8,7 @@ and [Mojang Authentication API](https://wiki.vg/Authentication)
 Checkout the [`documentation`](https://pymojang.readthedocs.io/en/latest/)
 """
 
-from .api import (
+from mojang.api import (
     app,
     get_blocked_servers,
     get_profile,
@@ -19,6 +19,17 @@ from .api import (
 )
 
 try:
-    from ._version import __version__
+    from mojang._version import __version__
 except ImportError:
     __version__ = None
+
+__all__ = [
+    "get_blocked_servers",
+    "get_profile",
+    "get_status",
+    "get_username",
+    "get_uuid",
+    "get_uuids",
+    "app",
+    "__version__",
+]

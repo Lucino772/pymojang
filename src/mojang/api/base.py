@@ -1,14 +1,13 @@
 import base64
-import datetime as dt
 import json
-from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Dict, Iterable, List, Optional
 
 import requests
 
-from ..exceptions import InvalidName, NotFound
-from . import helpers, urls
-from .models import Cape, Skin
-from .structures import ServiceStatus, UnauthenticatedProfile
+from mojang.api import helpers, urls
+from mojang.api.models import Cape, Skin
+from mojang.api.structures import ServiceStatus, UnauthenticatedProfile
+from mojang.exceptions import InvalidName, NotFound
 
 
 def get_status() -> List[ServiceStatus]:

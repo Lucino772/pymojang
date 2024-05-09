@@ -3,9 +3,9 @@ import socket
 from functools import partial
 from typing import Optional, Tuple
 
-from ._structures import SLPResponse
-from .post_netty import ping as mping
-from .pre_netty import ping_fe, ping_fe01
+from mojang.minecraft.slp._structures import SLPResponse
+from mojang.minecraft.slp.post_netty import ping as mping
+from mojang.minecraft.slp.pre_netty import ping_fe, ping_fe01
 
 
 class PingVersion(enum.IntFlag):

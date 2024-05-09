@@ -2,7 +2,7 @@ import socket
 from contextlib import contextmanager
 from typing import Callable, Generator, Optional, Tuple
 
-from .packets import Packets
+from mojang.minecraft.rcon.packets import Packets
 
 
 @contextmanager

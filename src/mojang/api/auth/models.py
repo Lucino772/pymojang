@@ -1,6 +1,6 @@
 import datetime
 from abc import ABCMeta, abstractmethod
-from typing import List, Optional, Tuple, Union, overload
+from typing import List, Optional, Tuple
 
 import msal
 

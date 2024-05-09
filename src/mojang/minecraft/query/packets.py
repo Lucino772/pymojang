@@ -1,6 +1,6 @@
 import socket
 import struct
-from typing import Optional, Tuple
+from typing import Tuple
 
 
 class Packets:

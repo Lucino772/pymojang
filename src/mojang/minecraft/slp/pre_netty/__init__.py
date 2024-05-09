@@ -3,7 +3,7 @@ import struct
 import time
 from typing import Optional
 
-from .._structures import Players, SLPResponse
+from mojang.minecraft.slp._structures import Players, SLPResponse
 
 
 def ping_fe01(

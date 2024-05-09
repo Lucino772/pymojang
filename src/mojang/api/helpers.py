@@ -4,7 +4,7 @@ from typing import Optional
 
 import requests
 
-from ..exceptions import MethodNotAllowed, NotFound, ServerError
+from mojang.exceptions import MethodNotAllowed, NotFound, ServerError
 
 
 def get_headers(json_content: Optional[bool] = False, bearer: Optional[str] = None):

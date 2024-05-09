@@ -4,15 +4,15 @@ import typing as t
 import jwt
 import requests
 
-from ..exceptions import (
+from mojang.api import helpers, urls
+from mojang.api.models import Cape, Skin
+from mojang.api.structures import AuthenticatedUserProfile, NameChange
+from mojang.exceptions import (
     InvalidName,
     NotCapeOwner,
     Unauthorized,
     UnavailableName,
 )
-from . import helpers, urls
-from .models import Cape, Skin
-from .structures import AuthenticatedUserProfile, NameChange
 
 
 def check_product_voucher(access_token: str, voucher: str) -> bool:

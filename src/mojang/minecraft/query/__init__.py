@@ -4,8 +4,8 @@ import struct
 import time
 from typing import IO, List, Optional, Tuple
 
-from ._structures import ServerStats
-from .packets import Packets
+from mojang.minecraft.query._structures import ServerStats
+from mojang.minecraft.query.packets import Packets
 
 
 def read_null_terminated_string(buffer: IO, encoding: str = "utf-8") -> str:
