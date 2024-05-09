@@ -64,7 +64,7 @@ class _Resource:
 
     @classmethod
     def _download_bytes(cls, url: str):
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         if response.ok:
             filename = (
                 cls._filename_from_url(url)

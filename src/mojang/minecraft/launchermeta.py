@@ -36,7 +36,7 @@ def _load_meta() -> tuple[Iterable[VersionMeta], str, str]:
     if _cached_meta is not None:
         return _cached_meta
 
-    data = requests.get(ROOT_URL).json()
+    data = requests.get(ROOT_URL, timeout=10).json()
     latest_release = data["latest"]["release"]
     latest_snapshot = data["latest"]["snapshot"]
 
