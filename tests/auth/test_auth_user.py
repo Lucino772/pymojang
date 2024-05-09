@@ -20,7 +20,7 @@ class TestAuthUser(unittest.TestCase):
     _refresh_token = "REFRESH_TOKEN"
 
     class _MockedMsalClientApplication:
-        def acquire_token_by_refresh_token(self, refresh_token, scopes):
+        def acquire_token_by_refresh_token(self, refresh_token, scopes):  # noqa: ARG002
             return {
                 "access_token": "ACCESS_TOKEN",
                 "refresh_token": TestAuthUser._refresh_token,
@@ -138,11 +138,11 @@ class TestAuthUser(unittest.TestCase):
             TestAuthUser._MockedMsalClientApplication(),
         )
 
-        assert user._access_token == "ACCESS_TOKEN"
-        assert user._refresh_token == "REFRESH_TOKEN"
+        assert user._access_token == "ACCESS_TOKEN"  # noqa: SLF001
+        assert user._refresh_token == "REFRESH_TOKEN"  # noqa: SLF001
         user.refresh()
-        assert user._access_token == self._mc_token
-        assert user._refresh_token == self._refresh_token
+        assert user._access_token == self._mc_token  # noqa: SLF001
+        assert user._refresh_token == self._refresh_token  # noqa: SLF001
         user.close()
-        assert user._access_token is None
-        assert user._refresh_token is None
+        assert user._access_token is None  # noqa: SLF001
+        assert user._refresh_token is None  # noqa: SLF001
