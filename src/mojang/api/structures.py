@@ -8,19 +8,19 @@ if TYPE_CHECKING:
     from mojang.api.models import Cape, Skin
 
 
-## Base
+# Base
 class ServiceStatus(NamedTuple):
     name: str
     status: str
 
 
-## Session
+# Session
 class NameChange(NamedTuple):
     allowed: bool
     created_at: dt.datetime
 
 
-## Profile
+# Profile
 class UnauthenticatedProfile(NamedTuple):
     name: str
     uuid: str

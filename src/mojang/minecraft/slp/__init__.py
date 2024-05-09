@@ -69,7 +69,7 @@ def ping(
             try:
                 sock.connect(addr)
                 response = method(sock)
-            except socket.error:
+            except OSError:
                 pass
 
     return response

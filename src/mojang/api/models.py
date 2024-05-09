@@ -22,7 +22,7 @@ class _Resource:
 
     def __init__(self, source: str, load: bool = True) -> None:
         self.__source = source
-        self.__data = bytes()
+        self.__data = b""
         self.__extension = None
 
         if load is True:

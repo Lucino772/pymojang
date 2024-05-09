@@ -25,7 +25,7 @@ def authenticate_xbl(auth_token: str) -> tuple[str, str]:
         "Properties": {
             "AuthMethod": "RPS",
             "SiteName": "user.auth.xboxlive.com",
-            "RpsTicket": "d={}".format(auth_token),
+            "RpsTicket": f"d={auth_token}",
         },
         "RelyingParty": "http://auth.xboxlive.com",
         "TokenType": "JWT",

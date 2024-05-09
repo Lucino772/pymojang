@@ -254,7 +254,7 @@ def owns_minecraft(
 
         jwt.decode(data["signature"], public_key, algorithms=["RS256"])
 
-    return not len(data["items"]) == 0
+    return len(data["items"]) != 0
 
 
 def get_profile(access_token: str) -> AuthenticatedUserProfile:
