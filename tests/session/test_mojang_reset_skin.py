@@ -1,5 +1,6 @@
 import unittest
 
+import pytest
 import responses
 
 from mojang.api import session
@@ -13,16 +14,16 @@ class TestMojangResetSkin(unittest.TestCase):
         responses.add(method=responses.DELETE, url=api_session_reset_skin, status=200)
 
         reset = session.reset_user_skin("TOKEN")
-        self.assertTrue(reset)
+        assert reset
 
     @responses.activate
     def test400(self):
         responses.add(method=responses.DELETE, url=api_session_reset_skin, status=400)
 
-        self.assertRaises(ValueError, session.reset_user_skin, "TOKEN")
+        pytest.raises(ValueError, session.reset_user_skin, "TOKEN")  # noqa: PT011
 
     @responses.activate
     def test401(self):
         responses.add(method=responses.DELETE, url=api_session_reset_skin, status=401)
 
-        self.assertRaises(Unauthorized, session.reset_user_skin, "TOKEN")
+        pytest.raises(Unauthorized, session.reset_user_skin, "TOKEN")

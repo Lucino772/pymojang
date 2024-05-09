@@ -1,5 +1,6 @@
 import unittest
 
+import pytest
 import responses
 
 import mojang
@@ -19,7 +20,7 @@ class TestMojangUsername(unittest.TestCase):
         )
 
         username = mojang.get_username(uuid)
-        self.assertEqual(username, "Notch")
+        assert username == "Notch"
 
     @responses.activate
     def test204(self):
@@ -27,14 +28,14 @@ class TestMojangUsername(unittest.TestCase):
         responses.add(method=responses.GET, url=api_get_username(uuid), status=204)
 
         username = mojang.get_username(uuid)
-        self.assertIsNone(username)
+        assert username is None
 
     @responses.activate
     def test400(self):
         uuid = "thisisnotauuid"
         responses.add(method=responses.GET, url=api_get_username(uuid), status=400)
 
-        self.assertRaises(ValueError, mojang.get_username, uuid)
+        pytest.raises(ValueError, mojang.get_username, uuid)  # noqa: PT011
 
     @responses.activate
     def test404(self):
@@ -42,18 +43,18 @@ class TestMojangUsername(unittest.TestCase):
         responses.add(method=responses.GET, url=api_get_username(uuid), status=404)
 
         username = mojang.get_username(uuid)
-        self.assertIsNone(username)
+        assert username is None
 
     @responses.activate
     def test405(self):
         uuid = "069a79f444e94726a5befca90e38aaf6"  # Does not exists
         responses.add(method=responses.GET, url=api_get_username(uuid), status=405)
 
-        self.assertRaises(MethodNotAllowed, mojang.get_username, uuid)
+        pytest.raises(MethodNotAllowed, mojang.get_username, uuid)
 
     @responses.activate
     def test500(self):
         uuid = "069a79f444e94726a5befca90e38aaf6"  # Does not exists
         responses.add(method=responses.GET, url=api_get_username(uuid), status=500)
 
-        self.assertRaises(ServerError, mojang.get_username, uuid)
+        pytest.raises(ServerError, mojang.get_username, uuid)

@@ -19,5 +19,4 @@ class TestMojangStatus(unittest.TestCase):
             ServiceStatus(name="textures.minecraft.net", status="unknown"),
             ServiceStatus(name="mojang.com", status="unknown"),
         ]
-
-        self.assertListEqual(expected, self.value)
+        assert self.value == expected

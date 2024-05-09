@@ -1,5 +1,6 @@
 import unittest
 
+import pytest
 import responses
 
 from mojang.api import session
@@ -13,16 +14,16 @@ class TestMojangShowCape(unittest.TestCase):
         responses.add(method=responses.PUT, url=api_session_cape_visibility, status=200)
 
         visible = session.show_user_cape("TOKEN", "100")
-        self.assertTrue(visible)
+        assert visible
 
     @responses.activate
     def test400(self):
         responses.add(method=responses.PUT, url=api_session_cape_visibility, status=400)
 
-        self.assertRaises(NotCapeOwner, session.show_user_cape, "TOKEN", "100")
+        pytest.raises(NotCapeOwner, session.show_user_cape, "TOKEN", "100")
 
     @responses.activate
     def test401(self):
         responses.add(method=responses.PUT, url=api_session_cape_visibility, status=401)
 
-        self.assertRaises(Unauthorized, session.show_user_cape, "TOKEN", "100")
+        pytest.raises(Unauthorized, session.show_user_cape, "TOKEN", "100")

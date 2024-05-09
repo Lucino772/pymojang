@@ -1,6 +1,7 @@
 import unittest
 
 import jwt
+import pytest
 import responses
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
@@ -187,7 +188,7 @@ class TestAuthApp(unittest.TestCase):
         app = MojangAuthenticationApp(
             TestAuthApp._MockedMsalClientApplicationOk(), "https://localhost"
         )
-        self.assertIsNotNone(app.get_session("AUTH_CODE"))
+        assert app.get_session("AUTH_CODE") is not None
 
     @responses.activate
     def test_get_session_invalid(self):
@@ -201,4 +202,4 @@ class TestAuthApp(unittest.TestCase):
             TestAuthApp._MockedMsalClientApplicationInvalidGrant(),
             "https://localhost",
         )
-        self.assertRaises(MicrosoftInvalidGrant, app.get_session, "AUTH_CODE")
+        pytest.raises(MicrosoftInvalidGrant, app.get_session, "AUTH_CODE")

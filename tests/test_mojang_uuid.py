@@ -1,5 +1,6 @@
 import unittest
 
+import pytest
 import responses
 
 import mojang
@@ -23,7 +24,7 @@ class TestMojangStatus(unittest.TestCase):
         )
 
         uuid = mojang.get_uuid(username)
-        self.assertEqual(uuid, "069a79f444e94726a5befca90e38aaf5")
+        assert uuid == "069a79f444e94726a5befca90e38aaf5"
 
     @responses.activate
     def test204(self):
@@ -31,7 +32,7 @@ class TestMojangStatus(unittest.TestCase):
         responses.add(method=responses.GET, url=api_get_uuid(username), status=204)
 
         uuid = mojang.get_uuid(username)
-        self.assertIsNone(uuid)
+        assert uuid is None
 
     @responses.activate
     def test400(self):
@@ -41,8 +42,8 @@ class TestMojangStatus(unittest.TestCase):
         username2 = ""
         responses.add(method=responses.GET, url=api_get_uuid(username2), status=400)
 
-        self.assertRaises(InvalidName, mojang.get_uuid, username1)
-        self.assertRaises(InvalidName, mojang.get_uuid, username2)
+        pytest.raises(InvalidName, mojang.get_uuid, username1)
+        pytest.raises(InvalidName, mojang.get_uuid, username2)
 
     @responses.activate
     def test404(self):
@@ -50,18 +51,18 @@ class TestMojangStatus(unittest.TestCase):
         responses.add(method=responses.GET, url=api_get_uuid(username), status=404)
 
         uuid = mojang.get_uuid(username)
-        self.assertIsNone(uuid)
+        assert uuid is None
 
     @responses.activate
     def test405(self):
         username = "UNEXISTENTPLAYER"
         responses.add(method=responses.GET, url=api_get_uuid(username), status=405)
 
-        self.assertRaises(MethodNotAllowed, mojang.get_uuid, username)
+        pytest.raises(MethodNotAllowed, mojang.get_uuid, username)
 
     @responses.activate
     def test500(self):
         username = "UNEXISTENTPLAYER"
         responses.add(method=responses.GET, url=api_get_uuid(username), status=500)
 
-        self.assertRaises(ServerError, mojang.get_uuid, username)
+        pytest.raises(ServerError, mojang.get_uuid, username)

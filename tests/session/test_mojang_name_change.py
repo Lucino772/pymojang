@@ -1,6 +1,7 @@
 import datetime as dt
 import unittest
 
+import pytest
 import responses
 
 from mojang.api import session
@@ -23,20 +24,17 @@ class TestMojangNameChange(unittest.TestCase):
         )
 
         ret = session.get_user_name_change("TOKEN")
-        self.assertTrue(ret.allowed)
-        self.assertEqual(
-            ret.created_at,
-            date,
-        )
+        assert ret.allowed
+        assert ret.created_at == date
 
     @responses.activate
     def test400(self):
         responses.add(method=responses.GET, url=api_session_name_change, status=400)
 
-        self.assertRaises(ValueError, session.get_user_name_change, "TOKEN")
+        pytest.raises(ValueError, session.get_user_name_change, "TOKEN")  # noqa: PT011
 
     @responses.activate
     def test401(self):
         responses.add(method=responses.GET, url=api_session_name_change, status=401)
 
-        self.assertRaises(Unauthorized, session.get_user_name_change, "TOKEN")
+        pytest.raises(Unauthorized, session.get_user_name_change, "TOKEN")

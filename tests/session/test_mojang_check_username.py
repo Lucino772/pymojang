@@ -1,5 +1,6 @@
 import unittest
 
+import pytest
 import responses
 
 from mojang.api import session
@@ -19,7 +20,7 @@ class TestMojangCheckUsername(unittest.TestCase):
         )
 
         available = session.check_username("TOKEN", name)
-        self.assertTrue(available)
+        assert available
 
     @responses.activate
     def test_unavailable(self):
@@ -32,7 +33,7 @@ class TestMojangCheckUsername(unittest.TestCase):
         )
 
         available = session.check_username("TOKEN", name)
-        self.assertFalse(available)
+        assert not available
 
     @responses.activate
     def test401(self):
@@ -43,7 +44,7 @@ class TestMojangCheckUsername(unittest.TestCase):
             status=401,
         )
 
-        self.assertRaises(Unauthorized, session.check_username, "TOKEN", name)
+        pytest.raises(Unauthorized, session.check_username, "TOKEN", name)
 
     @responses.activate
     def test429(self):
@@ -54,4 +55,4 @@ class TestMojangCheckUsername(unittest.TestCase):
             status=429,
         )
 
-        self.assertRaises(RuntimeError, session.check_username, "TOKEN", name)
+        pytest.raises(RuntimeError, session.check_username, "TOKEN", name)

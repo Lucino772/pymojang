@@ -40,13 +40,13 @@ class TestMojangAPIModels(unittest.TestCase):
 
         resource = _Resource(source=url, load=True)
 
-        self.assertEqual(resource.extension, "png")
-        self.assertEqual(resource.data, self.skin_data)
+        assert resource.extension == "png"
+        assert resource.data == self.skin_data
 
     def test_autoload_local(self):
         resource = _Resource(source=self.skin_path, load=True)
-        self.assertEqual(resource.extension, "png")
-        self.assertEqual(resource.data, self.skin_data)
+        assert resource.extension == "png"
+        assert resource.data == self.skin_data
 
     @responses.activate
     def test_lazyload_url(self):
@@ -56,15 +56,15 @@ class TestMojangAPIModels(unittest.TestCase):
         resource = _Resource(source=url, load=False)
         resource.load()
 
-        self.assertEqual(resource.extension, "png")
-        self.assertEqual(resource.data, self.skin_data)
+        assert resource.extension == "png"
+        assert resource.data == self.skin_data
 
     def test_lazyload_local(self):
         resource = _Resource(source=self.skin_path, load=False)
         resource.load()
 
-        self.assertEqual(resource.extension, "png")
-        self.assertEqual(resource.data, self.skin_data)
+        assert resource.extension == "png"
+        assert resource.data == self.skin_data
 
     @responses.activate
     def test_filename_from_url(self):
@@ -72,8 +72,8 @@ class TestMojangAPIModels(unittest.TestCase):
         self._patch_skin_url(url)
 
         resource = _Resource(source=url, load=True)
-        self.assertEqual(resource.extension, "png")
-        self.assertEqual(resource.data, self.skin_data)
+        assert resource.extension == "png"
+        assert resource.data == self.skin_data
 
     def test_save(self):
         resource = _Resource(source=self.skin_path, load=True)
@@ -85,5 +85,5 @@ class TestMojangAPIModels(unittest.TestCase):
             with open(filename, "rb") as fp:
                 content = fp.read()
 
-            self.assertTrue(os.path.exists(filename))
-            self.assertEqual(self.skin_data, content)
+            assert os.path.exists(filename)
+            assert self.skin_data == content

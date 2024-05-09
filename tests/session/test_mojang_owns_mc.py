@@ -1,6 +1,7 @@
 import unittest
 
 import jwt
+import pytest
 import responses
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
@@ -80,10 +81,10 @@ class TestMojangOwnsMinecraft(unittest.TestCase):
         )
 
         owned = session.owns_minecraft("TOKEN", verify_sig=True, public_key=public_pem)
-        self.assertTrue(owned)
+        assert owned
 
     @responses.activate
     def test401(self):
         responses.add(method=responses.GET, url=api_session_ownership, status=401)
 
-        self.assertRaises(Unauthorized, session.owns_minecraft, "TOKEN")
+        pytest.raises(Unauthorized, session.owns_minecraft, "TOKEN")

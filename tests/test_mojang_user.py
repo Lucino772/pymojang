@@ -1,5 +1,6 @@
 import unittest
 
+import pytest
 import responses
 
 import mojang
@@ -45,17 +46,17 @@ class TestMojangStatus(unittest.TestCase):
         )
 
         profile = mojang.get_profile(uuid)
-        self.assertEqual(profile.name, "Notch")
-        self.assertEqual(profile.uuid, uuid)
-        self.assertEqual(profile.is_legacy, False)
-        self.assertEqual(profile.is_demo, False)
-        self.assertIsNotNone(profile.skin)
-        self.assertEqual(
-            profile.skin.source,
-            "http://textures.minecraft.net/texture/292009a4925b58f02c77dadc3ecef07ea4c7472f64e0fdc32ce5522489362680",
+        assert profile.name == "Notch"
+        assert profile.uuid == uuid
+        assert profile.is_legacy == False
+        assert profile.is_demo == False
+        assert profile.skin is not None
+        assert (
+            profile.skin.source
+            == "http://textures.minecraft.net/texture/292009a4925b58f02c77dadc3ecef07ea4c7472f64e0fdc32ce5522489362680"
         )
-        self.assertEqual(profile.skin.variant, "classic")
-        self.assertIsNone(profile.cape)
+        assert profile.skin.variant == "classic"
+        assert profile.cape is None
 
     @responses.activate
     def test204(self):
@@ -63,32 +64,32 @@ class TestMojangStatus(unittest.TestCase):
         responses.add(method=responses.GET, url=api_user_profile(uuid), status=204)
 
         profile = mojang.get_profile(uuid)
-        self.assertIsNone(profile)
+        assert profile is None
 
     @responses.activate
     def test400(self):
         uuid = "thisisnotauuid"
         responses.add(method=responses.GET, url=api_user_profile(uuid), status=400)
 
-        self.assertRaises(ValueError, mojang.get_profile, uuid)
+        pytest.raises(ValueError, mojang.get_profile, uuid)  # noqa: PT011
 
     @responses.activate
     def test404(self):
         uuid = "069a79f444e94726a5befca90e38aaf6"  # Does not exists
         responses.add(method=responses.GET, url=api_user_profile(uuid), status=404)
 
-        self.assertRaises(NotFound, mojang.get_profile, uuid)
+        pytest.raises(NotFound, mojang.get_profile, uuid)
 
     @responses.activate
     def test405(self):
         uuid = "069a79f444e94726a5befca90e38aaf6"  # Does not exists
         responses.add(method=responses.GET, url=api_user_profile(uuid), status=405)
 
-        self.assertRaises(MethodNotAllowed, mojang.get_profile, uuid)
+        pytest.raises(MethodNotAllowed, mojang.get_profile, uuid)
 
     @responses.activate
     def test500(self):
         uuid = "069a79f444e94726a5befca90e38aaf6"  # Does not exists
         responses.add(method=responses.GET, url=api_user_profile(uuid), status=500)
 
-        self.assertRaises(ServerError, mojang.get_profile, uuid)
+        pytest.raises(ServerError, mojang.get_profile, uuid)
