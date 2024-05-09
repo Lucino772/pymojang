@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import unittest
 from contextlib import contextmanager
@@ -24,7 +26,7 @@ class TestMojangAPIModels(unittest.TestCase):
         with open(self.skin_path, "rb") as fp:
             self.skin_data = fp.read()
 
-    def _patch_skin_url(self, url: str, content_type: str = None):
+    def _patch_skin_url(self, url: str, content_type: str | None = None):
         responses.add(
             method=responses.GET,
             url=url,

@@ -12,7 +12,7 @@ from mojang.exceptions import Unauthorized
 class TestMojangNameChange(unittest.TestCase):
     @responses.activate
     def test200(self):
-        date = dt.datetime.utcnow()
+        date = dt.datetime.now(tz=dt.timezone.utc)
         responses.add(
             method=responses.GET,
             url=api_session_name_change,

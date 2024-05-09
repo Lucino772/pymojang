@@ -48,8 +48,8 @@ class TestMojangStatus(unittest.TestCase):
         profile = mojang.get_profile(uuid)
         assert profile.name == "Notch"
         assert profile.uuid == uuid
-        assert profile.is_legacy == False
-        assert profile.is_demo == False
+        assert not profile.is_legacy
+        assert not profile.is_demo
         assert profile.skin is not None
         assert (
             profile.skin.source

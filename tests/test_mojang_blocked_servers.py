@@ -31,7 +31,7 @@ class TestMojangBlockedServers(unittest.TestCase):
             status=200,
         )
         hashes = mojang.get_blocked_servers()
-        assert SERVER_HASHES == hashes
+        assert hashes == SERVER_HASHES
 
     @responses.activate
     def test404(self):

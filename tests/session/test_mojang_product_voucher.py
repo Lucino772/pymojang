@@ -67,8 +67,8 @@ class TestMojangCheckProductVoucher(unittest.TestCase):
                 "path": "/productvoucher/:voucher",
                 "errorType": "NOT_FOUND",
                 "error": "NOT_FOUND",
-                "errorMessage": "The server has not found anything matching the request URI",
-                "developerMessage": "The server has not found anything matching the request URI",
+                "errorMessage": "The server found nothing matching the request URI",
+                "developerMessage": "The server found nothing matching the request URI",
             },
         )
 
@@ -135,8 +135,8 @@ class TestMojangRedeemProductVoucher(unittest.TestCase):
                 "path": "/productvoucher/:voucher",
                 "errorType": "NOT_FOUND",
                 "error": "NOT_FOUND",
-                "errorMessage": "The server has not found anything matching the request URI",
-                "developerMessage": "The server has not found anything matching the request URI",
+                "errorMessage": "The server found nothing matching the request URI",
+                "developerMessage": "The server found nothing matching the request URI",
             },
         )
 
