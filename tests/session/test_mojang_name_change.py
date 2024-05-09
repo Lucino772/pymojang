@@ -31,16 +31,12 @@ class TestMojangNameChange(unittest.TestCase):
 
     @responses.activate
     def test400(self):
-        responses.add(
-            method=responses.GET, url=api_session_name_change, status=400
-        )
+        responses.add(method=responses.GET, url=api_session_name_change, status=400)
 
         self.assertRaises(ValueError, session.get_user_name_change, "TOKEN")
 
     @responses.activate
     def test401(self):
-        responses.add(
-            method=responses.GET, url=api_session_name_change, status=401
-        )
+        responses.add(method=responses.GET, url=api_session_name_change, status=401)
 
         self.assertRaises(Unauthorized, session.get_user_name_change, "TOKEN")

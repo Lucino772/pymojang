@@ -29,9 +29,7 @@ class TestMojangStatus(unittest.TestCase):
     @responses.activate
     def test204(self):
         username = "UNEXISTENTPLAYER"
-        responses.add(
-            method=responses.GET, url=api_get_uuid(username), status=204
-        )
+        responses.add(method=responses.GET, url=api_get_uuid(username), status=204)
 
         uuid = mojang.get_uuid(username)
         self.assertIsNone(uuid)
@@ -39,14 +37,10 @@ class TestMojangStatus(unittest.TestCase):
     @responses.activate
     def test400(self):
         username1 = "xxxxxxxxxxxxxxxxx"
-        responses.add(
-            method=responses.GET, url=api_get_uuid(username1), status=400
-        )
+        responses.add(method=responses.GET, url=api_get_uuid(username1), status=400)
 
         username2 = ""
-        responses.add(
-            method=responses.GET, url=api_get_uuid(username2), status=400
-        )
+        responses.add(method=responses.GET, url=api_get_uuid(username2), status=400)
 
         self.assertRaises(InvalidName, mojang.get_uuid, username1)
         self.assertRaises(InvalidName, mojang.get_uuid, username2)
@@ -54,9 +48,7 @@ class TestMojangStatus(unittest.TestCase):
     @responses.activate
     def test404(self):
         username = "UNEXISTENTPLAYER"
-        responses.add(
-            method=responses.GET, url=api_get_uuid(username), status=404
-        )
+        responses.add(method=responses.GET, url=api_get_uuid(username), status=404)
 
         uuid = mojang.get_uuid(username)
         self.assertIsNone(uuid)
@@ -64,17 +56,13 @@ class TestMojangStatus(unittest.TestCase):
     @responses.activate
     def test405(self):
         username = "UNEXISTENTPLAYER"
-        responses.add(
-            method=responses.GET, url=api_get_uuid(username), status=405
-        )
+        responses.add(method=responses.GET, url=api_get_uuid(username), status=405)
 
         self.assertRaises(MethodNotAllowed, mojang.get_uuid, username)
 
     @responses.activate
     def test500(self):
         username = "UNEXISTENTPLAYER"
-        responses.add(
-            method=responses.GET, url=api_get_uuid(username), status=500
-        )
+        responses.add(method=responses.GET, url=api_get_uuid(username), status=500)
 
         self.assertRaises(ServerError, mojang.get_uuid, username)

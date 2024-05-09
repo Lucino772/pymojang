@@ -7,9 +7,7 @@ import requests
 from ..exceptions import MethodNotAllowed, NotFound, ServerError
 
 
-def get_headers(
-    json_content: Optional[bool] = False, bearer: Optional[str] = None
-):
+def get_headers(json_content: Optional[bool] = False, bearer: Optional[str] = None):
     headers = {}
 
     if json_content:
@@ -22,9 +20,7 @@ def get_headers(
     return headers
 
 
-def err_check(
-    response: requests.Response, *args, use_defaults: Optional[bool] = True
-):
+def err_check(response: requests.Response, *args, use_defaults: Optional[bool] = True):
     if use_defaults:
         args += ((404, NotFound), (405, MethodNotAllowed), (500, ServerError))
 

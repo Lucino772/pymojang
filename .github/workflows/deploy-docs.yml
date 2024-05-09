@@ -22,12 +22,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: actions/configure-pages@v5
-    - uses: wntrblm/nox@2024.04.15
-      with:
-        python-versions: "3.8"
+    - name: Install Hatch
+      run: |
+        pipx install hatch==1.9.3
     - name: Build Docs
       run: |
-        nox -rs docs
+        hatch run docs:build
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:

@@ -15,6 +15,4 @@ class TestUtilsHelpers(unittest.TestCase):
         )
 
     def test_get_headers_token(self):
-        self.assertDictEqual(
-            {"authorization": "Bearer mytoken"}, self.headers2
-        )
+        self.assertDictEqual({"authorization": "Bearer mytoken"}, self.headers2)

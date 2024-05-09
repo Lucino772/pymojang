@@ -4,9 +4,7 @@ import typing
 from mojang.api.models import Cape, Skin
 
 ## Base
-ServiceStatus = typing.NamedTuple(
-    "ServiceStatus", [("name", str), ("status", str)]
-)
+ServiceStatus = typing.NamedTuple("ServiceStatus", [("name", str), ("status", str)])
 
 ## Session
 NameChange = typing.NamedTuple(

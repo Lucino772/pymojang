@@ -37,9 +37,7 @@ class TestMojangCheckProductVoucher(unittest.TestCase):
             status=401,
         )
 
-        self.assertRaises(
-            Unauthorized, session.check_product_voucher, "TOKEN", voucher
-        )
+        self.assertRaises(Unauthorized, session.check_product_voucher, "TOKEN", voucher)
 
     @responses.activate
     def test404_invalid(self):
@@ -55,9 +53,7 @@ class TestMojangCheckProductVoucher(unittest.TestCase):
             },
         )
 
-        self.assertRaises(
-            ValueError, session.check_product_voucher, "TOKEN", voucher
-        )
+        self.assertRaises(ValueError, session.check_product_voucher, "TOKEN", voucher)
 
     @responses.activate
     def test404_unavailable(self):
@@ -127,9 +123,7 @@ class TestMojangRedeemProductVoucher(unittest.TestCase):
             },
         )
 
-        self.assertRaises(
-            ValueError, session.redeem_product_voucher, "TOKEN", voucher
-        )
+        self.assertRaises(ValueError, session.redeem_product_voucher, "TOKEN", voucher)
 
     @responses.activate
     def test404_unavailable(self):

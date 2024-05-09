@@ -56,9 +56,7 @@ def authenticate_xsts(xbl_token: str) -> Tuple[str, str]:
         "TokenType": "JWT",
     }
 
-    response = requests.post(
-        urls.api_ms_xbl_authorize, headers=headers, json=payload
-    )
+    response = requests.post(urls.api_ms_xbl_authorize, headers=headers, json=payload)
     _, data = helpers.err_check(response, (400, XboxLiveAuthenticationError))
     return data["Token"], data["DisplayClaims"]["xui"][0]["uhs"]
 
@@ -77,7 +75,7 @@ def authenticate_minecraft(userhash: str, xsts_token: str) -> str:
     :Example:
 
     >>> from mojang.account.auth import microsoft
-    >>> ACCESS_TOKEN = '....' # Access token from Microsoft
+    >>> ACCESS_TOKEN = "...."  # Access token from Microsoft
     >>> xbl_token, _ = microsoft.authenticate_xbl(ACCESS_TOKEN)
     >>> xsts_token, userhash = microsoft.authenticate_xsts(xbl_token)
     >>> mc_access_token = microsoft.authenticate_minecraft(userhash, xsts_token)
@@ -85,9 +83,7 @@ def authenticate_minecraft(userhash: str, xsts_token: str) -> str:
     headers = helpers.get_headers(json_content=True)
     payload = {"identityToken": f"XBL3.0 x={userhash};{xsts_token}"}
 
-    response = requests.post(
-        urls.api_ms_xbl_login, headers=headers, json=payload
-    )
+    response = requests.post(urls.api_ms_xbl_login, headers=headers, json=payload)
     _, data = helpers.err_check(
         response, (400, XboxLiveInvalidUserHash), (401, Unauthorized)
     )

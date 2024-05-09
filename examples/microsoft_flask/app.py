@@ -20,9 +20,7 @@ def _sess_to_json(sess):
         "uuid": sess.uuid,
         "is_legacy": sess.is_legacy,
         "is_demo": sess.is_demo,
-        "names": [
-            {"name": name[0], "changed_to_at": name[1]} for name in sess.names
-        ],
+        "names": [{"name": name[0], "changed_to_at": name[1]} for name in sess.names],
         "skin": {
             "url": sess.skin.source if sess.skin else None,
             "variant": sess.skin.variant if sess.skin else None,

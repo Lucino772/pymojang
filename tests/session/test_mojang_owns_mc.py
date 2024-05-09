@@ -79,15 +79,11 @@ class TestMojangOwnsMinecraft(unittest.TestCase):
             status=200,
         )
 
-        owned = session.owns_minecraft(
-            "TOKEN", verify_sig=True, public_key=public_pem
-        )
+        owned = session.owns_minecraft("TOKEN", verify_sig=True, public_key=public_pem)
         self.assertTrue(owned)
 
     @responses.activate
     def test401(self):
-        responses.add(
-            method=responses.GET, url=api_session_ownership, status=401
-        )
+        responses.add(method=responses.GET, url=api_session_ownership, status=401)
 
         self.assertRaises(Unauthorized, session.owns_minecraft, "TOKEN")

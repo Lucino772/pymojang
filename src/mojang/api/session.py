@@ -27,16 +27,12 @@ def check_product_voucher(access_token: str, voucher: str) -> bool:
     :Example:
 
     >>> from mojang.api import session
-    >>> session.check_product_voucher('ACCESS_TOKEN', 'JHRD2-HWGTY-WP3MW-QR4MC-CGGHZ')
+    >>> session.check_product_voucher("ACCESS_TOKEN", "JHRD2-HWGTY-WP3MW-QR4MC-CGGHZ")
     True
     """
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.get(
-        urls.api_session_product_voucher(voucher), headers=headers
-    )
-    code, data = helpers.err_check(
-        response, (401, Unauthorized), use_defaults=False
-    )
+    response = requests.get(urls.api_session_product_voucher(voucher), headers=headers)
+    code, data = helpers.err_check(response, (401, Unauthorized), use_defaults=False)
 
     if code == 404 and "errorMessage" not in data:
         raise ValueError("Invalid voucher")
@@ -57,16 +53,12 @@ def redeem_product_voucher(access_token: str, voucher: str) -> bool:
     :Example:
 
     >>> from mojang.api import session
-    >>> session.redeem_product_voucher('ACCESS_TOKEN', 'JHRD2-HWGTY-WP3MW-QR4MC-CGGHZ')
+    >>> session.redeem_product_voucher("ACCESS_TOKEN", "JHRD2-HWGTY-WP3MW-QR4MC-CGGHZ")
     True
     """
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.put(
-        urls.api_session_product_voucher(voucher), headers=headers
-    )
-    code, data = helpers.err_check(
-        response, (401, Unauthorized), use_defaults=False
-    )
+    response = requests.put(urls.api_session_product_voucher(voucher), headers=headers)
+    code, data = helpers.err_check(response, (401, Unauthorized), use_defaults=False)
 
     if code == 404 and "errorMessage" not in data:
         raise ValueError("Invalid voucher")
@@ -89,9 +81,7 @@ def check_username(access_token: str, username: str) -> bool:
     :raises RuntimeError: if you sent to many requests
     """
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.get(
-        urls.api_session_check_username(username), headers=headers
-    )
+    response = requests.get(urls.api_session_check_username(username), headers=headers)
     code, data = helpers.err_check(
         response, (401, Unauthorized), (429, RuntimeError("Limited Endpoint"))
     )
@@ -109,14 +99,12 @@ def get_user_name_change(access_token: str) -> NameChange:
     :Example:
 
     >>> from mojang.account import session
-    >>> session.get_username_change('ACCESS_TOKEN')
+    >>> session.get_username_change("ACCESS_TOKEN")
     NameChange(allowed=True, created_at=datetime.datetime(2006, 4, 29, 10, 10, 10))
     """
     headers = helpers.get_headers(bearer=access_token)
     response = requests.get(urls.api_session_name_change, headers=headers)
-    _, data = helpers.err_check(
-        response, (400, ValueError), (401, Unauthorized)
-    )
+    _, data = helpers.err_check(response, (400, ValueError), (401, Unauthorized))
 
     data["created_at"] = dt.datetime.fromisoformat(
         data.pop("createdAt").replace("Z", "+00:00")
@@ -140,12 +128,10 @@ def change_user_name(access_token: str, name: str):
     :Example:
 
     >>> from mojang.account import session
-    >>> session.change_user_name('ACCESS_NAME', 'NEW_NAME')
+    >>> session.change_user_name("ACCESS_NAME", "NEW_NAME")
     """
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.put(
-        urls.api_session_change_name(name), headers=headers
-    )
+    response = requests.put(urls.api_session_change_name(name), headers=headers)
     code, _ = helpers.err_check(
         response,
         (400, InvalidName),
@@ -167,7 +153,7 @@ def change_user_skin(access_token: str, path: str, variant="classic"):
     :Example:
 
     >>> from mojang.account import session
-    >>> session.change_user_skin('ACCESS_TOKEN', 'http://...')
+    >>> session.change_user_skin("ACCESS_TOKEN", "http://...")
     """
     skin = Skin(source=path, variant=variant)
     files = {
@@ -176,12 +162,8 @@ def change_user_skin(access_token: str, path: str, variant="classic"):
     }
     headers = helpers.get_headers(bearer=access_token)
     headers["content-type"] = None
-    response = requests.post(
-        urls.api_session_change_skin, headers=headers, files=files
-    )
-    code, _ = helpers.err_check(
-        response, (400, ValueError), (401, Unauthorized)
-    )
+    response = requests.post(urls.api_session_change_skin, headers=headers, files=files)
+    code, _ = helpers.err_check(response, (400, ValueError), (401, Unauthorized))
     return code == 204
 
 
@@ -195,13 +177,11 @@ def reset_user_skin(access_token: str):
     :Example:
 
     >>> from mojang.account import session
-    >>> session.reset_user_skin('ACCESS_TOKEN', 'USER_UUID')
+    >>> session.reset_user_skin("ACCESS_TOKEN", "USER_UUID")
     """
     headers = helpers.get_headers(bearer=access_token)
     response = requests.delete(urls.api_session_reset_skin, headers=headers)
-    code, _ = helpers.err_check(
-        response, (400, ValueError), (401, Unauthorized)
-    )
+    code, _ = helpers.err_check(response, (400, ValueError), (401, Unauthorized))
     return code == 200
 
 
@@ -215,16 +195,14 @@ def show_user_cape(access_token: str, cape_id: str):
     :Example:
 
     >>> from mojang.account import session
-    >>> session.show_user_cape('ACCESS_TOKEN')
+    >>> session.show_user_cape("ACCESS_TOKEN")
     """
     payload = {"capeId": cape_id}
     headers = helpers.get_headers(bearer=access_token)
     response = requests.put(
         urls.api_session_cape_visibility, headers=headers, json=payload
     )
-    code, _ = helpers.err_check(
-        response, (400, NotCapeOwner), (401, Unauthorized)
-    )
+    code, _ = helpers.err_check(response, (400, NotCapeOwner), (401, Unauthorized))
     return code == 200
 
 
@@ -238,12 +216,10 @@ def hide_user_cape(access_token: str):
     :Example:
 
     >>> from mojang.account import session
-    >>> session.hide_user_cape('ACCESS_TOKEN')
+    >>> session.hide_user_cape("ACCESS_TOKEN")
     """
     headers = helpers.get_headers(bearer=access_token)
-    response = requests.delete(
-        urls.api_session_cape_visibility, headers=headers
-    )
+    response = requests.delete(urls.api_session_cape_visibility, headers=headers)
     code, _ = helpers.err_check(response, (401, Unauthorized))
     return code == 200
 
@@ -264,7 +240,7 @@ def owns_minecraft(
     :Example:
 
     >>> from mojang.account import session
-    >>> session.owns_minecraft('ACCESS_TOKEN')
+    >>> session.owns_minecraft("ACCESS_TOKEN")
     True
     """
     headers = helpers.get_headers(bearer=access_token)

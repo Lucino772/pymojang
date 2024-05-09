@@ -70,8 +70,6 @@ class TestMojangGetProfile(unittest.TestCase):
 
     @responses.activate
     def test401(self):
-        responses.add(
-            method=responses.GET, url=api_session_profile, status=401
-        )
+        responses.add(method=responses.GET, url=api_session_profile, status=401)
 
         self.assertRaises(Unauthorized, session.get_profile, "TOKEN")

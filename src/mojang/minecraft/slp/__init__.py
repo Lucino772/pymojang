@@ -38,7 +38,7 @@ def ping(
     :Example:
 
     >>> from mojang.minecraft import slp
-    >>> slp.ping(('localhost', 25565))
+    >>> slp.ping(("localhost", 25565))
     SLPResponse(
         protocol_version=754,
         version='1.16.5',

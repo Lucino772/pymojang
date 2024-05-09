@@ -65,9 +65,7 @@ class TestMojangStatus(unittest.TestCase):
     @responses.activate
     def test400(self):
         responses.add(method=responses.POST, url=api_get_uuids, status=400)
-        self.assertRaises(
-            InvalidName, mojang.get_uuids, ["", "xxxxxxxxxxxxxxxxx"]
-        )
+        self.assertRaises(InvalidName, mojang.get_uuids, ["", "xxxxxxxxxxxxxxxxx"])
 
     @responses.activate
     def test404(self):
@@ -77,9 +75,7 @@ class TestMojangStatus(unittest.TestCase):
     @responses.activate
     def test405(self):
         responses.add(method=responses.POST, url=api_get_uuids, status=405)
-        self.assertRaises(
-            MethodNotAllowed, mojang.get_uuids, ["Notch", "_jeb"]
-        )
+        self.assertRaises(MethodNotAllowed, mojang.get_uuids, ["Notch", "_jeb"])
 
     @responses.activate
     def test500(self):

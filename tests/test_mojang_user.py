@@ -60,9 +60,7 @@ class TestMojangStatus(unittest.TestCase):
     @responses.activate
     def test204(self):
         uuid = "069a79f444e94726a5befca90e38aaf6"  # Does not exists
-        responses.add(
-            method=responses.GET, url=api_user_profile(uuid), status=204
-        )
+        responses.add(method=responses.GET, url=api_user_profile(uuid), status=204)
 
         profile = mojang.get_profile(uuid)
         self.assertIsNone(profile)
@@ -70,35 +68,27 @@ class TestMojangStatus(unittest.TestCase):
     @responses.activate
     def test400(self):
         uuid = "thisisnotauuid"
-        responses.add(
-            method=responses.GET, url=api_user_profile(uuid), status=400
-        )
+        responses.add(method=responses.GET, url=api_user_profile(uuid), status=400)
 
         self.assertRaises(ValueError, mojang.get_profile, uuid)
 
     @responses.activate
     def test404(self):
         uuid = "069a79f444e94726a5befca90e38aaf6"  # Does not exists
-        responses.add(
-            method=responses.GET, url=api_user_profile(uuid), status=404
-        )
+        responses.add(method=responses.GET, url=api_user_profile(uuid), status=404)
 
         self.assertRaises(NotFound, mojang.get_profile, uuid)
 
     @responses.activate
     def test405(self):
         uuid = "069a79f444e94726a5befca90e38aaf6"  # Does not exists
-        responses.add(
-            method=responses.GET, url=api_user_profile(uuid), status=405
-        )
+        responses.add(method=responses.GET, url=api_user_profile(uuid), status=405)
 
         self.assertRaises(MethodNotAllowed, mojang.get_profile, uuid)
 
     @responses.activate
     def test500(self):
         uuid = "069a79f444e94726a5befca90e38aaf6"  # Does not exists
-        responses.add(
-            method=responses.GET, url=api_user_profile(uuid), status=500
-        )
+        responses.add(method=responses.GET, url=api_user_profile(uuid), status=500)
 
         self.assertRaises(ServerError, mojang.get_profile, uuid)

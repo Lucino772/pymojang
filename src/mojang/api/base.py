@@ -60,7 +60,7 @@ def get_uuid(username: str) -> Optional[str]:
     :Example:
 
     >>> import mojang
-    >>> mojang.get_uuid('Notch')
+    >>> mojang.get_uuid("Notch")
     '069a79f444e94726a5befca90e38aaf5'
     """
     if len(username) == 0 or len(username) > 16:
@@ -95,7 +95,7 @@ def get_uuids(usernames: Iterable[str]) -> Dict[str, Optional[str]]:
     :Example:
 
     >>> import mojang
-    >>> mojang.get_uuids(['Notch', '_jeb'])
+    >>> mojang.get_uuids(["Notch", "_jeb"])
     {
         'notch': '069a79f444e94726a5befca90e38aaf5',
         '_jeb': '45f50155c09f4fdcb5cee30af2ebd1f0'
@@ -109,9 +109,7 @@ def get_uuids(usernames: Iterable[str]) -> Dict[str, Optional[str]]:
         raise InvalidName()
 
     for i in range(0, len(usernames), 10):
-        response = requests.post(
-            urls.api_get_uuids, json=usernames[i : i + 10]
-        )
+        response = requests.post(urls.api_get_uuids, json=usernames[i : i + 10])
         _, data = helpers.err_check(response)
 
         for item in data:
@@ -128,7 +126,7 @@ def get_username(uuid: str) -> Optional[str]:
     :Example:
 
     >>> import mojang
-    >>> mojang.get_username('069a79f444e94726a5befca90e38aaf5')
+    >>> mojang.get_username("069a79f444e94726a5befca90e38aaf5")
     'Notch'
     """
     response = requests.get(urls.api_get_username(uuid))
@@ -155,7 +153,7 @@ def get_profile(uuid: str) -> Optional[UnauthenticatedProfile]:
     :Example:
 
     >>> import mojang
-    >>> mojang.get_profile('069a79f444e94726a5befca90e38aaf5')
+    >>> mojang.get_profile("069a79f444e94726a5befca90e38aaf5")
     UnauthenticatedProfile(
         name='Notch',
         uuid='069a79f444e94726a5befca90e38aaf5',
@@ -172,9 +170,7 @@ def get_profile(uuid: str) -> Optional[UnauthenticatedProfile]:
         return None
 
     # Load skin and cape
-    textures_data = json.loads(
-        base64.b64decode(data["properties"][0]["value"])
-    )
+    textures_data = json.loads(base64.b64decode(data["properties"][0]["value"]))
 
     skin = None
     skin_data = textures_data["textures"].get("SKIN", None)
