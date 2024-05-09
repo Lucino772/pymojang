@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import io
 import socket
 import struct
 import time
-from typing import IO, List, Optional, Tuple
+from typing import IO
 
 from mojang.minecraft.query._structures import ServerStats
 from mojang.minecraft.query.packets import Packets
@@ -34,7 +36,7 @@ def _parse_stats(data: bytes) -> ServerStats:
         _map = str(info.pop("map"))
         host = (str(info.pop("hostip")), int(info.pop("hostport")))
         # TODO: Parse plugins
-        plugins: List[str] = []
+        plugins: list[str] = []
         players = (
             int(info.pop("numplayers")),
             int(info.pop("maxplayers")),
@@ -63,7 +65,7 @@ def _parse_stats(data: bytes) -> ServerStats:
     )
 
 
-def _handshake(sock: socket.socket, addr: Tuple[str, int], session_id: int) -> int:
+def _handshake(sock: socket.socket, addr: tuple[str, int], session_id: int) -> int:
     pcks = Packets(sock)
     pcks.send(9, session_id)
 
@@ -75,7 +77,7 @@ def _handshake(sock: socket.socket, addr: Tuple[str, int], session_id: int) -> i
 
 
 def _get_stats(
-    sock: socket.socket, addr: Tuple[str, int], session_id: int, token: int
+    sock: socket.socket, addr: tuple[str, int], session_id: int, token: int
 ) -> ServerStats:
     pcks = Packets(sock)
     pcks.send(0, session_id, struct.pack(">iI", token, 0xFFFFFF01))
@@ -94,9 +96,7 @@ def _get_stats(
     return _parse_stats(total_data)
 
 
-def get_stats(
-    addr: Tuple[str, int], timeout: Optional[float] = 3
-) -> Optional[ServerStats]:
+def get_stats(addr: tuple[str, int], timeout: float | None = 3) -> ServerStats | None:
     """Returns full stats about server using the Query protocol
 
     :param tuple addr: tuple with the address and the port to connect to

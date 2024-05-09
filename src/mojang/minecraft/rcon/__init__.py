@@ -1,13 +1,15 @@
+from __future__ import annotations
+
 import socket
 from contextlib import contextmanager
-from typing import Callable, Generator, Optional, Tuple
+from typing import Callable, Generator
 
 from mojang.minecraft.rcon.packets import Packets
 
 
 @contextmanager
 def session(
-    addr: Tuple[str, int], password: str, timeout: Optional[float] = 3
+    addr: tuple[str, int], password: str, timeout: float | None = 3
 ) -> Generator[Callable[[str], str], None, None]:
     """Open a RCON connection
 

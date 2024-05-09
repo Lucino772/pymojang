@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime as dt
 import typing
 
@@ -5,21 +7,19 @@ import requests
 
 ROOT_URL = "https://launchermeta.mojang.com/mc/game/version_manifest.json"
 
-VersionMeta = typing.NamedTuple(
-    "VersionMeta",
-    [
-        ("id", str),
-        ("type", str),
-        ("url", str),
-        ("time", dt.datetime),
-        ("release_time", dt.datetime),
-    ],
-)
+
+class VersionMeta(typing.NamedTuple):
+    id: str
+    type: str
+    url: str
+    time: dt.datetime
+    release_time: dt.datetime
+
 
 _cached_meta = None
 
 
-def _load_meta() -> typing.Tuple[typing.Iterable["VersionMeta"], str, str]:
+def _load_meta() -> tuple[typing.Iterable["VersionMeta"], str, str]:
     global _cached_meta
 
     def _parse_meta_item(meta: dict):
@@ -62,9 +62,7 @@ def get_versions():
     return version_list, latest_rel, latest_snap
 
 
-def get_version(
-    version: str = "latest", snapshot: bool = False
-) -> typing.Optional["VersionMeta"]:
+def get_version(version: str = "latest", snapshot: bool = False) -> VersionMeta | None:
     """Returns information about a specific version
 
     :param str version: The version you want to retrieve (default: 'latest')

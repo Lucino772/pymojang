@@ -1,13 +1,14 @@
+from __future__ import annotations
+
 import inspect
 import json
-from typing import Optional
 
 import requests
 
 from mojang.exceptions import MethodNotAllowed, NotFound, ServerError
 
 
-def get_headers(json_content: Optional[bool] = False, bearer: Optional[str] = None):
+def get_headers(json_content: bool | None = False, bearer: str | None = None):
     headers = {}
 
     if json_content:
@@ -20,7 +21,7 @@ def get_headers(json_content: Optional[bool] = False, bearer: Optional[str] = No
     return headers
 
 
-def err_check(response: requests.Response, *args, use_defaults: Optional[bool] = True):
+def err_check(response: requests.Response, *args, use_defaults: bool | None = True):
     if use_defaults:
         args += ((404, NotFound), (405, MethodNotAllowed), (500, ServerError))
 

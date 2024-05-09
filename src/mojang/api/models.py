@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 import os
 import re
-from typing import Optional
 from urllib.parse import urlparse
 
 import requests
@@ -33,7 +34,7 @@ class _Resource:
         return self.__data
 
     @property
-    def extension(self) -> Optional[str]:
+    def extension(self) -> str | None:
         return self.__extension
 
     @classmethod
@@ -111,8 +112,8 @@ class Skin(_Resource):
         self,
         source: str,
         variant: str,
-        id: Optional[str] = None,
-        state: Optional[str] = None,
+        id: str | None = None,
+        state: str | None = None,
         load: bool = True,
     ) -> None:
         super().__init__(source, load=load)
@@ -125,11 +126,11 @@ class Skin(_Resource):
         return self.__variant
 
     @property
-    def id(self) -> Optional[str]:
+    def id(self) -> str | None:
         return self.__id
 
     @property
-    def state(self) -> Optional[str]:
+    def state(self) -> str | None:
         return self.__state
 
     def __hash__(self) -> int:
@@ -156,8 +157,8 @@ class Cape(_Resource):
     def __init__(
         self,
         source: str,
-        id: Optional[str] = None,
-        state: Optional[str] = None,
+        id: str | None = None,
+        state: str | None = None,
         load: bool = True,
     ) -> None:
         super().__init__(source, load=load)
@@ -165,11 +166,11 @@ class Cape(_Resource):
         self.__state = state
 
     @property
-    def id(self) -> Optional[str]:
+    def id(self) -> str | None:
         return self.__id
 
     @property
-    def state(self) -> Optional[str]:
+    def state(self) -> str | None:
         return self.__state
 
     def __hash__(self) -> int:

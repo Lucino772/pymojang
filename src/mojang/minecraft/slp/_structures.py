@@ -1,9 +1,11 @@
-from typing import List, NamedTuple, Tuple
+from __future__ import annotations
+
+from typing import NamedTuple
 
 
 class Players(NamedTuple):
-    total: Tuple[int, int]
-    list: List[str]
+    total: tuple[int, int]
+    list: list[str]
 
 
 class SLPResponse(NamedTuple):

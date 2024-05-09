@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 import enum
 import socket
 from functools import partial
-from typing import Optional, Tuple
 
 from mojang.minecraft.slp._structures import SLPResponse
 from mojang.minecraft.slp.post_netty import ping as mping
@@ -25,10 +26,10 @@ class PingVersion(enum.IntFlag):
 
 
 def ping(
-    addr: Tuple[str, int],
+    addr: tuple[str, int],
     timeout: int = 3,
     flags: int = PingVersion.V_ALL,
-) -> Optional[SLPResponse]:
+) -> SLPResponse | None:
     """Ping the server for information
 
     :param tuple addr: The address and the port to connect to

@@ -1,4 +1,6 @@
-from typing import List, NamedTuple, Tuple
+from __future__ import annotations
+
+from typing import NamedTuple
 
 
 class ServerStats(NamedTuple):
@@ -7,7 +9,7 @@ class ServerStats(NamedTuple):
     game_id: str
     version: str
     map: str
-    host: Tuple[str, int]
-    plugins: List[str]
-    players: Tuple[int, int]
-    player_list: List[str]
+    host: tuple[str, int]
+    plugins: list[str]
+    players: tuple[int, int]
+    player_list: list[str]
