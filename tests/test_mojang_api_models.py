@@ -4,7 +4,7 @@ from contextlib import contextmanager
 
 import responses
 
-from mojang.api.models import Cape, Skin, _Resource
+from mojang.api.models import _Resource
 
 
 @contextmanager

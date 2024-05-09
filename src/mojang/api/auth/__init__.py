@@ -1,6 +1,6 @@
 import msal
 
-from .models import MojangAuthenticationApp
+from mojang.api.auth.models import MojangAuthenticationApp
 
 
 def app(

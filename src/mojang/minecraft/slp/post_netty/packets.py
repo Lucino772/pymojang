@@ -2,7 +2,7 @@ import io
 import socket
 from contextlib import contextmanager
 
-from .types import VarInt
+from mojang.minecraft.slp.post_netty.types import VarInt
 
 
 class Packets:

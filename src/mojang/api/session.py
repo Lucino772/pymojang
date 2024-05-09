@@ -1,18 +1,19 @@
+from __future__ import annotations
+
 import datetime as dt
-import typing as t
 
 import jwt
 import requests
 
-from ..exceptions import (
+from mojang.api import helpers, urls
+from mojang.api.models import Cape, Skin
+from mojang.api.structures import AuthenticatedUserProfile, NameChange
+from mojang.exceptions import (
     InvalidName,
     NotCapeOwner,
     Unauthorized,
     UnavailableName,
 )
-from . import helpers, urls
-from .models import Cape, Skin
-from .structures import AuthenticatedUserProfile, NameChange
 
 
 def check_product_voucher(access_token: str, voucher: str) -> bool:
@@ -227,7 +228,7 @@ def hide_user_cape(access_token: str):
 def owns_minecraft(
     access_token: str,
     verify_sig: bool = False,
-    public_key: t.Optional[str] = None,
+    public_key: str | None = None,
 ) -> bool:
     """Returns True if the authenticated user owns minecraft
 
@@ -253,7 +254,7 @@ def owns_minecraft(
 
         jwt.decode(data["signature"], public_key, algorithms=["RS256"])
 
-    return not len(data["items"]) == 0
+    return len(data["items"]) != 0
 
 
 def get_profile(access_token: str) -> AuthenticatedUserProfile:

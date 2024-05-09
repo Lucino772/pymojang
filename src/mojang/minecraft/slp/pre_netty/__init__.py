@@ -1,14 +1,18 @@
-import socket
+from __future__ import annotations
+
 import struct
 import time
-from typing import Optional
+from typing import TYPE_CHECKING
 
-from .._structures import Players, SLPResponse
+from mojang.minecraft.slp._structures import Players, SLPResponse
+
+if TYPE_CHECKING:
+    import socket
 
 
 def ping_fe01(
     sock: socket.socket,
-    hostname: Optional[str] = None,
+    hostname: str | None = None,
     port: int = -1,
 ):
     if hostname is not None and len(hostname) > 0 and port > 0:

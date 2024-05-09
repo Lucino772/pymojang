@@ -1,4 +1,4 @@
-from typing import Tuple
+from __future__ import annotations
 
 import requests
 
@@ -10,7 +10,7 @@ from mojang.exceptions import (
 )
 
 
-def authenticate_xbl(auth_token: str) -> Tuple[str, str]:
+def authenticate_xbl(auth_token: str) -> tuple[str, str]:
     """Authenticate with Xbox Live using the Microsoft access token
     received after the OAuth authentication
 
@@ -25,7 +25,7 @@ def authenticate_xbl(auth_token: str) -> Tuple[str, str]:
         "Properties": {
             "AuthMethod": "RPS",
             "SiteName": "user.auth.xboxlive.com",
-            "RpsTicket": "d={}".format(auth_token),
+            "RpsTicket": f"d={auth_token}",
         },
         "RelyingParty": "http://auth.xboxlive.com",
         "TokenType": "JWT",
@@ -40,7 +40,7 @@ def authenticate_xbl(auth_token: str) -> Tuple[str, str]:
     return data["Token"], data["DisplayClaims"]["xui"][0]["uhs"]
 
 
-def authenticate_xsts(xbl_token: str) -> Tuple[str, str]:
+def authenticate_xsts(xbl_token: str) -> tuple[str, str]:
     """Retrieve the XSTS Token using the Xbox Live token
 
     :params str xbl_token: The Xbox Live token

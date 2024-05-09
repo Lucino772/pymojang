@@ -4,7 +4,7 @@ import responses
 
 import mojang
 from mojang.api.urls import api_get_username
-from mojang.exceptions import MethodNotAllowed, NotFound, ServerError
+from mojang.exceptions import MethodNotAllowed, ServerError
 
 
 class TestMojangUsername(unittest.TestCase):

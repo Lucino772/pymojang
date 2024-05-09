@@ -1,38 +1,39 @@
-import datetime as dt
-import typing
+from __future__ import annotations
 
-from mojang.api.models import Cape, Skin
+from typing import TYPE_CHECKING, NamedTuple
 
-## Base
-ServiceStatus = typing.NamedTuple("ServiceStatus", [("name", str), ("status", str)])
+if TYPE_CHECKING:
+    import datetime as dt
 
-## Session
-NameChange = typing.NamedTuple(
-    "NameChange", [("allowed", bool), ("created_at", dt.datetime)]
-)
-
-## Profile
-UnauthenticatedProfile = typing.NamedTuple(
-    "UnauthenticatedProfile",
-    [
-        ("name", str),
-        ("uuid", str),
-        ("is_legacy", bool),
-        ("is_demo", bool),
-        ("skin", typing.Optional[Skin]),
-        ("cape", typing.Optional[Cape]),
-    ],
-)
+    from mojang.api.models import Cape, Skin
 
 
-AuthenticatedUserProfile = typing.NamedTuple(
-    "AuthenticatedUserProfile",
-    [
-        ("name", str),
-        ("uuid", str),
-        ("is_legacy", bool),
-        ("is_demo", bool),
-        ("skins", typing.List[Skin]),
-        ("capes", typing.List[Cape]),
-    ],
-)
+# Base
+class ServiceStatus(NamedTuple):
+    name: str
+    status: str
+
+
+# Session
+class NameChange(NamedTuple):
+    allowed: bool
+    created_at: dt.datetime
+
+
+# Profile
+class UnauthenticatedProfile(NamedTuple):
+    name: str
+    uuid: str
+    is_legacy: bool
+    is_demo: bool
+    skin: Skin | None
+    cape: Cape | None
+
+
+class AuthenticatedUserProfile(NamedTuple):
+    name: str
+    uuid: str
+    is_legacy: bool
+    is_demo: bool
+    skins: list[Skin]
+    capes: list[Cape]

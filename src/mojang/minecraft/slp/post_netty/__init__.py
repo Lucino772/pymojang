@@ -2,11 +2,10 @@ import json
 import socket
 import struct
 import time
-from typing import Optional
 
-from .._structures import Players, SLPResponse
-from .packets import Packets
-from .types import String, VarInt
+from mojang.minecraft.slp._structures import Players, SLPResponse
+from mojang.minecraft.slp.post_netty.packets import Packets
+from mojang.minecraft.slp.post_netty.types import String, VarInt
 
 
 def ping(

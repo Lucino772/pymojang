@@ -1,17 +1,18 @@
+from __future__ import annotations
+
 import base64
-import datetime as dt
 import json
-from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Iterable
 
 import requests
 
-from ..exceptions import InvalidName, NotFound
-from . import helpers, urls
-from .models import Cape, Skin
-from .structures import ServiceStatus, UnauthenticatedProfile
+from mojang.api import helpers, urls
+from mojang.api.models import Cape, Skin
+from mojang.api.structures import ServiceStatus, UnauthenticatedProfile
+from mojang.exceptions import InvalidName, NotFound
 
 
-def get_status() -> List[ServiceStatus]:
+def get_status() -> list[ServiceStatus]:
     """Get the status of Mojang's services
 
     :Example:
@@ -44,7 +45,7 @@ def get_status() -> List[ServiceStatus]:
     return _status
 
 
-def get_blocked_servers() -> List[str]:
+def get_blocked_servers() -> list[str]:
     """Get a list of blocked servers hashes"""
     response = requests.get(urls.api_get_blocked_servers)
     _, data = helpers.err_check(response)
@@ -52,7 +53,7 @@ def get_blocked_servers() -> List[str]:
     return data.split("\n")
 
 
-def get_uuid(username: str) -> Optional[str]:
+def get_uuid(username: str) -> str | None:
     """Get uuid for a username
 
     :param str username: The username you want the uuid of
@@ -81,7 +82,7 @@ def get_uuid(username: str) -> Optional[str]:
     return data["id"]
 
 
-def get_uuids(usernames: Iterable[str]) -> Dict[str, Optional[str]]:
+def get_uuids(usernames: Iterable[str]) -> dict[str, str | None]:
     """Get uuids for multiple usernames
 
     .. admonition:: Limited Endpoint
@@ -118,7 +119,7 @@ def get_uuids(usernames: Iterable[str]) -> Dict[str, Optional[str]]:
     return ret
 
 
-def get_username(uuid: str) -> Optional[str]:
+def get_username(uuid: str) -> str | None:
     """Get username for a uuid
 
     :param uuid str: The uuid you want the username of
@@ -145,7 +146,7 @@ def get_username(uuid: str) -> Optional[str]:
     return data["name"]
 
 
-def get_profile(uuid: str) -> Optional[UnauthenticatedProfile]:
+def get_profile(uuid: str) -> UnauthenticatedProfile | None:
     """Returns the full profile of a user
 
     :param str uuid: The uuid of the profile

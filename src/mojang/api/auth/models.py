@@ -1,13 +1,18 @@
-import datetime
-from abc import ABCMeta, abstractmethod
-from typing import List, Optional, Tuple, Union, overload
+from __future__ import annotations
 
-import msal
+from abc import ABCMeta, abstractmethod
+from typing import TYPE_CHECKING
 
 from mojang.api import session
 from mojang.api.auth import microsoft
-from mojang.api.models import Cape, Skin
 from mojang.exceptions import MicrosoftInvalidGrant, MicrosoftUserNotOwner
+
+if TYPE_CHECKING:
+    import datetime
+
+    import msal
+
+    from mojang.api.models import Cape, Skin
 
 _DEFAULT_SCOPES = ["XboxLive.signin"]
 
@@ -25,9 +30,9 @@ class AuthenticatedUser(metaclass=ABCMeta):
     :var bool is_legacy: Wether the account has migrated
     :var bool is_demo: Wether the account is demo
     :var Skin skin: The active user skin
-    :var List[Skin] skins: All the skins of the user
+    :var list[Skin] skins: All the skins of the user
     :var Cape cape: The active user cape
-    :var List[Cape] capes: All the capes of the user
+    :var list[Cape] capes: All the capes of the user
     :var bool name_change_allowed:  Can the user change name
     :var datetime.datetime created_at: When was the user created
     """
@@ -57,11 +62,11 @@ class AuthenticatedUser(metaclass=ABCMeta):
         raise NotImplementedError
 
     @property
-    def name(self) -> Optional[str]:
+    def name(self) -> str | None:
         return self.__name
 
     @property
-    def uuid(self) -> Optional[str]:
+    def uuid(self) -> str | None:
         return self.__uuid
 
     @property
@@ -73,11 +78,11 @@ class AuthenticatedUser(metaclass=ABCMeta):
         return self.__is_demo
 
     @property
-    def skins(self) -> Optional[List[Skin]]:
+    def skins(self) -> list[Skin] | None:
         return self.__skins
 
     @property
-    def skin(self) -> Optional[Skin]:
+    def skin(self) -> Skin | None:
         if self.__skins is None:
             return None
 
@@ -88,11 +93,11 @@ class AuthenticatedUser(metaclass=ABCMeta):
         return None
 
     @property
-    def capes(self) -> Optional[List[Cape]]:
+    def capes(self) -> list[Cape] | None:
         return self.__capes
 
     @property
-    def cape(self) -> Optional[Cape]:
+    def cape(self) -> Cape | None:
         if self.__capes is None:
             return None
 
@@ -107,7 +112,7 @@ class AuthenticatedUser(metaclass=ABCMeta):
         return self.__name_change_allowed
 
     @property
-    def created_at(self) -> Optional[datetime.datetime]:
+    def created_at(self) -> datetime.datetime | None:
         return self.__created_at
 
     def _fetch_profile(self):
@@ -134,7 +139,7 @@ class AuthenticatedUser(metaclass=ABCMeta):
         session.change_user_name(self._access_token, name)
         self._fetch_profile()
 
-    def change_skin(self, path: str, variant: Optional[str] = "classic"):
+    def change_skin(self, path: str, variant: str | None = "classic"):
         """Change user skin. For more details checkout :py:meth:`~mojang.account.session.change_user_skin`
 
         :param str path: The path to the skin, either local or remote
@@ -213,7 +218,7 @@ class MojangAuthenticationApp:
             redirect_uri=(self.__redirect_uri),
         )
 
-    def _acquire_microsoft_token(self, code: str) -> Tuple[str, str]:
+    def _acquire_microsoft_token(self, code: str) -> tuple[str, str]:
         response = self.__client.acquire_token_by_authorization_code(
             code,
             scopes=_DEFAULT_SCOPES,

@@ -7,7 +7,6 @@ from mojang.api.urls import api_get_uuid
 from mojang.exceptions import (
     InvalidName,
     MethodNotAllowed,
-    NotFound,
     ServerError,
 )
 

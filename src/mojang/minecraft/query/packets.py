@@ -1,6 +1,10 @@
-import socket
+from __future__ import annotations
+
 import struct
-from typing import Optional, Tuple
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import socket
 
 
 class Packets:
@@ -11,7 +15,7 @@ class Packets:
         packet = struct.pack(f">Hbi{len(data)}s", 0xFEFD, _type, sess_id, data)
         return self.__sock.send(packet)
 
-    def recv(self) -> Tuple[int, int, bytes]:
+    def recv(self) -> tuple[int, int, bytes]:
         with self.__sock.makefile("rb") as buffer:
             data = buffer.read()
 
