@@ -1,0 +1,1 @@
+Added timeout parameter whe using requests module to prevent the program to hang
