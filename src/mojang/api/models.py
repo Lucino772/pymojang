@@ -119,7 +119,7 @@ class Skin(_Resource):
         self,
         source: str,
         variant: str,
-        id: str | None = None,
+        id: str | None = None,  # noqa: A002
         state: str | None = None,
         load: bool = True,
     ) -> None:
@@ -164,7 +164,7 @@ class Cape(_Resource):
     def __init__(
         self,
         source: str,
-        id: str | None = None,
+        id: str | None = None,  # noqa: A002
         state: str | None = None,
         load: bool = True,
     ) -> None:

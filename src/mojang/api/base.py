@@ -104,7 +104,7 @@ def get_uuids(usernames: Iterable[str]) -> dict[str, str | None]:
     ret = dict.fromkeys(usernames, None)
 
     # Check for invalid names
-    if any([not (0 < len(u) <= 16) for u in usernames]):  # noqa: PLR2004
+    if any(not (0 < len(u) <= 16) for u in usernames):  # noqa: PLR2004
         raise InvalidName
 
     for i in range(0, len(usernames), 10):

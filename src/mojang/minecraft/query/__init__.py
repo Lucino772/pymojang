@@ -65,7 +65,7 @@ def _parse_stats(data: bytes) -> ServerStats:
     )
 
 
-def _handshake(sock: socket.socket, addr: tuple[str, int], session_id: int) -> int:
+def _handshake(sock: socket.socket, addr: tuple[str, int], session_id: int) -> int:  # noqa: ARG001
     pcks = Packets(sock)
     pcks.send(9, session_id)
 
@@ -78,7 +78,10 @@ def _handshake(sock: socket.socket, addr: tuple[str, int], session_id: int) -> i
 
 
 def _get_stats(
-    sock: socket.socket, addr: tuple[str, int], session_id: int, token: int
+    sock: socket.socket,
+    addr: tuple[str, int],  # noqa: ARG001
+    session_id: int,
+    token: int,
 ) -> ServerStats:
     pcks = Packets(sock)
     pcks.send(0, session_id, struct.pack(">iI", token, 0xFFFFFF01))
