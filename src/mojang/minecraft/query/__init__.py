@@ -126,12 +126,13 @@ def get_stats(addr: tuple[str, int], timeout: float | None = 3) -> ServerStats |
     session_id = int(time.time()) & 0x0F0F0F0F
 
     stats = None
-    with contextlib.suppress(socket.timeout):
-        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
-            sock.settimeout(timeout)
-            sock.connect(addr)
+    with contextlib.suppress(socket.timeout), socket.socket(
+        socket.AF_INET, socket.SOCK_DGRAM
+    ) as sock:
+        sock.settimeout(timeout)
+        sock.connect(addr)
 
-            token = _handshake(sock, addr, session_id)
-            stats = _get_stats(sock, addr, session_id, token)
+        token = _handshake(sock, addr, session_id)
+        stats = _get_stats(sock, addr, session_id, token)
 
     return stats
