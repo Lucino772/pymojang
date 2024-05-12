@@ -1,3 +1,5 @@
+# ruff: noqa: E731
+
 # URLs for basic api
 api_check_status = "https://status.mojang.com/check"
 api_get_blocked_servers = "https://sessionserver.mojang.com/blockedservers"
