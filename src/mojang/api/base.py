@@ -31,7 +31,7 @@ def get_status() -> list[ServiceStatus]:
     ]
 
     """
-    _status = [
+    return [
         ServiceStatus(name="minecraft.net", status="unknown"),
         ServiceStatus(name="session.minecraft.net", status="unknown"),
         ServiceStatus(name="account.mojang.com", status="unknown"),
@@ -41,8 +41,6 @@ def get_status() -> list[ServiceStatus]:
         ServiceStatus(name="textures.minecraft.net", status="unknown"),
         ServiceStatus(name="mojang.com", status="unknown"),
     ]
-
-    return _status
 
 
 def get_blocked_servers() -> list[str]:

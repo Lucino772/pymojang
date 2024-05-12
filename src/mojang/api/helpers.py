@@ -35,7 +35,7 @@ def err_check(response: requests.Response, *args, use_defaults: bool | None = Tr
 
         if do_raise and inspect.isclass(exception):
             raise exception(response.text)
-        elif do_raise:
+        if do_raise:
             raise exception
 
     data = None

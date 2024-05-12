@@ -46,6 +46,7 @@ class _Resource:
         match = re.match(r"^([\w,\s-]+)\.([A-Za-z]{3})$", os.path.basename(url_path))
         if match:
             return match.groups()
+        return None
 
     @classmethod
     def _filename_from_headers(cls, headers: CaseInsensitiveDict):
@@ -61,6 +62,8 @@ class _Resource:
             ctype = headers["content-type"]
             if ("text" not in ctype) and ("html" not in ctype):
                 return ctype.split("/")
+            return None
+        return None
 
     @classmethod
     def _download_bytes(cls, url: str):
@@ -72,6 +75,7 @@ class _Resource:
                 or ["download", None]
             )
             return filename, response.content
+        return None
 
     def load(self):
         """Load data from the source"""
