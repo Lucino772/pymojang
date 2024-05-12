@@ -46,21 +46,24 @@ class _Resource:
         match = re.match(r"^([\w,\s-]+)\.([A-Za-z]{3})$", os.path.basename(url_path))
         if match:
             return match.groups()
+        return None
 
     @classmethod
     def _filename_from_headers(cls, headers: CaseInsensitiveDict):
         # Check content-disposition
-        if "content-disposition" in headers.keys():
+        if "content-disposition" in headers:
             cdisp = headers["content-disposition"]
             file_names = re.findall("filename=(.+)", cdisp)
             if len(file_names) > 0:
                 return file_names[0][0], file_names[0][1][1:]
 
         # Check content-type
-        if "content-type" in headers.keys():
+        if "content-type" in headers:
             ctype = headers["content-type"]
             if ("text" not in ctype) and ("html" not in ctype):
                 return ctype.split("/")
+            return None
+        return None
 
     @classmethod
     def _download_bytes(cls, url: str):
@@ -72,6 +75,7 @@ class _Resource:
                 or ["download", None]
             )
             return filename, response.content
+        return None
 
     def load(self):
         """Load data from the source"""
@@ -115,7 +119,7 @@ class Skin(_Resource):
         self,
         source: str,
         variant: str,
-        id: str | None = None,
+        id: str | None = None,  # noqa: A002
         state: str | None = None,
         load: bool = True,
     ) -> None:
@@ -160,7 +164,7 @@ class Cape(_Resource):
     def __init__(
         self,
         source: str,
-        id: str | None = None,
+        id: str | None = None,  # noqa: A002
         state: str | None = None,
         load: bool = True,
     ) -> None:

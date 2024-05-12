@@ -52,8 +52,6 @@ def ping(
             response["players"].get("sample", []),
         )
 
-    print(response)
-
     return SLPResponse(
         protocol_version=response.get("version", {}).get("protocol", "unknown"),
         version=response.get("version", {}).get("name", "unknown"),

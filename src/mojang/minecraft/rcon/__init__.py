@@ -34,7 +34,8 @@ def session(
 
     # Check packet id and packet type
     if r_packet_id != packet_id or r_type != 2:  # noqa: PLR2004
-        raise Exception("Authentication failed")
+        msg = "Authentication failed"
+        raise Exception(msg)
 
     def send(command: str):
         # TODO: Parse command response
@@ -43,7 +44,8 @@ def session(
 
         # Check packet id and packet type
         if r_packet_id != packet_id or r_type != 0:
-            raise Exception("Command error")
+            msg = "Command error"
+            raise Exception(msg)
 
         return payload.strip(b"\0").decode("ascii")
 

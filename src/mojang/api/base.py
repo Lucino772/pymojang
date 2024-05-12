@@ -31,7 +31,7 @@ def get_status() -> list[ServiceStatus]:
     ]
 
     """
-    _status = [
+    return [
         ServiceStatus(name="minecraft.net", status="unknown"),
         ServiceStatus(name="session.minecraft.net", status="unknown"),
         ServiceStatus(name="account.mojang.com", status="unknown"),
@@ -41,8 +41,6 @@ def get_status() -> list[ServiceStatus]:
         ServiceStatus(name="textures.minecraft.net", status="unknown"),
         ServiceStatus(name="mojang.com", status="unknown"),
     ]
-
-    return _status
 
 
 def get_blocked_servers() -> list[str]:
@@ -106,7 +104,7 @@ def get_uuids(usernames: Iterable[str]) -> dict[str, str | None]:
     ret = dict.fromkeys(usernames, None)
 
     # Check for invalid names
-    if any([not (0 < len(u) <= 16) for u in usernames]):  # noqa: PLR2004
+    if any(not (0 < len(u) <= 16) for u in usernames):  # noqa: PLR2004
         raise InvalidName
 
     for i in range(0, len(usernames), 10):

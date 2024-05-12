@@ -34,7 +34,7 @@ class MigratedAccount(Exception):
     """Account has been migrated to an Microsoft account,
     you need to use the Microsoft OAuth Flow"""
 
-    def __init__(self):
+    def __init__(self, *_):
         super().__init__(
             "Account has been migrated to an Microsoft account, you need to use the Microsoft OAuth Flow"
         )
@@ -56,7 +56,7 @@ class XboxLiveInvalidUserHash(Exception):
 class MicrosoftUserNotOwner(Exception):
     """The Microsoft user does not own Minecraft"""
 
-    def __init__(self):
+    def __init__(self, *_):
         super().__init__("The Microsoft user does not own Minecraft")
 
 
@@ -67,7 +67,7 @@ class InvalidName(Exception):
     the name of a user
     """
 
-    def __init__(self):
+    def __init__(self, *_):
         super().__init__(
             "Name is invalid, longer than 16 characters or contains characters other than (a-zA-Z0-9_)"
         )
@@ -76,7 +76,7 @@ class InvalidName(Exception):
 class UnavailableName(Exception):
     """Name is unavailable. Only raised when changing the name of a user"""
 
-    def __init__(self):
+    def __init__(self, *_):
         super().__init__("Name is unavailable")
 
 
@@ -84,7 +84,7 @@ class UnavailableName(Exception):
 class NotCapeOwner(Exception):
     """The user does not own a cape. Only raised when showing a user cape"""
 
-    def __init__(self) -> None:
+    def __init__(self, *_) -> None:
         super().__init__("User does not own a cape")
 
 

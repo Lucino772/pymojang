@@ -38,7 +38,8 @@ def check_product_voucher(access_token: str, voucher: str) -> bool:
     code, data = helpers.err_check(response, (401, Unauthorized), use_defaults=False)
 
     if code == 404 and "errorMessage" not in data:  # noqa: PLR2004
-        raise ValueError("Invalid voucher")
+        msg = "Invalid voucher"
+        raise ValueError(msg)
 
     return code == 200  # noqa: PLR2004
 
@@ -66,7 +67,8 @@ def redeem_product_voucher(access_token: str, voucher: str) -> bool:
     code, data = helpers.err_check(response, (401, Unauthorized), use_defaults=False)
 
     if code == 404 and "errorMessage" not in data:  # noqa: PLR2004
-        raise ValueError("Invalid voucher")
+        msg = "Invalid voucher"
+        raise ValueError(msg)
 
     return code == 200  # noqa: PLR2004
 
@@ -281,26 +283,24 @@ def get_profile(access_token: str) -> AuthenticatedUserProfile:
     response = requests.get(urls.api_session_profile, headers=headers, timeout=10)
     _, data = helpers.err_check(response, (401, Unauthorized))
 
-    skins = []
-    for item in data["skins"]:
-        skins.append(
-            Skin(
-                item["url"],
-                item["variant"],
-                id=item["id"],
-                state=item["state"],
-            )
+    skins = [
+        Skin(
+            item["url"],
+            item["variant"],
+            id=item["id"],
+            state=item["state"],
         )
+        for item in data["skins"]
+    ]
 
-    capes = []
-    for item in data["capes"]:
-        capes.append(
-            Cape(
-                item["url"],
-                id=item["id"],
-                state=item["state"],
-            )
+    capes = [
+        Cape(
+            item["url"],
+            id=item["id"],
+            state=item["state"],
         )
+        for item in data["capes"]
+    ]
 
     return AuthenticatedUserProfile(
         name=data["name"],

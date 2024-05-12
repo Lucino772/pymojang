@@ -20,7 +20,7 @@ _cached_meta = None
 
 
 def _load_meta() -> tuple[Iterable[VersionMeta], str, str]:
-    global _cached_meta
+    global _cached_meta  # noqa: PLW0603
 
     def _parse_meta_item(meta: dict):
         return VersionMeta(
@@ -58,7 +58,7 @@ def get_versions():
     (['22w18a', '22w17a', '22w16b', ..., 'rd-20090515', 'rd-132328', 'rd-132211'], '1.18.2', '22w18a')
     """
     versions, latest_rel, latest_snap = _load_meta()
-    version_list = list(map(lambda meta: meta.id, versions))
+    version_list = [meta.id for meta in versions]
     return version_list, latest_rel, latest_snap
 
 
