@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 from mojang.api import session
@@ -18,7 +18,7 @@ _DEFAULT_SCOPES = ["XboxLive.signin"]
 
 
 # User
-class AuthenticatedUser(metaclass=ABCMeta):
+class AuthenticatedUser(ABC):
     """
     Base class for every authenticated user
 

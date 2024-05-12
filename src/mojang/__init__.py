@@ -24,12 +24,12 @@ except ImportError:
     __version__ = None
 
 __all__ = [
+    "__version__",
+    "app",
     "get_blocked_servers",
     "get_profile",
     "get_status",
     "get_username",
     "get_uuid",
     "get_uuids",
-    "app",
-    "__version__",
 ]
