@@ -38,7 +38,8 @@ def check_product_voucher(access_token: str, voucher: str) -> bool:
     code, data = helpers.err_check(response, (401, Unauthorized), use_defaults=False)
 
     if code == 404 and "errorMessage" not in data:  # noqa: PLR2004
-        raise ValueError("Invalid voucher")
+        msg = "Invalid voucher"
+        raise ValueError(msg)
 
     return code == 200  # noqa: PLR2004
 
@@ -66,7 +67,8 @@ def redeem_product_voucher(access_token: str, voucher: str) -> bool:
     code, data = helpers.err_check(response, (401, Unauthorized), use_defaults=False)
 
     if code == 404 and "errorMessage" not in data:  # noqa: PLR2004
-        raise ValueError("Invalid voucher")
+        msg = "Invalid voucher"
+        raise ValueError(msg)
 
     return code == 200  # noqa: PLR2004
 
