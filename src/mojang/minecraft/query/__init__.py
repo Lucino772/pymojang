@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import io
 import socket
 import struct
@@ -124,14 +125,13 @@ def get_stats(addr: tuple[str, int], timeout: float | None = 3) -> ServerStats |
     """
     session_id = int(time.time()) & 0x0F0F0F0F
 
-    try:
+    stats = None
+    with contextlib.suppress(socket.timeout):
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
             sock.settimeout(timeout)
             sock.connect(addr)
 
             token = _handshake(sock, addr, session_id)
             stats = _get_stats(sock, addr, session_id, token)
-    except socket.timeout:
-        stats = None
-    finally:
-        return stats
+
+    return stats
