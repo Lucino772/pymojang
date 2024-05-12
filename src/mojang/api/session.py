@@ -283,26 +283,24 @@ def get_profile(access_token: str) -> AuthenticatedUserProfile:
     response = requests.get(urls.api_session_profile, headers=headers, timeout=10)
     _, data = helpers.err_check(response, (401, Unauthorized))
 
-    skins = []
-    for item in data["skins"]:
-        skins.append(
-            Skin(
-                item["url"],
-                item["variant"],
-                id=item["id"],
-                state=item["state"],
-            )
+    skins = [
+        Skin(
+            item["url"],
+            item["variant"],
+            id=item["id"],
+            state=item["state"],
         )
+        for item in data["skins"]
+    ]
 
-    capes = []
-    for item in data["capes"]:
-        capes.append(
-            Cape(
-                item["url"],
-                id=item["id"],
-                state=item["state"],
-            )
+    capes = [
+        Cape(
+            item["url"],
+            id=item["id"],
+            state=item["state"],
         )
+        for item in data["capes"]
+    ]
 
     return AuthenticatedUserProfile(
         name=data["name"],

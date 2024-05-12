@@ -51,14 +51,14 @@ class _Resource:
     @classmethod
     def _filename_from_headers(cls, headers: CaseInsensitiveDict):
         # Check content-disposition
-        if "content-disposition" in headers.keys():
+        if "content-disposition" in headers:
             cdisp = headers["content-disposition"]
             file_names = re.findall("filename=(.+)", cdisp)
             if len(file_names) > 0:
                 return file_names[0][0], file_names[0][1][1:]
 
         # Check content-type
-        if "content-type" in headers.keys():
+        if "content-type" in headers:
             ctype = headers["content-type"]
             if ("text" not in ctype) and ("html" not in ctype):
                 return ctype.split("/")
