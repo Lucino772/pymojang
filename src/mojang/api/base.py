@@ -65,7 +65,7 @@ def get_uuid(username: str) -> str | None:
     '069a79f444e94726a5befca90e38aaf5'
     """
     if len(username) == 0 or len(username) > 16:  # noqa: PLR2004
-        raise InvalidName()
+        raise InvalidName
 
     response = requests.get(urls.api_get_uuid(username), timeout=10)
     try:
@@ -107,7 +107,7 @@ def get_uuids(usernames: Iterable[str]) -> dict[str, str | None]:
 
     # Check for invalid names
     if any([not (0 < len(u) <= 16) for u in usernames]):  # noqa: PLR2004
-        raise InvalidName()
+        raise InvalidName
 
     for i in range(0, len(usernames), 10):
         response = requests.post(

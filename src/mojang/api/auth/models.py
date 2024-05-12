@@ -232,7 +232,7 @@ class MojangAuthenticationApp:
         access_token = microsoft.authenticate_minecraft(userhash, xsts_token)
 
         if not session.owns_minecraft(access_token):
-            raise MicrosoftUserNotOwner()
+            raise MicrosoftUserNotOwner
 
         return access_token, str(response["refresh_token"])
 
