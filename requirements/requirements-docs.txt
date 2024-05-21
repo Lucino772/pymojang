@@ -103,5 +103,5 @@ tornado==6.4
 urllib3==2.2.1
     # via requests
 validators==0.28.1
-zipp==3.18.1
+zipp==3.18.2
     # via importlib-metadata
