@@ -37,7 +37,7 @@ pycparser==2.22
     # via cffi
 pyjwt==2.8.0
     # via msal
-requests==2.32.0
+requests==2.32.2
     # via msal
 tomli==2.0.1
     # via towncrier
