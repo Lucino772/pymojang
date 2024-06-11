@@ -18,7 +18,7 @@ click==8.1.7
     # via towncrier
 colorama==0.4.6
     # via click
-cryptography==42.0.7
+cryptography==42.0.8
     # via
     #   msal
     #   pyjwt
