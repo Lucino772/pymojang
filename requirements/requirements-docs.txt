@@ -100,7 +100,7 @@ sphinxcontrib-serializinghtml==1.1.10
 sphinxext-opengraph==0.9.1
 tornado==6.4.1
     # via livereload
-urllib3==2.2.1
+urllib3==2.2.2
     # via requests
 validators==0.28.3
 zipp==3.19.2

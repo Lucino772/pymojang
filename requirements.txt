@@ -42,7 +42,7 @@ requests==2.32.3
 tomli==2.0.1
     # via towncrier
 towncrier==23.11.0
-urllib3==2.2.1
+urllib3==2.2.2
     # via requests
 validators==0.28.3
 zipp==3.19.2
