@@ -48,7 +48,7 @@ requests==2.32.3
     # via
     #   msal
     #   responses
-responses==0.25.2
+responses==0.25.3
 tomli==2.0.1
     # via
     #   coverage

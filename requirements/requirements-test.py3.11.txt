@@ -46,7 +46,7 @@ requests==2.32.3
     # via
     #   msal
     #   responses
-responses==0.25.2
+responses==0.25.3
 urllib3==2.2.2
     # via
     #   requests
