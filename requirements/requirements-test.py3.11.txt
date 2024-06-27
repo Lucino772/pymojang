@@ -29,7 +29,7 @@ idna==3.7
 iniconfig==2.0.0
     # via pytest
 msal==1.29.0
-packaging==24.0
+packaging==24.1
     # via pytest
 pluggy==1.5.0
     # via pytest
