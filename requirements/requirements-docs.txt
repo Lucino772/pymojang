@@ -50,7 +50,7 @@ livereload==2.6.3
 markupsafe==2.1.5
     # via jinja2
 msal==1.29.0
-packaging==24.0
+packaging==24.1
     # via sphinx
 pycparser==2.22
     # via cffi
