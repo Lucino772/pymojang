@@ -45,7 +45,7 @@ importlib-metadata==7.1.0
     # via sphinx
 jinja2==3.1.4
     # via sphinx
-livereload==2.6.3
+livereload==2.7.0
     # via sphinx-autobuild
 markupsafe==2.1.5
     # via jinja2
