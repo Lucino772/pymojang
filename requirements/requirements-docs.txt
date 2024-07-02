@@ -11,7 +11,7 @@
 # - msal==1.29.0
 # - pyjwt[crypto]==2.8.0
 # - requests==2.32.3
-# - validators==0.28.3
+# - validators==0.29.0
 #
 
 alabaster==0.7.16
@@ -102,6 +102,6 @@ tornado==6.4.1
     # via livereload
 urllib3==2.2.2
     # via requests
-validators==0.28.3
+validators==0.29.0
 zipp==3.19.2
     # via importlib-metadata
