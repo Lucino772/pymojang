@@ -6,7 +6,7 @@
 # - sphinx-copybutton==0.5.2
 # - sphinx_issues==4.1.0
 # - sphinx-autobuild==2024.4.16
-# - importlib-metadata==7.1.0
+# - importlib-metadata==8.0.0
 # - furo==2024.5.6
 # - msal==1.29.0
 # - pyjwt[crypto]==2.8.0
@@ -41,7 +41,7 @@ idna==3.7
     # via requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==7.1.0
+importlib-metadata==8.0.0
     # via sphinx
 jinja2==3.1.4
     # via sphinx
