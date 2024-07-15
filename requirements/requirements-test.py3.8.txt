@@ -24,7 +24,7 @@ cryptography==42.0.8
     # via
     #   msal
     #   pyjwt
-exceptiongroup==1.2.1
+exceptiongroup==1.2.2
     # via pytest
 idna==3.7
     # via requests
