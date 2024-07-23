@@ -32,7 +32,7 @@ jinja2==3.1.4
     # via towncrier
 markupsafe==2.1.5
     # via jinja2
-msal==1.29.0
+msal==1.30.0
 pycparser==2.22
     # via cffi
 pyjwt==2.8.0
