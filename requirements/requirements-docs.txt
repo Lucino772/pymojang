@@ -7,7 +7,7 @@
 # - sphinx_issues==4.1.0
 # - sphinx-autobuild==2024.4.16
 # - importlib-metadata==8.2.0
-# - furo==2024.7.18
+# - furo==2024.8.6
 # - msal==1.30.0
 # - pyjwt[crypto]==2.9.0
 # - requests==2.32.3
@@ -36,7 +36,7 @@ cryptography==43.0.0
     #   pyjwt
 docutils==0.21.2
     # via sphinx
-furo==2024.7.18
+furo==2024.8.6
 idna==3.7
     # via requests
 imagesize==1.4.1
