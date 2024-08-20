@@ -26,7 +26,7 @@ idna==3.7
     # via requests
 importlib-resources==6.4.3
     # via towncrier
-incremental==22.10.0
+incremental==24.7.2
     # via towncrier
 jinja2==3.1.4
     # via towncrier
