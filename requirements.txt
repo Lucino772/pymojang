@@ -45,5 +45,5 @@ towncrier==24.7.1
 urllib3==2.2.2
     # via requests
 validators==0.33.0
-zipp==3.20.0
+zipp==3.20.1
     # via importlib-resources
