@@ -51,4 +51,4 @@ urllib3==2.2.2
     # via
     #   requests
     #   responses
-validators==0.33.0
+validators==0.34.0
