@@ -22,7 +22,7 @@ cryptography==43.0.1
     # via
     #   msal
     #   pyjwt
-idna==3.7
+idna==3.8
     # via requests
 importlib-resources==6.4.4
     # via towncrier
