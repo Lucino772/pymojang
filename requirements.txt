@@ -24,7 +24,7 @@ cryptography==43.0.1
     #   pyjwt
 idna==3.8
     # via requests
-importlib-resources==6.4.4
+importlib-resources==6.4.5
     # via towncrier
 incremental==24.7.2
     # via towncrier
