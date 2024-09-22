@@ -24,7 +24,7 @@ cryptography==43.0.1
     # via
     #   msal
     #   pyjwt
-idna==3.8
+idna==3.10
     # via requests
 iniconfig==2.0.0
     # via pytest
