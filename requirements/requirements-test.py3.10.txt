@@ -39,7 +39,7 @@ pycparser==2.22
     # via cffi
 pyjwt==2.9.0
     # via msal
-pytest==8.3.2
+pytest==8.3.3
     # via pytest-cov
 pytest-cov==5.0.0
 pyyaml==6.0.2
