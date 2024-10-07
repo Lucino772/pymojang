@@ -49,7 +49,7 @@ requests==2.32.3
     #   msal
     #   responses
 responses==0.25.3
-tomli==2.0.1
+tomli==2.0.2
     # via
     #   coverage
     #   pytest

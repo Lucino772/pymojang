@@ -39,7 +39,7 @@ pyjwt==2.9.0
     # via msal
 requests==2.32.3
     # via msal
-tomli==2.0.1
+tomli==2.0.2
     # via towncrier
 towncrier==24.8.0
 urllib3==2.2.3
