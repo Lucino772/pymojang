@@ -30,7 +30,7 @@ incremental==24.7.2
     # via towncrier
 jinja2==3.1.4
     # via towncrier
-markupsafe==3.0.1
+markupsafe==3.0.2
     # via jinja2
 msal==1.31.0
 pycparser==2.22
