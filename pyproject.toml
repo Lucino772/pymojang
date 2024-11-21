@@ -24,7 +24,7 @@ classifiers = [
 dependencies = [
   "requests>=2.31,<2.33",
   "validators>=0.31.0,<0.35.0",
-  "pyjwt[crypto]>=2.8,<2.10",
+  "pyjwt[crypto]>=2.8,<2.11",
   "msal>=1.28,<1.32",
 ]
 
