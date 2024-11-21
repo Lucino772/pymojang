@@ -9,7 +9,7 @@
 # - importlib-metadata==8.5.0
 # - furo==2024.8.6
 # - msal==1.31.0
-# - pyjwt[crypto]==2.9.0
+# - pyjwt[crypto]==2.10.0
 # - requests==2.32.3
 # - validators==0.34.0
 #
