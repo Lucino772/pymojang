@@ -98,7 +98,7 @@ sphinxcontrib-qthelp==2.0.0
 sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
 sphinxext-opengraph==0.9.1
-tornado==6.4.1
+tornado==6.4.2
     # via livereload
 urllib3==2.2.3
     # via requests
