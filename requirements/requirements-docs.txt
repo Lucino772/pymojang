@@ -8,7 +8,7 @@
 # - sphinx-autobuild==2024.10.3
 # - importlib-metadata==8.5.0
 # - furo==2024.8.6
-# - msal==1.31.0
+# - msal==1.31.1
 # - pyjwt[crypto]==2.10.0
 # - requests==2.32.3
 # - validators==0.34.0
@@ -49,7 +49,7 @@ livereload==2.7.0
     # via sphinx-autobuild
 markupsafe==3.0.2
     # via jinja2
-msal==1.31.0
+msal==1.31.1
 packaging==24.2
     # via sphinx
 pycparser==2.22
