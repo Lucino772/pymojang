@@ -30,7 +30,7 @@ colorama==0.4.6
     # via
     #   sphinx
     #   sphinx-autobuild
-cryptography==43.0.3
+cryptography==44.0.0
     # via
     #   msal
     #   pyjwt
