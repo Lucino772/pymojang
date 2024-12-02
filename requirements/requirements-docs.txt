@@ -58,7 +58,7 @@ pygments==2.18.0
     # via
     #   furo
     #   sphinx
-pyjwt==2.9.0
+pyjwt==2.10.1
     # via msal
 pytz==2024.2
     # via babel
