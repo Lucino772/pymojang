@@ -22,12 +22,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: actions/configure-pages@v5
-    - name: Install Hatch
-      run: |
-        pipx install hatch==1.9.3
+    - name: Install devbox
+      uses: jetify-com/devbox-install-action@v0.11.0
     - name: Build Docs
       run: |
-        hatch run docs:build
+        devbox run docs:build
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
