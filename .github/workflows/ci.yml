@@ -20,7 +20,7 @@ jobs:
         python-version: ["3.8", "3.9", "3.10", "3.11"]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install uv and setup Python ${{ matrix.python-version }}
       uses: astral-sh/setup-uv@v6
       with:
@@ -46,7 +46,7 @@ jobs:
       id-token: write # IMPORTANT: this permission is mandatory for trusted publishing
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Build
         run: |
           pipx run build
